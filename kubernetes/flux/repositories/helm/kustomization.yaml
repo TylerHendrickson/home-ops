@@ -5,6 +5,7 @@ resources:
   - ./1password.yaml
   - ./bitnami.yaml
   - ./bjw-s.yaml
+  - ./cloudnative-pg.yaml
   - ./csi-driver-nfs.yaml
   - ./external-dns.yaml
   - ./external-secrets.yaml
