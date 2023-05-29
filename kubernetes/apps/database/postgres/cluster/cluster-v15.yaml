@@ -15,10 +15,10 @@ spec:
     storageClass: longhorn
   superuserSecret:
     name: cloudnative-pg-secret
-  bootstrap:
-    initdb:
-      database: homeassistant
-      owner: hass
+#  bootstrap:
+#    initdb:
+#      database: homeassistant
+#      owner: hass
   postgresql:
     parameters:
       max_connections: "300"
