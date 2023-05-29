@@ -6,6 +6,7 @@ resources:
   - ./bjw-s.yaml
   - ./csi-driver-nfs.yaml
   - ./external-dns.yaml
+  - ./external-secrets.yaml
   - ./hajimari.yaml
   - ./ingress-nginx.yaml
   - ./jetstack.yaml
