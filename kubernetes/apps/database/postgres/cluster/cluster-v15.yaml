@@ -14,7 +14,7 @@ spec:
     size: 20Gi
     storageClass: longhorn
   superuserSecret:
-    name: cloudnative-pg
+    name: cloudnative-pg-secret
   bootstrap:
     initdb:
       database: homeassistant
