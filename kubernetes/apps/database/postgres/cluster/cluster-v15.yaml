@@ -16,25 +16,9 @@ spec:
   superuserSecret:
     name: cloudnative-pg-secret
   bootstrap:
-#    initdb:
-#      database: homeassistant
-#      owner: hass
-    recovery:
-      source: clusterBackup
-  externalClusters:
-    - name: clusterBackup
-      barmanObjectStore:
-        destinationPath: "https://s3.${SECRET_DOMAIN}/postgresql/"
-        s3Credentials:
-          # Minio
-          accessKeyId:
-            name: cloudnative-pg-secret
-            key: aws-access-key-id
-          secretAccessKey:
-            name: cloudnative-pg-secret
-            key: aws-secret-access-key
-        wal:
-          maxParallel: 8
+    initdb:
+      database: homeassistant
+      owner: hass
   postgresql:
     parameters:
       max_connections: "300"
