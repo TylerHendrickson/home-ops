@@ -20,7 +20,21 @@ spec:
 #      database: homeassistant
 #      owner: hass
     recovery:
-      source: postgres-cluster-nightly
+      source: clusterBackup
+  externalClusters:
+    - name: clusterBackup
+      barmanObjectStore:
+        destinationPath: "https://s3.${SECRET_DOMAIN}/postgresql/postgres-v15/"
+        s3Credentials:
+          # Minio
+          accessKeyId:
+            name: cloudnative-pg-secret
+            key: aws-access-key-id
+          secretAccessKey:
+            name: cloudnative-pg-secret
+            key: aws-secret-access-key
+        wal:
+          maxParallel: 8
   postgresql:
     parameters:
       max_connections: "300"
