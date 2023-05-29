@@ -16,10 +16,11 @@ spec:
   superuserSecret:
     name: cloudnative-pg-secret
   bootstrap:
-    initdb:
-      database: homeassistant
-      owner: hass
+#    initdb:
+#      database: homeassistant
+#      owner: hass
     recovery:
+      source: postgres-cluster-nightly
   postgresql:
     parameters:
       max_connections: "300"
