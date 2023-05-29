@@ -5,3 +5,4 @@ resources:
   - ./namespace.yaml
 #  - ./csi-driver-nfs/ks.yaml
   - ./longhorn-system/ks.yaml
+  - ./nfs-subdir-external-provisioner/ks.yaml
