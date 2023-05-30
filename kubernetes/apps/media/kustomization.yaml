@@ -5,3 +5,4 @@ resources:
   - ./namespace.yaml
   - ./nzbget/ks.yaml
   - ./shared/ks.yaml
+  - ./sonarr/ks.yaml
