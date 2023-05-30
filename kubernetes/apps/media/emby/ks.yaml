@@ -9,7 +9,7 @@ spec:
   dependsOn:
     - name: cluster-storage-longhorn
     - name: cluster-media-shared
-    - name: cluster-apps-intel-device-plugin-gpu
+    - name: cluster-kube-system-intel-device-plugin-gpu
   path: ./kubernetes/apps/media/emby/app
   prune: true
   sourceRef:
