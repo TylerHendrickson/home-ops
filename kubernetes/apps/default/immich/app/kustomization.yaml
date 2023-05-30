@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: default
 resources:
   - ./configmap.yaml
-  - ./externalsecrets.yaml
+  - ./externalsecret.yaml
   - ./pvc.yaml
   - ./typesense
   - ./server
