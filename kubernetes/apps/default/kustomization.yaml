@@ -6,3 +6,4 @@ resources:
   - ./debugger/ks.yaml
   - ./echo-server/ks.yaml
   - ./hajimari/ks.yaml
+  - ./immich/ks.yaml
