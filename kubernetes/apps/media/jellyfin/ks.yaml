@@ -9,6 +9,7 @@ spec:
   dependsOn:
     - name: cluster-storage-longhorn
     - name: cluster-media-shared
+    - name: cluster-apps-intel-device-plugin-gpu
   path: ./kubernetes/apps/media/jellyfin/app
   prune: true
   sourceRef:
