@@ -64,8 +64,10 @@ spec:
             app.kubernetes.io/name: *app
     resources:
       requests:
-        cpu: 100m
-        memory: 250Mi
+        cpu: 500m
+        memory: 1G
+      limits:
+        memory: 10Gi
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
