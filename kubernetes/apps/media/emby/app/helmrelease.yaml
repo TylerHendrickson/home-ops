@@ -1,0 +1,83 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: emby
+  namespace: media
+spec:
+  interval: 6h
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 1h
+  values:
+    image:
+      repository: ghcr.io/onedr0p/emby
+      tag: 4.7.11.0@sha256:4889a3486b94e12e8a513200db8a1d573c6b39f02b9877959b3185012323a71a
+    env:
+      TZ: "America/Chicago"
+    service:
+      main:
+        ports:
+          http:
+            port: 8096
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        hosts:
+          - host: &host "emby.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        existingClaim: emby-config
+        retain: true
+      media:
+        enabled: true
+        type: pvc
+        existingClaim: nas-media
+        mountPath: /media/cardhu-warehouse1
+      transcode:
+        enabled: true
+        type: emptyDir
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      supplementalGroups:
+        - 100   # users
+        - 1000  # k8s
+        - 1001  # ???
+        - 105   # render
+        - 39    # video
+    resources:
+      requests:
+        gpu.intel.com/i915: 1
+        cpu: 1
+        memory: 4Gi
+      limits:
+        gpu.intel.com/i915: 1
+    nodeSelector:
+#      node-role.kubernetes.io/worker: "true"
+      intel.feature.node.kubernetes.io/gpu: "true"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: node-role.kubernetes.io/control-plane
+                  operator: NotIn
+                  values:
+                    - "true"
