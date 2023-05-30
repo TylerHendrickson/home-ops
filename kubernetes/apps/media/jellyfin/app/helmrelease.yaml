@@ -67,8 +67,8 @@ spec:
         gpu.intel.com/i915: 1
         cpu: 1
         memory: 4Gi
-      limits:
-        gpu.intel.com/i915: 1
+#      limits:
+#        gpu.intel.com/i915: 1
     nodeSelector:
       node-role.kubernetes.io/worker: "true"
-      intel.feature.node.kubernetes.io/gpu: "true"
+#      intel.feature.node.kubernetes.io/gpu: "true"
