@@ -12,10 +12,10 @@
       "separateMinorPatch": true
     },
     {
-      "description": "Immich Group",
+      "description": "Immich docker images and tags",
       "groupName": "Immich",
       "matchPackagePatterns": ["immich"],
-      "matchDatasources": ["docker"],
+      "matchDatasources": ["docker", "github-tags"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
