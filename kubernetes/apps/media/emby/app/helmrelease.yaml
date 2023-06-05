@@ -18,7 +18,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/emby
-      tag: 4.7.11.0@sha256:4889a3486b94e12e8a513200db8a1d573c6b39f02b9877959b3185012323a71a
+      tag: 4.7.13.0@sha256:b6fc6bfd29b34429d0fcf39c37611ae583f3c2997281d1739ec24bacaa0220db
     env:
       TZ: "America/Chicago"
     service:
