@@ -9,7 +9,6 @@ spec:
     - name: box
       image: debian:11
       imagePullPolicy: IfNotPresent
-      command:
-        - sleep
-        - "infinity"
+      command: ["/bin/bash", "-c", "--"]
+      args: ["sleep infinity"]
   restartPolicy: Always
