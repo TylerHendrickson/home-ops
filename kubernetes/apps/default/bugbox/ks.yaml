@@ -5,7 +5,7 @@ metadata:
   name: cluster-apps-debugger
   namespace: flux-system
 spec:
-  path: ./kubernetes/apps/default/debugger/app
+  path: ./kubernetes/apps/default/bugbox/app
   prune: true
   sourceRef:
     kind: GitRepository
