@@ -15,6 +15,9 @@ spec:
           tag: 4.13.0
         env:
           TZ: "America/Chicago"
+        envFrom:
+          - secretRef:
+              name: home-assistant-code-secret
         workingDir: /config
         args:
           - --auth
