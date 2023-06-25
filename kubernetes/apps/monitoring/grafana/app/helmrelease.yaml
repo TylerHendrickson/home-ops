@@ -34,7 +34,6 @@ spec:
         envFrom:
           - secretRef:
               name: &secret grafana-secret
-    replicas: 2
     env:
       GF_DEFAULT_TIMEZONE: browser
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
