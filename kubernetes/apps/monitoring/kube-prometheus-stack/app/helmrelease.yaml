@@ -125,9 +125,9 @@ spec:
           - hosts:
               - *host
       prometheusSpec:
-        replicas: 3
+        replicas: 2
         podAntiAffinity: hard
-        replicaExternalLabelName: __replica__
+        replicaExternalLabelName: replica
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
         podMonitorSelectorNilUsesHelmValues: false
