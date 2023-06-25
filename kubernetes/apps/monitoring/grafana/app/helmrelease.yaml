@@ -182,8 +182,7 @@ spec:
             - *host
     persistence:
       enabled: true
-      storageClassName: longhorn
-      size: 10Gi
+      existingClaim: grafana-config-v1
     testFramework:
       enabled: false
     affinity:
