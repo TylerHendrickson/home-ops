@@ -181,7 +181,11 @@ spec:
         - hosts:
             - *host
     persistence:
-      enabled: false
+      enabled: true
+      storageClassName: longhorn
+      size: 10Gi
+      accessModes:
+        - ReadWriteOnce
     testFramework:
       enabled: false
     affinity:
