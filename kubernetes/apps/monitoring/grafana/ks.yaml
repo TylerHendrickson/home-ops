@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
+    - name: cluster-storage-longhorn
     - name: cluster-database-postgres-cluster
     - name: cluster-kube-system-external-secrets
   path: ./kubernetes/apps/monitoring/grafana/app
