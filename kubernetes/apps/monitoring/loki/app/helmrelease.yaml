@@ -124,7 +124,17 @@ spec:
       extraVolumes:
         - name: rules
           emptyDir: {}
+      affinity: &affinity
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
     write:
+      affinity: *affinity
       replicas: 2
       persistence:
         storageClass: longhorn
@@ -137,6 +147,7 @@ spec:
           cpu: 500m
           memory: 1Gi
     backend:
+      affinity: *affinity
       replicas: 2
       persistence:
         storageClass: longhorn
@@ -160,6 +171,7 @@ spec:
           cpu: 500m
           memory: 512Mi
     monitoring:
+      affinity: *affinity
       dashboards:
         annotations:
           kustomize.toolkit.fluxcd.io/substitute: disabled
@@ -195,12 +207,3 @@ spec:
       kind: Secret
       name: loki-secret
       valuesKey: AWS_SECRET_ACCESS_KEY
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: NotIn
-                values:
-                  - "true"
