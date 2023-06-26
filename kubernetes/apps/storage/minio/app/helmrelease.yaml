@@ -89,7 +89,6 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
           nginx.ingress.kubernetes.io/enable-cors: true
-          nginx.ingress.kubernetes.io/cors-allow-methods: "*"
         hosts:
           - host: &console-host "minio.${SECRET_DOMAIN}"
             paths:
