@@ -32,8 +32,9 @@ spec:
     env:
       TZ: America/Chicago
       MINIO_UPDATE: "off"
-      MINIO_BROWSER_REDIRECT_URL: "https://minio.${SECRET_DOMAIN}"
-      MINIO_SERVER_URL: "https://s3.${SECRET_DOMAIN}"
+      MINIO_BROWSER_REDIRECT_URL: "https://minio.${SECRET_DOMAIN}/"
+      MINIO_SERVER_URL: "https://s3.${SECRET_DOMAIN}/"
+      CONSOLE_MINIO_SERVER: "https://minio.${SECRET_DOMAIN}"
       MINIO_DOMAIN: "https://s3.${SECRET_DOMAIN}"
       MINIO_API_CORS_ALLOW_ORIGIN: "https://minio.${SECRET_DOMAIN},https://s3.${SECRET_DOMAIN}"
       MINIO_PROMETHEUS_URL: "http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090"
@@ -87,9 +88,6 @@ spec:
       main:
         enabled: true
         ingressClassName: nginx
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
-          nginx.ingress.kubernetes.io/enable-cors: "true"
         hosts:
           - host: &console-host "minio.${SECRET_DOMAIN}"
             paths:
