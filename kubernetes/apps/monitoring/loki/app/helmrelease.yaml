@@ -195,3 +195,12 @@ spec:
       kind: Secret
       name: loki-secret
       valuesKey: AWS_SECRET_ACCESS_KEY
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: NotIn
+                values:
+                  - "true"
