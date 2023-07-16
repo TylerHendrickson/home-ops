@@ -5,7 +5,8 @@ tasks:
 
   verify:
     desc: Verify flux meets the prerequisites
-    cmd: flux check --pre
+    cmds:
+      - flux check --pre
 
   install:
     desc: Install Flux into your cluster
@@ -24,7 +25,8 @@ tasks:
 
   reconcile:
     desc: Force update Flux to pull in changes from your Git repository
-    cmd: flux reconcile -n flux-system kustomization cluster --with-source
+    cmds:
+      - flux reconcile -n flux-system kustomization cluster --with-source
 
   hr-restart:
     desc: Restart all failed Helm Releases
@@ -34,27 +36,33 @@ tasks:
 
   nodes:
     desc: List all the nodes in your cluster
-    cmd: kubectl get nodes {{.CLI_ARGS | default "-o wide"}}
+    cmds:
+      - kubectl get nodes {{.CLI_ARGS | default "-o wide"}}
 
   pods:
     desc: List all the pods in your cluster
-    cmd: kubectl get pods {{.CLI_ARGS | default "-A"}}
+    cmds:
+      - kubectl get pods {{.CLI_ARGS | default "-A"}}
 
   kustomizations:
     desc: List all the kustomizations in your cluster
-    cmd: kubectl get kustomizations {{.CLI_ARGS | default "-A"}}
+    cmds:
+      - kubectl get kustomizations {{.CLI_ARGS | default "-A"}}
 
   helmreleases:
     desc: List all the helmreleases in your cluster
-    cmd: kubectl get helmreleases {{.CLI_ARGS | default "-A"}}
+    cmds:
+      - kubectl get helmreleases {{.CLI_ARGS | default "-A"}}
 
   helmrepositories:
     desc: List all the helmrepositories in your cluster
-    cmd: kubectl get helmrepositories {{.CLI_ARGS | default "-A"}}
+    cmds:
+      - kubectl get helmrepositories {{.CLI_ARGS | default "-A"}}
 
   gitrepositories:
     desc: List all the gitrepositories in your cluster
-    cmd: kubectl get gitrepositories {{.CLI_ARGS | default "-A"}}
+    cmds:
+      - kubectl get gitrepositories {{.CLI_ARGS | default "-A"}}
 
   certificates:
     desc: List all the certificates in your cluster
@@ -64,7 +72,8 @@ tasks:
 
   ingresses:
     desc: List all the ingresses in your cluster
-    cmd: kubectl get ingress {{.CLI_ARGS | default "-A"}}
+    cmds:
+      - kubectl get ingress {{.CLI_ARGS | default "-A"}}
 
   resources:
     desc: Gather common resources in your cluster, useful when asking for support
