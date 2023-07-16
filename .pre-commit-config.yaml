@@ -1,0 +1,48 @@
+---
+fail_fast: false
+repos:
+#  - repo: meta
+#    hooks:
+#      - id: check-useless-excludes
+#  - repo: https://github.com/adrienverge/yamllint
+#    rev: v1.32.0
+#    hooks:
+#      - args:
+#          - --config-file
+#          - .yamllint.yaml
+#        id: yamllint
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.22
+    hooks:
+      - id: terraform-fmt
+      - id: terraform-validate
+      - id: tflint
+  - repo: https://github.com/onedr0p/sops-pre-commit
+    rev: v2.1.1
+    hooks:
+      - id: forbid-secrets
+        files: .*\.sops\.ya?ml
+        exclude: tmpl/.*
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-json
+      - id: detect-private-key
+        exclude: README.md
+      - id: end-of-file-fixer
+      - id: pretty-format-json
+        args:
+          - --autofix
+          - --no-ensure-ascii
+          - --no-sort-keys
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+  - repo: https://github.com/sirosen/texthooks
+    rev: 0.5.0
+    hooks:
+      - id: fix-smartquotes
+  - repo: https://gitlab.com/bmares/check-json5
+    rev: v1.0.0
+    hooks:
+      - id: check-json5

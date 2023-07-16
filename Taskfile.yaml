@@ -19,6 +19,11 @@ tasks:
 
   default: task -l
 
+  foo:
+    desc: something
+    cmds:
+      - ls -lah
+
   init:
     desc: Initialize configuration files
     dir: "{{.BOOTSTRAP_DIR}}"
@@ -40,6 +45,7 @@ tasks:
   configure:
     desc: Configure repository from Ansible vars
     dir: "{{.BOOTSTRAP_DIR}}"
-    cmd: ansible-playbook configure.yaml
+    cmds:
+      - cmd: ansible-playbook configure.yaml
     env:
       ANSIBLE_DISPLAY_SKIPPED_HOSTS: "false"

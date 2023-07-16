@@ -5,7 +5,8 @@ tasks:
 
   deps:
     desc: Install workstation dependencies with Brew
-    cmd: brew install {{.DEPS}} {{.CLI_ARGS}}
+    cmds:
+      - "brew install {{.DEPS}} {{.CLI_ARGS}}"
     preconditions:
       - sh: command -v brew
         msg: |
