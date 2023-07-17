@@ -1,0 +1,38 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nfs-subdir-external-provisioner
+  namespace: storage
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+      chart: nfs-subdir-external-provisioner
+      version: 4.0.18
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: nfs-subdir-external-provisioner
+        namespace: flux-system
+      interval: 5m
+  values:
+    nfs:
+      server: "${NAS_IP}"
+      path: /volume1/warehouse1
+    mountOptions:
+      - nfsvers=4.1
+      - noatime
+      - nolock
+      - bg
+      - soft
+      - intr
+      - tcp
+      - timeo=50
+      - retrans=5
+      - actimeo=10
+      - retry=5 0 0
+    storageClass:
+      defaultClass: false
+      reclaimPolicy: Retain

@@ -7,17 +7,6 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: 192.168.1.95
   share: /volume1/warehouse1
-reclaimPolicy: Retain
+reclaimPolicy: Delete
 volumeBindingMode: Immediate
-mountOptions:
-  - nfsvers=4.1
-  - noatime
-  - nolock
-  - bg
-  - soft
-  - intr
-  - tcp
-  - timeo=50
-  - retrans=5
-  - actimeo=10
-  - retry=5 0 0
+mountOptions: ["hard", "noatime"]
