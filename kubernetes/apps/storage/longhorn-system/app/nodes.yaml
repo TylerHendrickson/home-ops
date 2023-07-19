@@ -1,4 +1,4 @@
-apiVersion: longhorn.io/v1beta2
+apiVersion: longhorn.io/v1beta1
 kind: Node
 metadata:
   name: k8s-0-balvenie-lan
