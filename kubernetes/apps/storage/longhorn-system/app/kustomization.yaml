@@ -5,7 +5,7 @@ namespace: storage
 resources:
   - ./helmrelease.yaml
 #  - ./nodes.yaml
-  - ./recurringjob.yaml
+#  - ./recurringjob.yaml
 labels:
   - pairs:
       app.kubernetes.io/name: longhorn
