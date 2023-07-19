@@ -7,7 +7,7 @@ metadata:
   namespace: flux-system
 spec:
   path: ./kubernetes/apps/storage/longhorn-system/app
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: home-kubernetes
@@ -16,6 +16,6 @@ spec:
       kind: HelmRelease
       name: longhorn
       namespace: storage
-  interval: 30m
+  interval: 10m
   retryInterval: 1m
   timeout: 3m
