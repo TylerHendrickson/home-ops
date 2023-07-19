@@ -1,6 +1,8 @@
 apiVersion: longhorn.io/v1beta1
 kind: Node
 metadata:
+  finalizers:
+    - longhorn.io
   name: k8s-0-balvenie-lan
   namespace: storage
   uid: b10e4503-066d-4eec-82e5-7e5fb07088cb
