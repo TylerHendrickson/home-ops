@@ -1,11 +1,11 @@
 apiVersion: longhorn.io/v1beta2
 kind: Node
 metadata:
-  name: k8s-0.balvenie.lan
+  name: k8s-0-balvenie-lan
   namespace: storage
   uid: ae5e3cd2-1630-40fa-a409-102cbda7fef8
 spec:
-  name: k8s-0.balvenie.lan
+  name: k8s-0-balvenie-lan
   allowScheduling: true
   disks:
     bulk:
@@ -20,11 +20,11 @@ kind: Node
 metadata:
   finalizers:
     - longhorn.io
-  name: k8s-0.falkirk.lan
+  name: k8s-0-falkirk-lan
   namespace: storage
   uid: b732c37c-d3b3-490d-ab51-cca05e52ad05
 spec:
-  name: k8s-0.falkirk.lan
+  name: k8s-0-falkirk-lan
   allowScheduling: true
   disks:
     bulk:
@@ -39,11 +39,11 @@ kind: Node
 metadata:
   finalizers:
     - longhorn.io
-  name: k8s-0.jura.lan
+  name: k8s-0-jura-lan
   namespace: storage
   uid: 2b7f4a42-73cd-4914-aede-3b49f5a069ff
 spec:
-  name: k8s-0.jura.lan
+  name: k8s-0-jura-lan
   allowScheduling: true
   disks:
     bulk:
@@ -58,11 +58,11 @@ kind: Node
 metadata:
   finalizers:
     - longhorn.io
-  name: k8s-0.glenfiddich.lan
+  name: k8s-0-glenfiddich-lan
   namespace: storage
   uid: f90c7f4c-9d19-44b0-b514-b7888b017d46
 spec:
-  name: k8s-0.glenfiddich.lan
+  name: k8s-0-glenfiddich-lan
   allowScheduling: false
   disks: {}
 ---
@@ -71,11 +71,11 @@ kind: Node
 metadata:
   finalizers:
     - longhorn.io
-  name: k8s-0.harris.lan
+  name: k8s-0-harris-lan
   namespace: storage
   uid: 865952d4-803c-4274-bbcf-7cdd1092ea5d
 spec:
-  name: k8s-0.harris.lan
+  name: k8s-0-harris-lan
   allowScheduling: false
   disks: {}
 ---
@@ -84,10 +84,10 @@ kind: Node
 metadata:
   finalizers:
     - longhorn.io
-  name: k8s-0.inchgower.lan
+  name: k8s-0-inchgower-lan
   namespace: storage
   uid: 1705846c-f035-4ad1-8b65-8d660c171fe0
 spec:
-  name: k8s-0.inchgower.lan
+  name: k8s-0-inchgower-lan
   allowScheduling: false
   disks: {}
