@@ -26,25 +26,13 @@ spec:
       storageMinimalAvailablePercentage: 10
     ingress:
       enabled: true
-      ingressClassName: "nginx"
+      ingressClassName: nginx
       host: "longhorn.${SECRET_DOMAIN}"
       path: /
       tls: true
-    longhornManager:
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
-    longhornDriver:
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
     longhornUI:
       tolerations:
         - key: "node-role.kubernetes.io/control-plane"
           operator: "Equal"
           value: "true"
-          effect: "NoSchedule"
+          effect: "NoExecute"
