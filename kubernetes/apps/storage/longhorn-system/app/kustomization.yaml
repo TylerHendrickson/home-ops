@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: storage
 resources:
   - ./helmrelease.yaml
-#  - ./nodes.yaml
+  - ./nodes.yaml
 #  - ./recurringjob.yaml
 labels:
   - pairs:
