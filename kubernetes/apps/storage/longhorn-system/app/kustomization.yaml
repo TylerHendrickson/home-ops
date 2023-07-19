@@ -1,10 +1,9 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: storage
+namespace: longhorn-system
 resources:
   - ./helmrelease.yaml
-#  - ./nodes.yaml
 #  - ./recurringjob.yaml
 labels:
   - pairs:
