@@ -1,0 +1,61 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: coder-postgres-v15-cluster-1
+  namespace: database
+  annotations:
+    kyverno.io/ignore: "true"
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:15.2
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 20Gi
+    storageClass: longhorn
+  superuserSecret:
+    name: coder-postgres-v15-cluster-1-user-superuser-secret
+  bootstrap:
+    initdb:
+      database: coder
+      owner: coder
+      secret:
+        name: coder-postgres-v15-cluster-1-user-coder-secret
+  postgresql:
+    parameters:
+      max_connections: "300"
+      shared_buffers: 512MB
+#    pg_hba: []
+  monitoring:
+    enablePodMonitor: true
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "1"
+    limits:
+      memory: "4Gi"
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: "s3://coder-psql-v15-cluster-1-backup/"
+      endpointURL: "https://s3.${SECRET_DOMAIN}"
+      serverName: "coder-postgres-v15-cluster-1"
+      s3Credentials:
+        accessKeyId:
+          name: "coder-postgres-v15-cluster-1-minio"
+          key: "access-key-id"
+        secretAccessKey:
+          name: "coder-postgres-v15-cluster-1-minio"
+          key: "secret-access-key"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: NotIn
+                values:
+                  - "true"
