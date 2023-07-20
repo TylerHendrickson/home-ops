@@ -1,0 +1,23 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cardhu-wh1
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: "${NAS_IP}"
+  share: /volume1/warehouse1
+reclaimPolicy: Reclaim
+volumeBindingMode: Immediate
+mountOptions:
+  - nfsvers=4.1
+  - noatime
+  - nolock
+  - bg
+  - soft
+  - intr
+  - tcp
+  - timeo=50
+  - retrans=5
+  - actimeo=10
+  - retry=5 0 0
