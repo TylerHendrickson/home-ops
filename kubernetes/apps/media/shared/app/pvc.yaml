@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nas-media
+spec:
+  capacity:
+    storage: 50Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-client
+  mountOptions:
+    - noatime
+    - nolock
+    - bg
+    - soft
+    - nfsvers=4.1
+    - intr
+    - tcp
+    - timeo=50
+    - retrans=5
+    - actimeo=10
+    - retry=5 0 0
+  nfs:
+    path: /volume1/warehouse1
+    server: "${NAS_IP}"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nas-media
+  namespace: media
+spec:
+  storageClassName: nfs-client
+  resources:
+    requests:
+      storage: 50Gi
+  volumeMode: Filesystem
+  volumeName: nas-media
+  accessModes:
+    - ReadWriteMany
