@@ -17,9 +17,26 @@ spec:
     name: cloudnative-pg-secret
   bootstrap:
     recovery:
-      source: clusterBackup
+      source: postgres-v15-0
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: "s3://postgresql/"
+      endpointURL: "http://minio.storage.svc.cluster.local:9000"
+      serverName: postgres-v15-1
+      s3Credentials:
+        # Minio
+        accessKeyId:
+          name: cloudnative-pg-secret
+          key: aws-access-key-id
+        secretAccessKey:
+          name: cloudnative-pg-secret
+          key: aws-secret-access-key
   externalClusters:
-    - name: clusterBackup
+    - name: postgres-v15-0
       barmanObjectStore:
         destinationPath: "s3://postgresql/"
         endpointURL: "http://minio.storage.svc.cluster.local:9000"
@@ -45,23 +62,6 @@ spec:
       cpu: "1"
     limits:
       memory: "4Gi"
-  backup:
-    retentionPolicy: 30d
-    barmanObjectStore:
-      wal:
-        compression: bzip2
-        maxParallel: 8
-      destinationPath: "s3://postgresql/"
-      endpointURL: "http://minio.storage.svc.cluster.local:9000"
-      serverName: postgres-v15
-      s3Credentials:
-        # Minio
-        accessKeyId:
-          name: cloudnative-pg-secret
-          key: aws-access-key-id
-        secretAccessKey:
-          name: cloudnative-pg-secret
-          key: aws-secret-access-key
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
