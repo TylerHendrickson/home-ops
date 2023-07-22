@@ -15,23 +15,23 @@ spec:
     storageClass: longhorn
   superuserSecret:
     name: cloudnative-pg-secret
-#  bootstrap:
-#    recovery:
-#      source: clusterBackup
-#  externalClusters:
-#    - name: clusterBackup
-#      barmanObjectStore:
-#        destinationPath: "s3://postgresql/"
-#        endpointURL: "http://minio.storage.svc.cluster.local:9000"
-#        s3Credentials:
-#          accessKeyId:
-#            name: cloudnative-pg-secret
-#            key: aws-access-key-id
-#          secretAccessKey:
-#            name: cloudnative-pg-secret
-#            key: aws-secret-access-key
-#        wal:
-#          maxParallel: 8
+  bootstrap:
+    recovery:
+      source: clusterBackup
+  externalClusters:
+    - name: clusterBackup
+      barmanObjectStore:
+        destinationPath: "s3://postgresql/"
+        endpointURL: "http://minio.storage.svc.cluster.local:9000"
+        s3Credentials:
+          accessKeyId:
+            name: cloudnative-pg-secret
+            key: aws-access-key-id
+          secretAccessKey:
+            name: cloudnative-pg-secret
+            key: aws-secret-access-key
+        wal:
+          maxParallel: 8
   postgresql:
     parameters:
       max_connections: "300"
