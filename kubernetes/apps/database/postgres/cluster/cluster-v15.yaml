@@ -17,10 +17,9 @@ spec:
     name: cloudnative-pg-secret
   bootstrap:
     recovery:
-      backup:
-        name: cluster-v15-20230723034200
-        recoveryTarget:
-          targetTime: "2023-07-23T08:42:32Z"
+      source: cluster-v15-20230723034200
+      recoveryTarget:
+        targetTime: "2023-07-23T08:42:32Z"
 #      source: postgres-v15
 #      recoveryTarget:
 #        targetTime: "2023-07-13T00:00:00"
