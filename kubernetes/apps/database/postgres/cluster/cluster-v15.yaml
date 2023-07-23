@@ -19,7 +19,7 @@ spec:
     recovery:
       source: postgres-v15
       recoveryTarget:
-        targetTime: "2023-07-15T03:00:00"
+        targetTime: "2023-07-13T03:00:00"
   backup:
     retentionPolicy: 30d
     barmanObjectStore:
