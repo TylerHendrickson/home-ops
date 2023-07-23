@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ./cluster-v15.yaml
   - ./cluster-v15-test.yaml
-#  - ./scheduledbackup.yaml
+  - ./scheduledbackup.yaml
