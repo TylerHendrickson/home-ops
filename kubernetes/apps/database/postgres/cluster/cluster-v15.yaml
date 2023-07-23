@@ -19,7 +19,8 @@ spec:
     recovery:
       backup:
         name: cluster-v15-20230723034200
-        targetTime: "2023-07-23T08:42:32Z"
+        recoveryTarget:
+          targetTime: "2023-07-23T08:42:32Z"
 #      source: postgres-v15
 #      recoveryTarget:
 #        targetTime: "2023-07-13T00:00:00"
