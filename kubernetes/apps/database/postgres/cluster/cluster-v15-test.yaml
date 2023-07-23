@@ -19,7 +19,7 @@ spec:
     recovery:
       source: postgres-v15-0
       recoveryTarget:
-        backupID: 20230713T030000
+#        backupID: 20230713T030000
 #        targetTime: "2023-07-13T00:00:00"
         targetImmediate: true
   backup:
@@ -52,7 +52,7 @@ spec:
             name: cloudnative-pg-secret
             key: aws-secret-access-key
         wal:
-          maxParallel: 16
+          maxParallel: 32
   postgresql:
     parameters:
       max_connections: "300"
