@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-nfs-v1
+spec:
+  storageClassName: nfs-client
+  capacity:
+    storage: 200Gi # Size does not matter
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - noatime
+    - nolock
+    - bg
+    - hard
+    - nfsvers=4.1
+    - intr
+    - tcp
+    - timeo=50
+    - retrans=5
+    - actimeo=10
+    - retry=5 0 0
+  nfs:
+    server: "${NAS_IP}"
+    path: /volume1/immich
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-nfs-v1
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-client
+  resources:
+    requests:
+      storage: 200Gi # Size does not matter
