@@ -100,6 +100,7 @@ spec:
         enabled: true
         type: pvc
         existingClaim: nas-media
+        mountPath: /media/cardhu-warehouse1
     nodeSelector:
       node-role.kubernetes.io/worker: "true"
     resources:
