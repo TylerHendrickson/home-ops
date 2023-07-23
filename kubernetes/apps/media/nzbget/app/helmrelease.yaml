@@ -28,8 +28,8 @@ spec:
       tag: latest
     env:
       TZ: "America/Chicago"
-      PGID: 568
-      PUID: 568
+      PGID: 1000
+      PUID: 1000
     service:
       main:
         ports:
