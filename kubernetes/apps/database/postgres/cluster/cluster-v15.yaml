@@ -50,7 +50,7 @@ spec:
             name: cloudnative-pg-secret
             key: aws-secret-access-key
         wal:
-          maxParallel: 8
+          maxParallel: 16
   postgresql:
     parameters:
       max_connections: "300"
