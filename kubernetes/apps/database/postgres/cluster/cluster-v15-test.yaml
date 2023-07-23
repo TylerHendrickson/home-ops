@@ -19,7 +19,7 @@ spec:
     recovery:
       source: postgres-v15-0
       recoveryTarget:
-#        backupID: 20230713T030000
+        backupID: 20230715T130000
 #        targetTime: "2023-07-13T00:00:00"
         targetImmediate: true
   backup:
