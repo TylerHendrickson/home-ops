@@ -6,9 +6,6 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: cluster-apps-postgres-app
-    - name: cluster-apps-postgres-cluster
-    - name: cluster-apps-external-secrets
     - name: cluster-apps-longhorn-system
   path: ./kubernetes/apps/monitoring/kube-prometheus-stack/app
   prune: true
