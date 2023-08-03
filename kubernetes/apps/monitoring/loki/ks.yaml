@@ -8,6 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-external-secrets-stores
+    - name: cluster-apps-longhorn-system
   path: ./kubernetes/apps/monitoring/loki/app
   prune: true
   sourceRef:
