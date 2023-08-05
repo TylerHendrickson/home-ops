@@ -84,6 +84,10 @@ tasks:
       - task: helmrepositories
       - task: gitrepositories
       - task: certificates
-      - task: certificaterequests
       - task: ingresses
       - task: pods
+
+  events:
+    desc: List events in your cluster, ordered by lastTimestamp
+    cmds:
+      - kubectl get events --sort-by '.lastTimestamp' {{ .CLI_ARGS | default "-A" }}

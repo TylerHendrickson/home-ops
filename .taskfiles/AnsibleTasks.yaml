@@ -47,6 +47,14 @@ tasks:
     env:
       ANSIBLE_CONFIG: "{{.ANSIBLE_DIR}}/ansible.cfg"
 
+  facts:
+    desc: Show ansible facts
+    dir: "{{.ANSIBLE_DIR}}"
+    cmds:
+      - cmd: ansible-playbook -i {{.ANSIBLE_INVENTORY_DIR}}/hosts.yaml {{.ANSIBLE_PLAYBOOK_DIR}}/cluster-facts.yaml
+    env:
+      ANSIBLE_CONFIG: "{{.ANSIBLE_DIR}}/ansible.cfg"
+
   rollout-update:
     desc: Preform operating system updates and rollout restart the cluster
     dir: "{{.ANSIBLE_DIR}}"
