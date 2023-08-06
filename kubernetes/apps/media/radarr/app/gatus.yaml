@@ -20,6 +20,6 @@ data:
           query-name: "radarr.${SECRET_DOMAIN}"
           query-type: A
         conditions:
-          - "len([BODY]) == 0"
+          - "[STATUS] == 200"
 #        alerts:
 #          - type: pushover
