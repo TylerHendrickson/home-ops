@@ -62,6 +62,9 @@ spec:
         tls:
           - hosts:
               - *host
+    serviceMonitor:
+      main:
+        enabled: true
     metrics:
       enabled: true
       serviceMonitor:
