@@ -38,35 +38,35 @@ spec:
           - secretRef: coder-secret
       env:
         # DB
-        # - name: CODER_PG_CONNECTION_URL
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_PG_CONNECTION_URL
+        - name: CODER_PG_CONNECTION_URL
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_PG_CONNECTION_URL
         # App
         - name: CODER_ACCESS_URL
           value: https://coder.${SECRET_DOMAIN}
         # Github
-        # - name: CODER_GITAUTH_0_ID
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_GITAUTH_0_ID
-        # - name: CODER_GITAUTH_0_TYPE
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_GITAUTH_0_TYPE
-        # - name: CODER_GITAUTH_0_CLIENT_ID
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_GITAUTH_0_CLIENT_ID
-        # - name: CODER_GITAUTH_0_CLIENT_SECRET
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_GITAUTH_0_CLIENT_SECRET
+        - name: CODER_GITAUTH_0_ID
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_ID
+        - name: CODER_GITAUTH_0_TYPE
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_TYPE
+        - name: CODER_GITAUTH_0_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_CLIENT_ID
+        - name: CODER_GITAUTH_0_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_CLIENT_SECRET
         # # OIDC
         # - name: CODER_OIDC_ISSUER_URL
         #   valueFrom:
