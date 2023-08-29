@@ -28,7 +28,7 @@ spec:
   values:
     coder:
       initContainers:
-        01-init-db:
+        - name: 01-init-db
           image: ghcr.io/onedr0p/postgres-init:14.9
           imagePullPolicy: IfNotPresent
           envFrom:
