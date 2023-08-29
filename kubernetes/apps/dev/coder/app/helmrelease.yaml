@@ -34,8 +34,6 @@ spec:
           envFrom:
             - secretRef:
                 name: coder-secret
-      envFrom:
-          - secretRef: coder-secret
       env:
         # DB
         - name: CODER_PG_CONNECTION_URL
@@ -90,7 +88,7 @@ spec:
         #       key: CODER_OIDC_CLIENT_SECRET
       ingress:
         enable: true
-        className: external
+        className: nginx
         annotations:
           external-dns.alpha.kubernetes.io/target: "ingress.${SECRET_DOMAIN}"
         host: "coder.${SECRET_DOMAIN}"
