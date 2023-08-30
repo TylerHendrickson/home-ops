@@ -34,6 +34,11 @@ spec:
           envFrom:
             - secretRef:
                 name: coder-secret
+      serviceAccount:
+        enableDeployments: true
+        workspacePerms: true
+        name: coder
+        annotations: {}
       env:
         # DB
         - name: CODER_PG_CONNECTION_URL
