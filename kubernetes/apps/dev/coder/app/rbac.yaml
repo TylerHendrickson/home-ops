@@ -9,5 +9,5 @@ subjects:
     name: coder
 roleRef:
   kind: Role
-  name: coder
+  name: coder-workspace-perms
   apiGroup: rbac.authorization.k8s.io
