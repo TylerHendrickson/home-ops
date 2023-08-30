@@ -44,27 +44,48 @@ spec:
         # App
         - name: CODER_ACCESS_URL
           value: https://coder.${SECRET_DOMAIN}
-        # Github
-        - name: CODER_GITAUTH_0_ID
+        # GitHub
+        #- name: CODER_GITAUTH_0_ID
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: coder-secret
+        #      key: CODER_GITAUTH_0_ID
+        #- name: CODER_GITAUTH_0_TYPE
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: coder-secret
+        #      key: CODER_GITAUTH_0_TYPE
+        #- name: CODER_GITAUTH_0_CLIENT_ID
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: coder-secret
+        #      key: CODER_GITAUTH_0_CLIENT_ID
+        #- name: CODER_GITAUTH_0_CLIENT_SECRET
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: coder-secret
+        #      key: CODER_GITAUTH_0_CLIENT_SECRET
+        # GitHub OAuth
+        - name: CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS
           valueFrom:
             secretKeyRef:
               name: coder-secret
-              key: CODER_GITAUTH_0_ID
-        - name: CODER_GITAUTH_0_TYPE
+              key: CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS
+        - name: CODER_OAUTH2_GITHUB_ALLOWED_ORGS
           valueFrom:
             secretKeyRef:
               name: coder-secret
-              key: CODER_GITAUTH_0_TYPE
-        - name: CODER_GITAUTH_0_CLIENT_ID
+              key: CODER_OAUTH2_GITHUB_ALLOWED_ORGS
+        - name: CODER_OAUTH2_GITHUB_CLIENT_ID
           valueFrom:
             secretKeyRef:
               name: coder-secret
-              key: CODER_GITAUTH_0_CLIENT_ID
-        - name: CODER_GITAUTH_0_CLIENT_SECRET
+              key: CODER_OAUTH2_GITHUB_CLIENT_ID
+        - name: CODER_OAUTH2_GITHUB_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
               name: coder-secret
-              key: CODER_GITAUTH_0_CLIENT_SECRET
+              key: CODER_OAUTH2_GITHUB_CLIENT_SECRET
         # # OIDC
         # - name: CODER_OIDC_ISSUER_URL
         #   valueFrom:
