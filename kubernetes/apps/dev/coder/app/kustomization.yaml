@@ -6,3 +6,4 @@ namespace: dev
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./rbac.yaml

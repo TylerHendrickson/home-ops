@@ -49,6 +49,10 @@ spec:
         # App
         - name: CODER_ACCESS_URL
           value: https://coder.${SECRET_DOMAIN}
+        - name: CODER_TELEMETRY
+          value: "false"
+        - name: CODER_PROMETHEUS_ENABLE
+          value: "true"
         # GitHub
         #- name: CODER_GITAUTH_0_ID
         #  valueFrom:
