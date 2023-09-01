@@ -48,7 +48,7 @@ spec:
               key: CODER_PG_CONNECTION_URL
         # App
         - name: CODER_ACCESS_URL
-          value: "coder.${SECRET_DOMAIN}"
+          value: "https://coder.${SECRET_DOMAIN}"
         - name: CODER_WILDCARD_ACCESS_URL
           value: "*.coder.${SECRET_DOMAIN}"
         - name: CODER_TELEMETRY
