@@ -50,7 +50,7 @@ spec:
         - name: CODER_ACCESS_URL
           value: "https://coder.${SECRET_DOMAIN}"
         - name: CODER_WILDCARD_ACCESS_URL
-          value: "*.ws.coder.${SECRET_DOMAIN}"
+          value: "*.coder.${SECRET_DOMAIN}"
         - name: CODER_TELEMETRY
           value: "false"
         - name: CODER_PROMETHEUS_ENABLE
@@ -126,6 +126,6 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: "ingress.${SECRET_DOMAIN}"
         host: "https://coder.${SECRET_DOMAIN}"
-        wildcardHost: "*.ws.coder.${SECRET_DOMAIN}"
+        wildcardHost: "*.coder.${SECRET_DOMAIN}"
     nodeSelector:
       node-role.kubernetes.io/worker: "true"
