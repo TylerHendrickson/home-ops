@@ -55,8 +55,8 @@ spec:
           value: "false"
         - name: CODER_PROMETHEUS_ENABLE
           value: "true"
-        - name: CODER_DISABLE_PATH_APPS
-          value: "true"
+        #- name: CODER_DISABLE_PATH_APPS
+        #  value: "true"
         # GitHub
         #- name: CODER_GITAUTH_0_ID
         #  valueFrom:
