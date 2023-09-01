@@ -48,10 +48,14 @@ spec:
               key: CODER_PG_CONNECTION_URL
         # App
         - name: CODER_ACCESS_URL
-          value: https://coder.${SECRET_DOMAIN}
+          value: &host https://coder.${SECRET_DOMAIN}
+        - name: CODER_WILDCARD_ACCESS_URL
+          value: &wildcardHost "*.ws.coder.${SECRET_DOMAIN}"
         - name: CODER_TELEMETRY
           value: "false"
         - name: CODER_PROMETHEUS_ENABLE
+          value: "true"
+        - name: CODER_DISABLE_PATH_APPS
           value: "true"
         # GitHub
         #- name: CODER_GITAUTH_0_ID
@@ -121,6 +125,7 @@ spec:
         className: nginx
         annotations:
           external-dns.alpha.kubernetes.io/target: "ingress.${SECRET_DOMAIN}"
-        host: "coder.${SECRET_DOMAIN}"
+        host: *host
+        wildcardHost: *wildcardHost
     nodeSelector:
       node-role.kubernetes.io/worker: "true"
