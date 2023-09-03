@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  push:
+    internal: true
+    dir: '{{.TEMPLATE_DIR}}'
+    cmds:
+      - cmd: 'coder template push {{.TEMPLATE_NAME}} {{ .CLI_ARGS }}'
+
+  push-gost:
+    run: always
+    cmds:
+      - task: push
+        vars:
+          TEMPLATE_DIR: coder-templates/usdr-gost/feature-development-v3
+          TEMPLATE_NAME: usdr-gost-feature-dev
+
+  push-bookworm-dind:
+    run: always
+    cmds:
+      - task: push
+        vars:
+          TEMPLATE_DIR: coder-templates/generic/bookworm-dind
+          TEMPLATE_NAME: generic-bookworm-dind
