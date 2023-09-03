@@ -1,11 +1,13 @@
 terraform {
+  required_version = "1.5.4"
   required_providers {
     coder = {
       source  = "coder/coder"
-      version = "0.11.1"
+      version = "0.11.2"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.23.0"
     }
   }
 }
@@ -17,7 +19,6 @@ locals {
   postgres_password       = "password123"
   postgres_dev_dbname     = "usdr_grants"
   postgres_test_dbname    = "usdr_grants_test"
-  node_version            = "16.14.0"
   port_forward_url_scheme = "${data.coder_workspace.this.access_port == 443 ? "https" : "http"}://"
   port_forward_domains = {
     for port in ["8080", "3000"] :
@@ -253,20 +254,20 @@ resource "kubernetes_pod" "main" {
     volume {
       name = "home-directory"
       persistent_volume_claim {
-        claim_name = kubernetes_persistent_volume_claim.home-directory.metadata.0.name
+        claim_name = kubernetes_persistent_volume_claim.home-directory.metadata[0].name
       }
     }
     volume {
       name = "dind-storage"
       persistent_volume_claim {
-        claim_name = kubernetes_persistent_volume_claim.dind.metadata.0.name
+        claim_name = kubernetes_persistent_volume_claim.dind.metadata[0].name
         read_only  = false
       }
     }
     volume {
       name = "postgres-data-directory"
       persistent_volume_claim {
-        claim_name = kubernetes_persistent_volume_claim.postgres-data-directory.metadata.0.name
+        claim_name = kubernetes_persistent_volume_claim.postgres-data-directory.metadata[0].name
       }
     }
   }
