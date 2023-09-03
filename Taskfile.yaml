@@ -20,11 +20,6 @@ tasks:
 
   default: task -l
 
-  foo:
-    desc: something
-    cmds:
-      - ls -lah
-
   init:
     desc: Initialize configuration files
     dir: "{{.BOOTSTRAP_DIR}}"
