@@ -97,7 +97,7 @@ RUN sh -c 'curl -fsSL https://code-server.dev/install.sh | sh'
 # Install Taskfile
 RUN mkdir -p "/home/coder/.local/bin"
 RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /home/coder/.local/bin
-RUN mkdir -p /home/coder/.completions
-RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task -o /home/coder/.default-completions/zsh/_task
-RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/bash/task.bash -o /home/coder/.default-completions/bash/task.bash
+RUN mkdir -p /home/coder/.default-completions
+RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task --create-dirs -o /home/coder/.default-completions/zsh/_task
+RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/bash/task.bash --create-dirs -o /home/coder/.default-completions/bash/task.bash
 RUN chmod +x /home/coder/.default-completions/bash/task.bash
