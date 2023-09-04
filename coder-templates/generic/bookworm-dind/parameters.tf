@@ -15,6 +15,13 @@ data "coder_parameter" "sharing_mode" {
   }
 }
 
+data "coder_parameter" "git_config_auto_user" {
+  name        = "Git Config: Auto-populate `git config --global user.name` and `user.email`?"
+  description = "If not selected, you will have to configure these before you can commit."
+  type        = "bool"
+  default     = "false"
+}
+
 data "coder_parameter" "home_volume_size" {
   name        = "Home Disk Size"
   description = "Amount of storage to allocate for the home directory volume. Can only be increased after creation!"
@@ -53,7 +60,21 @@ data "coder_parameter" "oh_my_zsh_plugins" {
   type        = "list(string)"
   mutable     = true
   default = jsonencode([
-    "aws", "docker", "docker-compose", "extract", "git", "npm", "nvm", "postgres", "pre-commit", "terraform", "themes", "yarn",
+    "aws",
+    "docker",
+    "docker-compose",
+    "extract",
+    "fd",
+    "git",
+    "npm",
+    "nvm",
+    "postgres",
+    "pre-commit",
+    "ripgrep",
+    "terraform",
+    "themes",
+    "wd",
+    "yarn",
   ])
 }
 
@@ -66,5 +87,6 @@ data "coder_parameter" "vscode_extensions" {
     "ms-azuretools.vscode-docker",
     "hashicorp.terraform",
     "4ops.terraform",
+    "task.vscode-task",
   ])
 }

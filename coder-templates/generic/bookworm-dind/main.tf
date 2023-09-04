@@ -9,7 +9,8 @@ locals {
   cpu-limit      = 3
   memory-limit   = "10G"
 
-  main_docker_image = "ghcr.io/tortitude/coder-templates:generic-bookworm-dind"
+  main_docker_image    = "ghcr.io/tortitude/coder-templates:generic-bookworm-dind"
+  git_config_auto_user = data.coder_parameter.git_config_auto_user.value == "true"
 }
 
 resource "coder_agent" "coder" {
@@ -47,10 +48,13 @@ resource "coder_agent" "coder" {
 
   startup_script_timeout = 300
   startup_script = templatefile("${path.module}/tpl/coder_agent_startup_script.bash", {
-    preferred_shell       = data.coder_parameter.preferred_shell.value
-    oh_my_zsh_plugins_cmd = local.omz_plugins_cmd
-    vscode_extensions     = jsondecode(data.coder_parameter.vscode_extensions.value)
-    dotfiles_uri          = "todo"
+    git_config_auto_user_name  = local.git_config_auto_user ? data.coder_workspace.this.owner : ""
+    git_config_auto_user_email = local.git_config_auto_user ? data.coder_workspace.this.owner_email : ""
+    preferred_shell            = data.coder_parameter.preferred_shell.value
+    oh_my_zsh_plugins_cmd      = local.omz_plugins_cmd
+    vscode_extensions          = jsondecode(data.coder_parameter.vscode_extensions.value)
+    dotfiles_uri               = "todo"
+    git_config_auto_user       = data.coder_parameter.git_config_auto_user.value == "true"
   })
 }
 

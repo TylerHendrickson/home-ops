@@ -7,12 +7,16 @@ RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get upgrade --yes && \
     DEBIAN_FRONTEND="noninteractive" apt-get install --yes apt-utils ca-certificates curl gnupg wget
 RUN install -m 0755 -d /etc/apt/keyrings
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+COPY docker-archive-keyring.gpg /tmp/docker-archive-keyring.gpg
+RUN gpg --dearmor -o /etc/apt/keyrings/docker.gpg < /tmp/docker-archive-keyring.gpg
 RUN chmod a+r /etc/apt/keyrings/docker.gpg
 RUN echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+RUN rm /tmp/docker-archive-keyring.gpg
+COPY hashicorp-archive-keyring.gpg /tmp/hashicorp-archive-keyring.gpg
+RUN gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg < /tmp/hashicorp-archive-keyring.gpg
 RUN gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(. /etc/os-release && echo "$VERSION_CODENAME") main" | tee /etc/apt/sources.list.d/hashicorp.list
+RUN rm /tmp/hashicorp-archive-keyring.gpg
 
 # Install baseline packages
 RUN apt-get update && \
@@ -89,3 +93,11 @@ RUN rm -rf /tmp/awscli
 
 # Install code-server
 RUN sh -c 'curl -fsSL https://code-server.dev/install.sh | sh'
+
+# Install Taskfile
+RUN mkdir -p "/home/coder/.local/bin"
+RUN sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /home/coder/.local/bin
+RUN mkdir -p /home/coder/.completions
+RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_task -o /home/coder/.default-completions/zsh/_task
+RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/bash/task.bash -o /home/coder/.default-completions/bash/task.bash
+RUN chmod +x /home/coder/.default-completions/bash/task.bash
