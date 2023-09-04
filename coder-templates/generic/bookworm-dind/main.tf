@@ -3,6 +3,13 @@ data "coder_workspace" "this" {}
 locals {
   omz_plugins     = jsondecode(data.coder_parameter.oh_my_zsh_plugins.value)
   omz_plugins_cmd = length(local.omz_plugins) > 0 ? "source .zshrc && omz plugin enable ${join(" ", local.omz_plugins)}" : "true"
+
+  cpu-request    = "250m"
+  memory-request = "500m"
+  cpu-limit      = 3
+  memory-limit   = "10G"
+
+  main_docker_image = "ghcr.io/tortitude/coder-templates:generic-bookworm-dind"
 }
 
 resource "coder_agent" "coder" {
@@ -65,12 +72,7 @@ resource "coder_app" "code-server" {
 }
 
 locals {
-  cpu-request    = "250m"
-  memory-request = "500m"
-  cpu-limit      = 3
-  memory-limit   = "10G"
 
-  main_docker_image = "debian:bookworm"
 }
 
 resource "kubernetes_pod" "main" {
