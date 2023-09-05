@@ -166,6 +166,9 @@ spec:
           gnetId: 14866
           revision: 1
           datasource: Prometheus
+        mac-prometheus-exporter-custom:
+          url: https://gist.githubusercontent.com/TylerHendrickson/772c0db3636bf55498c236ea6394ed9b/raw/efc1e42bda5d8c473dd3d884b83bb1c08b0d431d/dashboard.json
+          datasource: Prometheus
     sidecar:
       dashboards:
         enabled: true
