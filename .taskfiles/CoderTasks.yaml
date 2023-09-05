@@ -25,3 +25,12 @@ tasks:
         vars:
           TEMPLATE_DIR: coder-templates/generic/bookworm-dind
           TEMPLATE_NAME: generic-bookworm-dind
+
+  publish-bookworm-dind:
+    run: always
+    dir: coder-templates/generic/bookworm-dind/docker
+    vars:
+      DOCKER_IMAGE: 'ghcr.io/tortitude/coder-templates:generic-bookworm-dind'
+    cmds:
+      - cmd: "docker build -t {{ .DOCKER_IMAGE }} ."
+      - cmd: "docker push {{ .DOCKER_IMAGE }}"
