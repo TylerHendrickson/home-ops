@@ -13,6 +13,21 @@ git config --global alias.pr '!f() { if [ $# -lt 1 ]; then echo "Usage: git pr <
 echo '===== END: Configure Git ====='
 
 
+# Clone and checkout repo
+echo '===== BEGIN: Clone and checkout repo ====='
+if [[ ! -z "${git_clone_url}" && ! -d "$HOME/${git_repo_name}" ]]; then
+  git clone ${git_clone_url}
+  git -C ./${git_repo_name} checkout ${git_checkout_branch} 2> /dev/null || git -C ./${git_repo_name} checkout -b ${git_checkout_branch} ${git_checkout_base}
+fi
+echo '===== END: Clone and checkout repo ====='
+
+
+# Ensure default working directory exists
+echo '===== BEGIN: Ensure default working directory exists ====='
+[ ! -d "${default_working_directory}" ] && mkdir -p "${default_working_directory}"
+echo '===== END: Ensure default working directory exists ====='
+
+
 # Configure preferred shell
 echo '===== BEGIN: Configure preferred shell ====='
 sudo chsh -s $(which "${preferred_shell}") $(whoami)

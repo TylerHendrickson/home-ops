@@ -11,12 +11,23 @@ locals {
 
   main_docker_image    = "ghcr.io/tortitude/coder-templates:generic-bookworm-dind"
   git_config_auto_user = data.coder_parameter.git_config_auto_user.value == "true"
+
+  git_clone_repo  = data.coder_parameter.git_clone_repo.value
+  clone_url       = endswith(local.git_clone_repo, ".git") ? local.git_clone_repo : "git@github.com:${local.git_clone_repo}.git"
+  checkout_branch = data.coder_parameter.git_checkout_branch.value
+  checkout_base   = data.coder_parameter.git_checkout_base_branch.value
+  repo_name       = try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), "")
+  default_working_directory = coalesce(
+    data.coder_parameter.default_working_directory.value,
+    trimsuffix("${try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), "")}", "/")
+  )
+  absolute_default_working_directory = startswith(local.default_working_directory, "/") ? local.default_working_directory : "/home/coder/${local.default_working_directory}"
 }
 
 resource "coder_agent" "coder" {
   os   = "linux"
   arch = "amd64"
-  dir  = "/home/coder"
+  dir  = local.absolute_default_working_directory
 
   metadata {
     display_name = "CPU Usage"
@@ -50,6 +61,11 @@ resource "coder_agent" "coder" {
   startup_script = templatefile("${path.module}/tpl/coder_agent_startup_script.bash", {
     git_config_auto_user_name  = local.git_config_auto_user ? data.coder_workspace.this.owner : ""
     git_config_auto_user_email = local.git_config_auto_user ? data.coder_workspace.this.owner_email : ""
+    git_clone_url              = local.git_clone_repo != "" ? local.clone_url : ""
+    git_repo_name              = local.repo_name
+    git_checkout_branch        = local.checkout_branch
+    git_checkout_base          = local.checkout_base
+    default_working_directory  = local.absolute_default_working_directory
     preferred_shell            = data.coder_parameter.preferred_shell.value
     oh_my_zsh_plugins_cmd      = local.omz_plugins_cmd
     vscode_extensions          = jsondecode(data.coder_parameter.vscode_extensions.value)
@@ -64,7 +80,7 @@ resource "coder_app" "code-server" {
   slug         = "code-server"
   display_name = "VS Code Web"
   icon         = "/icon/code.svg"
-  url          = "http://localhost:13337?folder=/home/coder"
+  url          = "http://localhost:13337?folder=${local.absolute_default_working_directory}"
   subdomain    = false
   share        = data.coder_parameter.sharing_mode.value
 
