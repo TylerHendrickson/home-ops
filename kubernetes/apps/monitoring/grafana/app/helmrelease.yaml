@@ -161,6 +161,11 @@ spec:
           gnetId: 12524
           revision: 2
           datasource: Prometheus
+        # Ref: https://grafana.com/grafana/dashboards/14866-mac-prometheus-exporter/
+        mac-prometheus-exporter:
+          gnetId: 14866
+          revision: 1
+          datasource: Prometheus
     sidecar:
       dashboards:
         enabled: true
