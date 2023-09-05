@@ -19,7 +19,8 @@ locals {
   repo_name       = try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), "")
   default_working_directory = coalesce(
     data.coder_parameter.default_working_directory.value,
-    trimsuffix("${try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), "")}", "/")
+    trimsuffix("${try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), "")}", "/"),
+    "/home/coder",
   )
   absolute_default_working_directory = startswith(local.default_working_directory, "/") ? local.default_working_directory : "/home/coder/${local.default_working_directory}"
 }
