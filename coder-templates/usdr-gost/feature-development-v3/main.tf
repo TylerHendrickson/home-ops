@@ -1,4 +1,5 @@
 data "coder_workspace" "this" {}
+data "coder_git_auth" "github" { id = "github" }
 
 locals {
   postgres_user           = "postgres"
@@ -68,8 +69,9 @@ resource "coder_agent" "coder" {
   }
 
   env = {
-    PGHOST = "localhost"
-    PGUSER = local.postgres_user
+    GITHUB_TOKEN = data.coder_git_auth.github.access_token
+    PGHOST       = "localhost"
+    PGUSER       = local.postgres_user
   }
 
   startup_script_timeout = 300

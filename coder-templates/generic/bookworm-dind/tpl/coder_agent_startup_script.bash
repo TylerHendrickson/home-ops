@@ -33,12 +33,13 @@ echo '===== BEGIN: Configure preferred shell ====='
 sudo chsh -s $(which "${preferred_shell}") $(whoami)
 if [[ "${preferred_shell}" == "zsh" && ! -d "$HOME/.oh-my-zsh/" ]]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended"
-  zsh -c '${oh_my_zsh_plugins_cmd}'
+  [ -n "${oh_my_zsh_plugins}" ] && zsh -c 'source .zshrc && omz plugin enable ${oh_my_zsh_plugins}'
   mkdir -p "$HOME/.oh-my-zsh/completions"
-  cp "$HOME/.default-completions/zsh/_task" "$HOME/.oh-my-zsh/completions/_task"
 fi
 if [[ "${preferred_shell}" == "bash" && ! -f "$HOME/.bash_profile" ]]; then
-  echo 'source ~/.default-completions/task.bash' >> "$HOME/.bash_profile"
+  echo 'source /etc/profile.d/bash_completion.sh' >> "$HOME/.bash_profile"
+  echo "complete -C '/usr/local/bin/aws_completer' aws" >> "$HOME/.bash_profile"
+  echo 'source "$HOME/.bash_profile"' >> "$HOME/.bashrc"
 fi
 echo '===== END: Configure preferred shell ====='
 

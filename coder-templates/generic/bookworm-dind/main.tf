@@ -1,8 +1,7 @@
 data "coder_workspace" "this" {}
 
 locals {
-  omz_plugins     = jsondecode(data.coder_parameter.oh_my_zsh_plugins.value)
-  omz_plugins_cmd = length(local.omz_plugins) > 0 ? "source .zshrc && omz plugin enable ${join(" ", local.omz_plugins)}" : "true"
+  omz_plugins = jsondecode(data.coder_parameter.oh_my_zsh_plugins.value)
 
   cpu-request    = "250m"
   memory-request = "500m"
@@ -19,7 +18,7 @@ locals {
   repo_name       = try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), "")
   default_working_directory = coalesce(
     data.coder_parameter.default_working_directory.value,
-    trimsuffix("${try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), "")}", "/"),
+    trimsuffix(try(one(regex("^.+\\/(.+)\\.git$", local.clone_url)), ""), "/"),
     "/home/coder",
   )
   absolute_default_working_directory = startswith(local.default_working_directory, "/") ? local.default_working_directory : "/home/coder/${local.default_working_directory}"
@@ -68,7 +67,7 @@ resource "coder_agent" "coder" {
     git_checkout_base          = local.checkout_base
     default_working_directory  = local.absolute_default_working_directory
     preferred_shell            = data.coder_parameter.preferred_shell.value
-    oh_my_zsh_plugins_cmd      = local.omz_plugins_cmd
+    oh_my_zsh_plugins          = join(" ", local.omz_plugins)
     vscode_extensions          = jsondecode(data.coder_parameter.vscode_extensions.value)
     dotfiles_uri               = "todo"
     git_config_auto_user       = data.coder_parameter.git_config_auto_user.value == "true"
