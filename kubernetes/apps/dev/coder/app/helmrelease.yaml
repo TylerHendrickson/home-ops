@@ -58,26 +58,26 @@ spec:
         #- name: CODER_DISABLE_PATH_APPS
         #  value: "true"
         # GitHub
-        #- name: CODER_GITAUTH_0_ID
-        #  valueFrom:
-        #    secretKeyRef:
-        #      name: coder-secret
-        #      key: CODER_GITAUTH_0_ID
-        #- name: CODER_GITAUTH_0_TYPE
-        #  valueFrom:
-        #    secretKeyRef:
-        #      name: coder-secret
-        #      key: CODER_GITAUTH_0_TYPE
-        #- name: CODER_GITAUTH_0_CLIENT_ID
-        #  valueFrom:
-        #    secretKeyRef:
-        #      name: coder-secret
-        #      key: CODER_GITAUTH_0_CLIENT_ID
-        #- name: CODER_GITAUTH_0_CLIENT_SECRET
-        #  valueFrom:
-        #    secretKeyRef:
-        #      name: coder-secret
-        #      key: CODER_GITAUTH_0_CLIENT_SECRET
+        - name: CODER_GITAUTH_0_ID
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_ID
+        - name: CODER_GITAUTH_0_TYPE
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_TYPE
+        - name: CODER_GITAUTH_0_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_CLIENT_ID
+        - name: CODER_GITAUTH_0_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: coder-secret
+              key: CODER_GITAUTH_0_CLIENT_SECRET
         # GitHub OAuth
         - name: CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS
           valueFrom:
