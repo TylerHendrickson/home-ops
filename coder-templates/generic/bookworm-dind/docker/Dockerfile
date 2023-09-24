@@ -12,11 +12,6 @@ RUN gpg --dearmor -o /etc/apt/keyrings/docker.gpg < /tmp/docker-archive-keyring.
 RUN chmod a+r /etc/apt/keyrings/docker.gpg
 RUN echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 RUN rm /tmp/docker-archive-keyring.gpg
-COPY hashicorp-archive-keyring.gpg /tmp/hashicorp-archive-keyring.gpg
-RUN gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg < /tmp/hashicorp-archive-keyring.gpg
-RUN gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(. /etc/os-release && echo "$VERSION_CODENAME") main" | tee /etc/apt/sources.list.d/hashicorp.list
-RUN rm /tmp/hashicorp-archive-keyring.gpg
 
 # Install baseline packages
 RUN apt-get update && \
@@ -45,7 +40,6 @@ RUN apt-get update && \
       sudo \
       systemd \
       systemd-sysv \
-      terraform \
       tmux \
       unzip \
       vim \

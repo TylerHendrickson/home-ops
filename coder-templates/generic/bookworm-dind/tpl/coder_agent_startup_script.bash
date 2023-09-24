@@ -68,3 +68,6 @@ code-server --auth none --port 13337 "$HOME" > /tmp/code-server.log 2>&1 &
 SERVICE_URL=https://open-vsx.org/vscode/gallery ITEM_URL=https://open-vsx.org/vscode/item code-server \
   %{ for ext in vscode_extensions ~} --install-extension "${ext}" %{ endfor }
 echo '===== END: Start code-server and install extensions ====='
+
+# Install terraform with tfvm (Terraform version manager)
+command -v tfvm || curl -sL https://raw.githubusercontent.com/cbuschka/tfvm/main/install.sh -o - | bash
