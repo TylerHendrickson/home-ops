@@ -29,6 +29,12 @@ RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/zsh/_tas
 RUN curl https://raw.githubusercontent.com/go-task/task/main/completion/bash/task.bash --create-dirs -o /usr/share/bash-completion/completions/task.bash
 RUN chmod +x /usr/share/bash-completion/completions/task.bash
 
+# Install tflint
+RUN curl -s 'https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh' | bash
+
+# Install staticcheck
+RUN GOBIN=/usr/local/bin/ go install 'honnef.co/go/tools/cmd/staticcheck@latest'
+
 USER coder
 
 # Install code-server
