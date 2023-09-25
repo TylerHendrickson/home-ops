@@ -52,6 +52,15 @@ fi
 echo '========== END: Add ~/.local/bin to PATH =========='
 
 
+# Install terraform with tfvm (Terraform version manager)
+echo '========== BEGIN: Install terraform with tfvm (Terraform version manager) =========='
+command -v tfvm || curl -sL https://raw.githubusercontent.com/cbuschka/tfvm/main/install.sh -o - | bash
+pushd "$HOME/${git_repo_name}/terraform"
+tfvm install
+popd
+echo '========== END: Install terraform with tfvm (Terraform version manager) =========='
+
+
 # Use coder CLI to clone and install dotfiles TODO
 echo '========== BEGIN: Configure dotfiles =========='
 # coder dotfiles -y ${dotfiles_uri} &

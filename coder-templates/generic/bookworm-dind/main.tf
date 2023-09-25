@@ -100,7 +100,7 @@ resource "kubernetes_pod" "main" {
   depends_on = [kubernetes_persistent_volume_claim.home-directory]
 
   metadata {
-    name      = "coder-ws-${data.coder_workspace.this.owner}-${data.coder_workspace.this.name}"
+    name      = "coder-ws-${lower(data.coder_workspace.this.owner)}-${lower(data.coder_workspace.this.name)}"
     namespace = "dev"
   }
 
@@ -179,7 +179,7 @@ resource "kubernetes_pod" "main" {
 
 resource "kubernetes_persistent_volume_claim" "home-directory" {
   metadata {
-    name      = "coder-ws-${data.coder_workspace.this.owner}-${data.coder_workspace.this.name}-home"
+    name      = "coder-ws-${lower(data.coder_workspace.this.owner)}-${lower(data.coder_workspace.this.name)}-home"
     namespace = "dev"
   }
 
@@ -198,7 +198,7 @@ resource "kubernetes_persistent_volume_claim" "home-directory" {
 
 resource "kubernetes_persistent_volume_claim" "dind" {
   metadata {
-    name      = "coder-ws-${data.coder_workspace.this.owner}-${data.coder_workspace.this.name}-dind"
+    name      = "coder-ws-${lower(data.coder_workspace.this.owner)}-${lower(data.coder_workspace.this.name)}-dind"
     namespace = "dev"
   }
 

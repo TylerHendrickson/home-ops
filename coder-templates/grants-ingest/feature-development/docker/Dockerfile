@@ -9,11 +9,7 @@ RUN locale-gen --purge "en_US.UTF-8"
 RUN update-locale "LANG=en_US.UTF-8"
 RUN dpkg-reconfigure --frontend noninteractive locales
 
-RUN wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-RUN sh -c 'echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list'
-RUN apt update
-
-RUN apt install bash-completion fd-find jq gnupg gnupg1 gnupg2 ripgrep screen terraform tmux zsh -y
+RUN apt install bash-completion fd-find jq gnupg gnupg1 gnupg2 ripgrep screen tmux zsh -y
 
 # Install AWS CLI
 RUN mkdir -p /tmp/awscli
