@@ -9,6 +9,8 @@ locals {
   localstack_data_dir  = "/var/lib/localstack"
   omz_plugins          = jsondecode(data.coder_parameter.oh_my_zsh_plugins.value)
   git_config_auto_user = data.coder_parameter.git_config_auto_user.value == "true"
+
+  workspace_volume_name_prefix = "coder-ws-${lower(data.coder_workspace.this.owner)}-${lower(data.coder_workspace.this.name)}"
 }
 
 resource "coder_agent" "coder" {
@@ -201,7 +203,7 @@ resource "kubernetes_pod" "main" {
 
 resource "kubernetes_persistent_volume_claim" "home-directory" {
   metadata {
-    name      = "coder-ws-${data.coder_workspace.this.owner}-${data.coder_workspace.this.name}-home"
+    name      = "${local.workspace_volume_name_prefix}-home"
     namespace = "dev"
   }
 
@@ -212,7 +214,7 @@ resource "kubernetes_persistent_volume_claim" "home-directory" {
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "10Gi"
+        storage = "20Gi"
       }
     }
   }
@@ -220,7 +222,7 @@ resource "kubernetes_persistent_volume_claim" "home-directory" {
 
 resource "kubernetes_persistent_volume_claim" "dind" {
   metadata {
-    name      = "coder-ws-${data.coder_workspace.this.owner}-${data.coder_workspace.this.name}-dind"
+    name      = "${local.workspace_volume_name_prefix}-dind"
     namespace = "dev"
   }
 
