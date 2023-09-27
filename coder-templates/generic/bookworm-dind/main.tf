@@ -1,4 +1,7 @@
 data "coder_workspace" "this" {}
+data "coder_git_auth" "github" {
+  id = "primary-github"
+}
 
 locals {
   omz_plugins = jsondecode(data.coder_parameter.oh_my_zsh_plugins.value)
@@ -54,7 +57,7 @@ resource "coder_agent" "coder" {
   }
 
   env = {
-
+    GITHUB_TOKEN = data.coder_git_auth.github.access_token
   }
 
   startup_script_timeout = 300
