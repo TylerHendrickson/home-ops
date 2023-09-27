@@ -45,7 +45,7 @@ resource "coder_agent" "coder" {
   }
 
   metadata {
-    display_name = "Home Disk"
+    display_name = "Home Disk Usage"
     key          = "2_home_disk"
     script       = "coder stat disk --path $${HOME}"
     interval     = 60
@@ -55,7 +55,7 @@ resource "coder_agent" "coder" {
   metadata {
     display_name = "GOST Website Available?"
     key          = "3_gost_website_available"
-    script       = "curl -sL --connect-timeout 5 localhost:8080 -o /dev/null && echo yes || echo no"
+    script       = "ss -HOtln | grep -q ':8080' && echo yes || echo no"
     interval     = 30
     timeout      = 10
   }
@@ -63,7 +63,7 @@ resource "coder_agent" "coder" {
   metadata {
     display_name = "GOST API Available?"
     key          = "4_gost_api_available"
-    script       = "curl -sL --connect-timeout 5 localhost:3000 -o /dev/null && echo yes || echo no"
+    script       = "ss -HOtln | grep -q ':3000' && echo yes || echo no"
     interval     = 30
     timeout      = 10
   }
