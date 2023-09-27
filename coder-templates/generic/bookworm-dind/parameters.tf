@@ -67,7 +67,7 @@ data "coder_parameter" "preferred_shell" {
   order       = 30
   type        = "string"
   mutable     = true
-  default     = "bash"
+  default     = "zsh"
 
   option {
     name  = "bash"
@@ -136,4 +136,3 @@ data "coder_parameter" "sharing_mode" {
     value = "owner"
   }
 }
-

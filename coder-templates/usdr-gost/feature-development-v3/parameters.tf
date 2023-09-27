@@ -36,7 +36,7 @@ data "coder_parameter" "preferred_shell" {
   description = "What command-line shell do you want to use?"
   type        = "string"
   mutable     = true
-  default     = "bash"
+  default     = "zsh"
 
   option {
     name  = "bash"
