@@ -1,5 +1,7 @@
 data "coder_workspace" "this" {}
-data "coder_git_auth" "github" { id = "github" }
+data "coder_git_auth" "github" {
+  id = "primary-github"
+}
 
 locals {
   postgres_user           = "postgres"
