@@ -73,7 +73,6 @@ resource "coder_agent" "coder" {
     oh_my_zsh_plugins          = join(" ", local.omz_plugins)
     vscode_extensions          = jsondecode(data.coder_parameter.vscode_extensions.value)
     dotfiles_uri               = "todo"
-    git_config_auto_user       = data.coder_parameter.git_config_auto_user.value == "true"
   })
 }
 
