@@ -21,8 +21,9 @@ locals {
     for port, domain in local.port_forward_domains :
     port => "${local.port_forward_url_scheme}${domain}"
   }
-  omz_plugins     = jsondecode(data.coder_parameter.oh_my_zsh_plugins.value)
-  omz_plugins_cmd = length(local.omz_plugins) > 0 ? "source .zshrc && omz plugin enable ${join(" ", local.omz_plugins)}" : "true"
+  git_config_auto_user = data.coder_parameter.git_config_auto_user.value == "true"
+  omz_plugins          = jsondecode(data.coder_parameter.oh_my_zsh_plugins.value)
+  omz_plugins_cmd      = length(local.omz_plugins) > 0 ? "source .zshrc && omz plugin enable ${join(" ", local.omz_plugins)}" : "true"
 }
 
 resource "coder_agent" "coder" {
@@ -88,15 +89,17 @@ resource "coder_agent" "coder" {
       POSTGRES_URL      = local.postgres_dev_dbname
       POSTGRES_TEST_URL = local.postgres_test_dbname
     }
-    nvm_install_script_url = "https://raw.githubusercontent.com/nvm-sh/nvm/${data.coder_parameter.nvm_version.value}/install.sh"
-    yarn_network_timeout   = data.coder_parameter.yarn_network_timeout_ms.value
-    git_clone_url          = "git@github.com:usdigitalresponse/usdr-gost.git"
-    git_repo_name          = "usdr-gost"
-    git_checkout_branch    = data.coder_parameter.git_checkout_branch_name.value
-    git_base_branch        = data.coder_parameter.git_base_branch_name.value
-    gost_api_url           = local.port_forward_urls["3000"]
-    website_url            = local.port_forward_urls["8080"]
-    vscode_extensions      = jsondecode(data.coder_parameter.vscode_extensions.value)
+    nvm_install_script_url     = "https://raw.githubusercontent.com/nvm-sh/nvm/${data.coder_parameter.nvm_version.value}/install.sh"
+    yarn_network_timeout       = data.coder_parameter.yarn_network_timeout_ms.value
+    git_config_auto_user_name  = local.git_config_auto_user ? data.coder_workspace.this.owner : ""
+    git_config_auto_user_email = local.git_config_auto_user ? data.coder_workspace.this.owner_email : ""
+    git_clone_url              = "git@github.com:usdigitalresponse/usdr-gost.git"
+    git_repo_name              = "usdr-gost"
+    git_checkout_branch        = data.coder_parameter.git_checkout_branch_name.value
+    git_base_branch            = data.coder_parameter.git_base_branch_name.value
+    gost_api_url               = local.port_forward_urls["3000"]
+    website_url                = local.port_forward_urls["8080"]
+    vscode_extensions          = jsondecode(data.coder_parameter.vscode_extensions.value)
   })
 }
 

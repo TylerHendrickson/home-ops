@@ -14,6 +14,13 @@ data "coder_parameter" "git_base_branch_name" {
   default     = "_staging"
 }
 
+data "coder_parameter" "git_config_auto_user" {
+  name        = "Git Config: Auto-populate `git config --global user.name` and `user.email`?"
+  description = "If not selected, you will have to configure these before you can commit."
+  type        = "bool"
+  default     = "false"
+}
+
 data "coder_parameter" "sharing_mode" {
   name        = "Enable Shared Access"
   description = "Whether to enable access for other team members. We recommend leaving this on!"

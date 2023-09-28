@@ -1,9 +1,14 @@
 #!/bin/bash
 cd "$HOME"
 
-# Add github.com to known_hosts
+# Configure git
+echo '========== BEGIN: Configure git =========='
 mkdir -p ~/.ssh
 ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+git config --global credential.useHttpPath true
+[ -n "${git_config_auto_user_name}" ] && git config --global user.name "${git_config_auto_user_name}"
+[ -n "${git_config_auto_user_email}" ] && git config --global user.email "${git_config_auto_user_email}"
+echo '========== END: Configure git =========='
 
 
 # Start postgres
