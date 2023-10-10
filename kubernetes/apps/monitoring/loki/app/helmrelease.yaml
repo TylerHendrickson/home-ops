@@ -127,6 +127,15 @@ spec:
           operator: "Equal"
           value: "true"
           effect: "NoExecute"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
     read:
       replicas: 2
       persistence:
@@ -143,6 +152,15 @@ spec:
           operator: "Equal"
           value: "true"
           effect: "NoExecute"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
     write:
       replicas: 2
       persistence:
@@ -153,6 +171,15 @@ spec:
           operator: "Equal"
           value: "true"
           effect: "NoExecute"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
     backend:
       replicas: 2
       persistence:
@@ -174,6 +201,15 @@ spec:
           operator: "Equal"
           value: "true"
           effect: "NoExecute"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
     monitoring:
       dashboards:
         annotations:
