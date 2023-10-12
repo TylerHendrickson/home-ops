@@ -137,14 +137,14 @@ spec:
           - memory-snapshot-on-shutdown
           - new-service-discovery-manager
         retention: 2d
-        retentionSize: 15GB
+        retentionSize: 45GB
         storageSpec:
           volumeClaimTemplate:
             spec:
               storageClassName: longhorn
               resources:
                 requests:
-                  storage: 20Gi
+                  storage: 50Gi
     grafana:
       enabled: false
       forceDeployDashboards: true
