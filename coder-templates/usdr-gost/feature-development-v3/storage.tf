@@ -7,7 +7,7 @@ resource "kubernetes_persistent_volume_claim" "home-directory" {
   wait_until_bound = false
 
   spec {
-    storage_class_name = "longhorn-coder-workspace"
+    storage_class_name = "longhorn-coder-workspace-v2"
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
@@ -26,7 +26,7 @@ resource "kubernetes_persistent_volume_claim" "dind" {
   wait_until_bound = false
 
   spec {
-    storage_class_name = "longhorn-coder-workspace"
+    storage_class_name = "longhorn-coder-workspace-v2"
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
@@ -46,7 +46,7 @@ resource "kubernetes_persistent_volume_claim" "postgres-data-directory" {
 
   spec {
     access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "longhorn-coder-workspace"
+    storage_class_name = "longhorn-coder-workspace-v2"
     resources {
       requests = {
         storage = "5Gi"
