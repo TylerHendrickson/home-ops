@@ -1,5 +1,5 @@
 data "coder_workspace" "this" {}
-data "coder_git_auth" "github" {
+data "coder_external_auth" "github" {
   id = "primary-github"
 }
 
@@ -57,7 +57,7 @@ resource "coder_agent" "coder" {
   }
 
   env = {
-    GITHUB_TOKEN = data.coder_git_auth.github.access_token
+    GITHUB_TOKEN = data.coder_external_auth.github.access_token
   }
 
   startup_script_timeout = 300
