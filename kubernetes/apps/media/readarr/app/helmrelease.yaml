@@ -26,7 +26,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/readarr-develop
-      tag: 0.3.10.2287@sha256:ff5f0db30fd5e0461a43a5b97556bea46e1f6f84b9c6d94028f636a14a158c24
+      tag: 0.3.13.2338@sha256:bf8a16b7fb4c17499f8de4c0c71a044e140e90d9c00904d751c1a46470a99033
     env:
       TZ: "America/Chicago"
       READARR__PORT: &port 80
