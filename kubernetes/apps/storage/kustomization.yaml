@@ -6,3 +6,4 @@ resources:
   - ./local-path-provisioner/ks.yaml
   - ./snapshot-controller/ks.yaml
   - ./volsync/ks.yaml
+  - ./csi-driver-nfs/ks.yaml
