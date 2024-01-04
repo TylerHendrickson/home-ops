@@ -17,10 +17,12 @@ spec:
   install:
     remediation:
       retries: 3
+    timeout: 2m
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
+    timeout: 2m
   uninstall:
     keepHistory: false
   values:
@@ -126,7 +128,7 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        existingClaim: cardhu-minio-v2
+        existingClaim: cardhu-minio-v1
         globalMounts:
           - path: /data
     affinity:
