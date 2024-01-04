@@ -114,6 +114,14 @@ spec:
           - hosts:
               - *consoleHost
               - *s3Host
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      supplementalGroups:
+        - 100
+        - 1000
+        - 1001
     persistence:
       config:
         enabled: true
