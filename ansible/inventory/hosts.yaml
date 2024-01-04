@@ -1,0 +1,25 @@
+---
+kubernetes:
+  children:
+    master:
+      hosts:
+        glenfiddich-lan:
+          ansible_user: k8s
+          ansible_host: 192.168.1.104
+        harris-lan:
+          ansible_user: k8s
+          ansible_host: 192.168.1.106
+        inchgower-lan:
+          ansible_user: k8s
+          ansible_host: 192.168.1.107
+    worker:
+      hosts:
+        k8s-0-balvenie-lan:
+          ansible_user: k8s
+          ansible_host: 192.168.1.111
+        k8s-0-falkirk-lan:
+          ansible_user: k8s
+          ansible_host: 192.168.1.176
+        k8s-0-jura-lan:
+          ansible_user: k8s
+          ansible_host: 192.168.1.146

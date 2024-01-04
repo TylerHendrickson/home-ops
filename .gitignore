@@ -12,3 +12,5 @@ kubeconfig
 .venv*
 # Taskfile
 .tasks
+# Explicitly ignored
+*.gitignored
