@@ -32,27 +32,15 @@ spec:
     longhornUI:
       tolerations:
         - key: "node-role.kubernetes.io/control-plane"
-          operator: "Equal"
-          value: "true"
-          effect: "NoExecute"
-        - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
           effect: "NoExecute"
     longhornManager:
       tolerations:
         - key: "node-role.kubernetes.io/control-plane"
-          operator: "Equal"
-          value: "true"
-          effect: "NoExecute"
-        - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
           effect: "NoExecute"
     longhornDriver:
       tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Equal"
-          value: "true"
-          effect: "NoExecute"
         - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
           effect: "NoExecute"
