@@ -8,4 +8,4 @@ resources:
   - ./volsync/ks.yaml
   - ./csi-driver-nfs/ks.yaml
   - ./longhorn-system
-  - ./minio
+  - ./minio/ks.yaml
