@@ -6,7 +6,7 @@ metadata:
 provisioner: nfs.csi.k8s.io
 parameters:
   server: 192.168.1.95
-  path: /volume1/minio
+  share: /volume1/minio
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
