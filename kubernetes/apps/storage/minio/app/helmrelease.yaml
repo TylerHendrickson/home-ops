@@ -118,7 +118,7 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        existingClaim: cardhu-minio-v1
+        existingClaim: cardhu-minio-v2
         globalMounts:
           - path: /data
     affinity:

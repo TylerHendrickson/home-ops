@@ -2,7 +2,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: cardhu-minio-v1
+  name: cardhu-minio-v2
 provisioner: nfs.csi.k8s.io
 parameters:
   server: 192.168.1.95
@@ -25,9 +25,9 @@ mountOptions:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: cardhu-minio-v1
+  name: cardhu-minio-v2
 spec:
-  storageClassName: cardhu-minio-v1
+  storageClassName: cardhu-minio-v2
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
