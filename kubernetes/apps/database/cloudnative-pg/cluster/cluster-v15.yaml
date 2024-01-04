@@ -1,0 +1,70 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-v15
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:15.2
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 50Gi
+    storageClass: local-path
+  superuserSecret:
+    name: cloudnative-pg-secret
+  bootstrap:
+    recovery:
+      source: &previousCluster postgres-v15-1
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      serverName: &currentCluster postgres-v15-2
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: "s3://postgresql/"
+      endpointURL: "http://minio.storage.svc.cluster.local:9000"
+      s3Credentials:
+        # Minio
+        accessKeyId:
+          name: cloudnative-pg-secret
+          key: aws-access-key-id
+        secretAccessKey:
+          name: cloudnative-pg-secret
+          key: aws-secret-access-key
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        destinationPath: "s3://postgresql/"
+        endpointURL: "http://minio.storage.svc.cluster.local:9000"
+        s3Credentials:
+          accessKeyId:
+            name: cloudnative-pg-secret
+            key: aws-access-key-id
+          secretAccessKey:
+            name: cloudnative-pg-secret
+            key: aws-secret-access-key
+        wal:
+          maxParallel: 16
+  postgresql:
+    parameters:
+      max_connections: "300"
+      shared_buffers: 512MB
+#    pg_hba: []
+  monitoring:
+    enablePodMonitor: true
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "1"
+    limits:
+      memory: "4Gi"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: NotIn
+                values:
+                  - "true"
