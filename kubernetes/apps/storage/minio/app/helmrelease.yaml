@@ -118,7 +118,7 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        existingClaim: minio-nas
+        existingClaim: cardhu-minio-v1
         globalMounts:
           - path: /data
     affinity:
