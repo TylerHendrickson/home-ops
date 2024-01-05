@@ -12,6 +12,7 @@ spec:
     storageClass: local-hostpath
   superuserSecret:
     name: cloudnative-pg-secret
+  enableSuperuserAccess: true
   bootstrap:
     recovery:
       source: &previousCluster postgres-v15-1
