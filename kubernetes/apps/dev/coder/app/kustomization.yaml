@@ -7,5 +7,5 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./namespace.yaml
-  - ./rbac.yaml
+  # - ./rbac.yaml
   - ./storageclass.yaml
