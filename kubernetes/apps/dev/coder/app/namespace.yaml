@@ -1,8 +1,0 @@
----
-# This is a namespace for coder workspaces, NOT the control plane
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: coder-workspace
-  labels:
-    kustomize.toolkit.fluxcd.io/prune: disabled
