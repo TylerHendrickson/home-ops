@@ -105,6 +105,11 @@ spec:
         path: /volume1/warehouse1
         globalMounts:
           - path: /media/cardhu-warehouse1
+      transcode:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /transcode
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
