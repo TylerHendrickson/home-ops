@@ -6,7 +6,7 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   # - ./bazarr/ks.yaml
-  - ./jellyfin/ks.yaml
+  # - ./jellyfin/ks.yaml
   # - ./prowlarr/ks.yaml
   # - ./radarr/ks.yaml
   # - ./readarr/ks.yaml
