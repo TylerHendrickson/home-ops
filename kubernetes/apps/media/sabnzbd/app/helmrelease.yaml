@@ -107,6 +107,8 @@ spec:
       incomplete:
         enabled: true
         existingClaim: sabnzbd-downloads
+      tmp:
+        type: emptyDir
       # media:
       #   enabled: true
       #   type: pvc
