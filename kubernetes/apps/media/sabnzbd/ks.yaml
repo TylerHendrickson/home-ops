@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: longhorn-system
-    - name: media-shared
+    # - name: media-shared
   path: ./kubernetes/apps/media/sabnzbd/app
   prune: true
   sourceRef:
