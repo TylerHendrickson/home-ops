@@ -54,7 +54,6 @@ spec:
                   failureThreshold: 3
               readiness: *probes
               startup:
-
                 enabled: false
             resources:
               requests:
