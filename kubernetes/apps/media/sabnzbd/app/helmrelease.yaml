@@ -117,7 +117,7 @@ spec:
         server: 192.168.1.95
         path: /volume1/warehouse1
         globalMounts:
-          - path: /volume1/warehouse1
+          - path: /media
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
