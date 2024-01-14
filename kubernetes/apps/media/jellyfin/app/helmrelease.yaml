@@ -69,13 +69,15 @@ spec:
           securityContext:
             runAsUser: 568
             runAsGroup: 568
-            runAsNonRoot: true
             fsGroup: 568
+            runAsNonRoot: true
             fsGroupChangePolicy: OnRootMismatch
             supplementalGroups:
-              - 100
-              - 1000
-              - 1001
+              - 100   # users
+              - 1000  # k8s
+              - 1001  # ???
+              - 105   # render
+              - 39    # video
     service:
       main:
         ports:
