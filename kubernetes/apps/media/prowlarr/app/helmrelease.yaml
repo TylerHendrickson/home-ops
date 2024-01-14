@@ -46,7 +46,7 @@ spec:
               # Ref: https://github.com/dotnet/runtime/issues/9336
               COMPlus_EnableDiagnostics: "0"
               PROWLARR__INSTANCE_NAME: Prowlarr
-              PROWLARR__LOG_LEVEL: debug
+              PROWLARR__LOG_LEVEL: info
               PROWLARR__PORT: &port 80
               TZ: "America/Chicago"
             envFrom: *envFrom
