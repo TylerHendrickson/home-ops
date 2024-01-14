@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./descheduler/ks.yaml
+  - ./intel-device-plugin
   - ./node-feature-discovery/ks.yaml
   - ./reloader/ks.yaml
   - ./system-upgrade-controller/ks.yaml
