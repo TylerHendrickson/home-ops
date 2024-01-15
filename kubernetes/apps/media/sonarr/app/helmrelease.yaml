@@ -79,10 +79,13 @@ spec:
           securityContext:
             runAsUser: 568
             runAsGroup: 568
-            runAsNonRoot: true
             fsGroup: 568
+            runAsNonRoot: true
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups: [10000]
+            supplementalGroups:
+              - 100
+              - 1000
+              - 1001
     service:
       main:
         ports:
