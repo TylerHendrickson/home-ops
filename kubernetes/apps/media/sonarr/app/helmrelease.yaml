@@ -46,7 +46,7 @@ spec:
               # Ref: https://github.com/dotnet/runtime/issues/9336
               COMPlus_EnableDiagnostics: "0"
               # SONARR__AUTHENTICATION_METHOD: External
-              # SONARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
+              SONARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
               # SONARR__INSTANCE_NAME: Sonarr
               SONARR__PORT: &port 80
               TZ: "America/Chicago"
