@@ -42,10 +42,8 @@ spec:
               repository: ghcr.io/onedr0p/sonarr
               tag: 3.0.10.1567@sha256:90200b6c31047426aaa175b05715f42edba6bfad34f7845a3ca1b8d8f41b9cd2
             env:
-              # Ref: https://github.com/Radarr/Radarr/issues/7030#issuecomment-1039689518
-              # Ref: https://github.com/dotnet/runtime/issues/9336
               COMPlus_EnableDiagnostics: "0"
-              # SONARR__AUTHENTICATION_METHOD: External
+              SONARR__AUTHENTICATION_METHOD: External
               SONARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
               # SONARR__INSTANCE_NAME: Sonarr
               SONARR__PORT: &port 80
@@ -124,19 +122,19 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: NotIn
-                  values:
-                    - "true"
-                - key: node-role.kubernetes.io/control-plane
-                  operator: NotIn
-                  values:
-                    - "true"
-                - key: node-role.kubernetes.io/control-plane
-                  operator: DoesNotExist
-                - key: node-role.kubernetes.io/worker
-                  operator: In
-                  values:
-                    - "true"
-                - key: node-role.kubernetes.io/worder
-                  operator: Exists
+              - key: node-role.kubernetes.io/control-plane
+                operator: NotIn
+                values:
+                  - "true"
+              - key: node-role.kubernetes.io/control-plane
+                operator: NotIn
+                values:
+                  - "true"
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                  - "true"
+              - key: node-role.kubernetes.io/worder
+                operator: Exists
