@@ -104,9 +104,15 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                # - key: node-role.kubernetes.io/control-plane
-                #   operator: NotIn
-                #   values:
-                #     - "true"
+                - key: node-role.kubernetes.io/control-plane
+                  operator: NotIn
+                  values:
+                    - "true"
                 - key: node-role.kubernetes.io/control-plane
                   operator: DoesNotExist
+                - key: node-role.kubernetes.io/worker
+                  operator: In
+                  values:
+                    - "true"
+                - key: node-role.kubernetes.io/worder
+                  operator: Exists
