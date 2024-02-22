@@ -5,7 +5,7 @@ metadata:
   name: cilium-values
 data:
   values.yaml: |
-    autoDirectNodeRoutes: false
+    autoDirectNodeRoutes: true
     bpf:
       masquerade: true
     bgp:
