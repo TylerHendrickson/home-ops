@@ -94,4 +94,5 @@ data:
     rollOutCiliumPods: true
     securityContext:
       privileged: true
+    tunnelProtocol: ""
     routingMode: native
