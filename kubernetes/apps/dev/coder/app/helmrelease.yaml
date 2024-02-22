@@ -131,3 +131,12 @@ spec:
         # wildcardHost: "*-ws-coder.${SECRET_DOMAIN}"
       nodeSelector:
         node-role.kubernetes.io/worker: "true"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                - "true"
