@@ -5,7 +5,7 @@ metadata:
   name: cilium-values
 data:
   values.yaml: |
-    autoDirectNodeRoutes: false
+    autoDirectNodeRoutes: true
     bpf:
       masquerade: true
     bgp:
@@ -69,7 +69,7 @@ data:
       leaseRetryPeriod: 1s
     loadBalancer:
       algorithm: maglev
-      mode: snat
+      mode: dsr
     localRedirectPolicy: true
     operator:
       replicas: 1
@@ -94,5 +94,4 @@ data:
     rollOutCiliumPods: true
     securityContext:
       privileged: true
-    tunnelProtocol: ""
-    routingMode: native
+    tunnel: disabled
