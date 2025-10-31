@@ -116,3 +116,15 @@ spec:
                     - "true"
                 - key: node-role.kubernetes.io/worder
                   operator: Exists
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
+
+
