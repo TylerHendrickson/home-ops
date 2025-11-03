@@ -39,8 +39,8 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/sonarr
-              tag: 4.0.14.2938@sha256:f82e69b2d290877b89c2bcae9928df7ed74e05ab3cba905ecaeced85f4f1f2c6
+              repository: ghcr.io/home-operations/sonarr
+              tag: 4.0.16.2942@sha256:a986ef3682f1b94e2832a31ace57057279bd4ffdf49190a1b5f9f8d3cef875f5
             env:
               COMPlus_EnableDiagnostics: "0"
               SONARR__AUTHENTICATION_METHOD: External
@@ -142,3 +142,14 @@ spec:
                 operator: In
                 values:
                 - "true"
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
+
