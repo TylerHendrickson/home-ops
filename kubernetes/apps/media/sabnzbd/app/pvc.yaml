@@ -16,6 +16,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: sabnzbd-downloads
   labels:
+    recurring-job.longhorn.io/source: enabled
     recurring-job-group.longhorn.io/downloader: enabled
 spec:
   storageClassName: longhorn
