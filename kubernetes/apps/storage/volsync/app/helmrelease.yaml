@@ -30,8 +30,8 @@ spec:
     manageCRDs: true
     image:
       # https://github.com/backube/volsync/issues/828
-      repository: &image ghcr.io/perfectra1n/volsync
-      tag: &tag 0.15.24
+      repository: &image ghcr.io/home-operations/volsync
+      tag: &tag 0.12.1@sha256:0483e545f9d9d9bd4bc97e2f7f6eceed1b302bb42d99d506e0bcf3bc6dcc9cc2
     rclone:
       repository: *image
       tag: *tag
