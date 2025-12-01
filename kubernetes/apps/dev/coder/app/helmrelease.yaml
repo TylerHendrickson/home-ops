@@ -29,7 +29,9 @@ spec:
     coder:
       initContainers:
         - name: 01-init-db
-          image: ghcr.io/onedr0p/postgres-init:16.8
+          image:
+            repository: ghcr.io/home-operations/postgres-init
+            tag: 18.1.0@sha256:866f15038ed5185a2b8118821f470bb7ca0df8c4231b8e277446e681ebb1ed84
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
