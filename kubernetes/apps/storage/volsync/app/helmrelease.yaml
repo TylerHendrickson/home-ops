@@ -28,5 +28,15 @@ spec:
       namespace: storage
   values:
     manageCRDs: true
+    image:
+      # https://github.com/backube/volsync/issues/828
+      repository: &image ghcr.io/perfectra1n/volsync
+      tag: &tag 0.15.24
+    rclone:
+      repository: *image
+      tag: *tag
+    restic:
+      repository: *image
+      tag: *tag
     metrics:
       disableAuth: true
