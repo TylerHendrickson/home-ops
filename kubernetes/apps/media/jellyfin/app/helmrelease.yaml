@@ -99,6 +99,19 @@ spec:
         tls:
           - hosts:
               - *host
+      internal:
+        enabled: true
+        className: internal
+        hosts:
+          - host: "jellyfin.int.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
+        tls:
+          - hosts:
+              - "jellyfin.int.${SECRET_DOMAIN}"
     persistence:
       config:
         enabled: true
