@@ -97,7 +97,7 @@ spec:
         enabled: true
         className: internal
         hosts:
-          - host: &host "hass.int.${SECRET_DOMAIN}"
+          - host: &internalhost "hass.int.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
@@ -105,7 +105,7 @@ spec:
                   port: http
         tls:
           - hosts:
-              - *host              
+              - *internalhost              
     persistence:
       config:
         enabled: true
