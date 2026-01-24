@@ -61,7 +61,7 @@ spec:
                 memory: 4Gi
                 gpu.intel.com/i915: 1
               limits:
-                memory: 20Gi
+                memory: 30Gi
                 gpu.intel.com/i915: 1
         pod:
           nodeSelector:
