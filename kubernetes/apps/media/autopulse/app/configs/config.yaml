@@ -2,7 +2,7 @@
 app:
   hostname: 0.0.0.0
   port: 2875
-  database_url: postgres://{{ .AUTOPULSE_POSTGRES_USER }}:{{ .AUTOPULSE_POSTGRES_PASSWORD }}@postgres-rw.database.svc.cluster.local:5432
+  database_url: postgres://{{ .AUTOPULSE_POSTGRES_USER }}:{{ .AUTOPULSE_POSTGRES_PASSWORD }}@postgres-rw.database.svc.cluster.local:5432/autopulse_main
   log_level: info
   api_logging: true
 
