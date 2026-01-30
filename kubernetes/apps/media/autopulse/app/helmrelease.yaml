@@ -95,10 +95,12 @@ spec:
               - 1001
     service:
       main:
+        controller: main
         ports:
           http:
             port: *port
       ui:
+        controller: main
         ports:
           http:
             port: 2880
