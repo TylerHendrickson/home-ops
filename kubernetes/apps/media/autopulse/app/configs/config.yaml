@@ -1,0 +1,30 @@
+---
+app:
+  hostname: 0.0.0.0
+  port: 2875
+  database_url: postgres://{{ .AUTOPULSE_POSTGRES_USER }}:{{ .AUTOPULSE_POSTGRES_PASSWORD }}@postgres-rw.database.svc.cluster.local:5432
+  log_level: info
+  api_logging: true
+
+auth:
+  enabled: true
+  username: "{{ .AUTOPULSE_USERNAME }}"
+  password: "{{ .AUTOPULSE_PASSWORD }}"
+
+anchors:
+  - "{{ .AUTOPULSE_ANCHOR_0 }}"
+  - "{{ .AUTOPULSE_ANCHOR_1 }}"
+
+triggers:
+  sonarr:
+    type: sonarr
+  radarr:
+    type: radarr
+  manual:
+    type: manual
+
+targets:
+  jellyfin:
+    type: jellyfin
+    url: "http://jellyfin.media.svc.cluster.local:8096"
+    token: "{{ .JELLYFIN_TOKEN }}"

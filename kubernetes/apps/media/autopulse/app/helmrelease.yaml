@@ -1,0 +1,178 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: autopulse
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.6.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 18.1.0@sha256:866f15038ed5185a2b8118821f470bb7ca0df8c4231b8e277446e681ebb1ed84
+            envFrom:
+              - secretRef:
+                  name: autopulse-db-secret
+        containers:
+          main:
+            image:
+              repository: ghcr.io/dan-online/autopulse
+              tag: v1.5.0@sha256:f8a8a375f02ca91c6a14e22124a0b7f8e8244092d49e6c80c27b4c65aba11c28
+            command:
+              - "/bin/autopulse"
+            env:
+              AUTOPULSE__APP__PORT: &port 2875
+              TZ: "America/Chicago"
+            envFrom: &envFrom
+              - secretRef:
+                  name: autopulse-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+          ui:
+            image:
+              repository: ghcr.io/dan-online/autopulse
+              tag: ui-v1.5.0@sha256:49e623aa86e925994d5af1a3d8e5d6e13414b8f0d271d1f2e4787368354dc7b1
+            env:
+              TZ: America/Chicago
+              FORCE_DEFAULT_SERVER_URL: true
+              DEFAULT_SERVER_URL: http://autopulse-app.media.svc.cluster.local:2875
+              FORCE_SERVER_URL: http://autopulse-app.media.svc.cluster.local:2875
+              FORCE_AUTH: true
+            envFrom: *envFrom
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            runAsNonRoot: true
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 100
+              - 1000
+              - 1001
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+      ui:
+        ports:
+          http:
+            port: 2880
+    ingress:
+      main:
+        enabled: true
+        className: internal
+        hosts:
+          - host: &host "autopulse.int.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  name: ui
+                  port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      config:
+        enabled: true
+        type: secret
+        name: autopulse-secret
+        globalMounts:
+          - path: /app/config.yaml
+            subPath: config.yaml
+            readOnly: true
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          autopulse:
+            main:
+              - path: /app
+                subPath: app
+              - path: /tmp
+                subPath: tmp
+      media:
+        type: nfs
+        server: 192.168.1.95
+        path: /volume1/warehouse1
+        globalMounts:
+          - path: /media/cardhu-warehouse1
+            readOnly: true
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: NotIn
+                values:
+                  - "true"
+              - key: node-role.kubernetes.io/control-plane
+                operator: NotIn
+                values:
+                  - "true"
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                  - "true"
+              - key: node-role.kubernetes.io/worder
+                operator: Exists
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                  - "true"
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: NotIn
+                    values:
+                      - "true"
