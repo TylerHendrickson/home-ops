@@ -28,7 +28,7 @@ spec:
       main:
         annotations:
           reloader.stakater.com/auto: "true"
-          force-refresh-at/timestamp: "2026-01-30T18:40:57CST"
+          force-refresh-at/timestamp: "2026-01-30T18:53:59CST"
         initContainers:
           init-db:
             image:
