@@ -68,8 +68,8 @@ spec:
             env:
               TZ: America/Chicago
               FORCE_DEFAULT_SERVER_URL: true
-              DEFAULT_SERVER_URL: http://autopulse-app.media.svc.cluster.local:2875
-              FORCE_SERVER_URL: http://autopulse-app.media.svc.cluster.local:2875
+              DEFAULT_SERVER_URL: http://autopulse.media.svc.cluster.local:2875
+              FORCE_SERVER_URL: http://autopulse.media.svc.cluster.local:2875
               FORCE_AUTH: true
             envFrom: *envFrom
             securityContext:
