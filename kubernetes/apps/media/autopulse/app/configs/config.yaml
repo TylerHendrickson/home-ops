@@ -5,7 +5,7 @@ app:
   database_url: "postgres://{{ .AUTOPULSE_POSTGRES_USER }}:{{ .AUTOPULSE_POSTGRES_PASSWORD }}@postgres-v15-rw.database.svc.cluster.local:5432/autopulse"
   # database_url: "sqlite://:memory:"
   log_level: trace
-  api_logging: true
+  api_logging: false
 
 auth:
   enabled: true
