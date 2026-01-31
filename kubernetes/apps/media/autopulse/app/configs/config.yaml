@@ -3,7 +3,7 @@ app:
   hostname: 0.0.0.0
   port: 2875
   # database_url: "postgres://{{ .AUTOPULSE_POSTGRES_USER }}:{{ .AUTOPULSE_POSTGRES_PASSWORD }}@postgres-v15-rw.database.svc.cluster.local:5432/autopulse_main"
-  database_url: "sqlite:memory:"
+  database_url: "sqlite://:memory:"
   log_level: trace
   api_logging: true
 
