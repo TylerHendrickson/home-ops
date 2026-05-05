@@ -5,4 +5,5 @@ namespace: home-automation
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./network-attachment.yaml
   - ./pvc.yaml

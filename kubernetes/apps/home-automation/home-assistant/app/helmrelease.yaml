@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -105,7 +105,7 @@ spec:
                   port: http
         tls:
           - hosts:
-              - *internalhost              
+              - *internalhost
     persistence:
       config:
         enabled: true
@@ -130,6 +130,15 @@ spec:
                 - key: node-role.kubernetes.io/worder
                   operator: Exists
     defaultPodOptions:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |
+          [
+            {
+              "name": "home-assistant-lan",
+              "ips": ["192.168.1.219/24"],
+              "mac": "02:48:41:00:00:01"
+            }
+          ]
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
