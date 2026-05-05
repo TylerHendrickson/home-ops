@@ -14,7 +14,6 @@ data:
       name: home-cluster
       id: 1
     containerRuntime:
-      integration: containerd
       socketPath: /var/run/k3s/containerd/containerd.sock
     endpointRoutes:
       enabled: true
