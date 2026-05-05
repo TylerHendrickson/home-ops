@@ -13,6 +13,8 @@ data:
     cluster:
       name: home-cluster
       id: 1
+    cni:
+      exclusive: false
     containerRuntime:
       socketPath: /var/run/k3s/containerd/containerd.sock
     endpointRoutes:
