@@ -121,6 +121,8 @@ spec:
         #     secretKeyRef:
         #       name: coder-secret
         #       key: CODER_OIDC_CLIENT_SECRET
+      service:
+        type: ClusterIP
       ingress:
         enable: true
         className: external
