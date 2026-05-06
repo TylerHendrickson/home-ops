@@ -114,15 +114,6 @@ spec:
         path: /volume1/warehouse1
         globalMounts:
           - path: /media/cardhu-warehouse1
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: NotIn
-                  values:
-                    - "true"
     defaultPodOptions:
       affinity:
         nodeAffinity:
@@ -130,6 +121,4 @@ spec:
             nodeSelectorTerms:
               - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
-                    operator: NotIn
-                    values:
-                      - "true"
+                    operator: DoesNotExist
