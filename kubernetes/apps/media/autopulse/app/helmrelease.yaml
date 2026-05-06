@@ -137,31 +137,6 @@ spec:
         globalMounts:
           - path: /media/cardhu-warehouse1
             readOnly: true
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: NotIn
-                values:
-                  - "true"
-              - key: node-role.kubernetes.io/control-plane
-                operator: NotIn
-                values:
-                  - "true"
-              - key: node-role.kubernetes.io/control-plane
-                operator: DoesNotExist
-              - key: node-role.kubernetes.io/worker
-                operator: In
-                values:
-                  - "true"
-              - key: node-role.kubernetes.io/worder
-                operator: Exists
-              - key: node-role.kubernetes.io/worker
-                operator: In
-                values:
-                  - "true"
     defaultPodOptions:
       affinity:
         nodeAffinity:
@@ -169,6 +144,4 @@ spec:
             nodeSelectorTerms:
               - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
-                    operator: NotIn
-                    values:
-                      - "true"
+                    operator: DoesNotExist
