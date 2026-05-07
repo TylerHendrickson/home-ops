@@ -102,15 +102,6 @@ spec:
         type: emptyDir
       tmp:
         type: emptyDir
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: NotIn
-                  values:
-                    - "true"
     defaultPodOptions:
       affinity:
         nodeAffinity:
@@ -118,6 +109,4 @@ spec:
             nodeSelectorTerms:
               - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
-                    operator: NotIn
-                    values:
-                      - "true"
+                    operator: DoesNotExist
