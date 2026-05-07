@@ -6,4 +6,5 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./network-attachment.yaml
+  - ./ocirepository.yaml
   - ./pvc.yaml
