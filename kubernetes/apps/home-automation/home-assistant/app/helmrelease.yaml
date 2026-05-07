@@ -107,23 +107,6 @@ spec:
         existingClaim: home-assistant-config-v1
       tmp:
         type: emptyDir
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: NotIn
-                  values:
-                    - "true"
-                - key: node-role.kubernetes.io/control-plane
-                  operator: DoesNotExist
-                - key: node-role.kubernetes.io/worker
-                  operator: In
-                  values:
-                    - "true"
-                - key: node-role.kubernetes.io/worder
-                  operator: Exists
     defaultPodOptions:
       annotations:
         k8s.v1.cni.cncf.io/networks: |
@@ -140,8 +123,6 @@ spec:
             nodeSelectorTerms:
               - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
-                    operator: NotIn
-                    values:
-                      - "true"
+                    operator: DoesNotExist
 
 
