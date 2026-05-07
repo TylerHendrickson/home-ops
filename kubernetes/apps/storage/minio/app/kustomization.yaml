@@ -6,3 +6,4 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./nfs.yaml
+  - ./ocirepository.yaml
