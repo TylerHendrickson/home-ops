@@ -13,6 +13,7 @@ spec:
   dependsOn:
     - name: longhorn-system
     - name: intel-device-plugin
+    - name: media-shared
   path: ./kubernetes/apps/media/jellyfin/app
   prune: true
   sourceRef:

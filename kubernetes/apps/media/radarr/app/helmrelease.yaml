@@ -109,9 +109,7 @@ spec:
       tmp:
         type: emptyDir
       media:
-        type: nfs
-        server: 192.168.1.95
-        path: /volume1/warehouse1
+        existingClaim: nas-media
         globalMounts:
           - path: /media/cardhu-warehouse1
     defaultPodOptions:
