@@ -5,7 +5,6 @@ resources:
   - ./1password.yaml
   - ./backube.yaml
   - ./bitnami.yaml
-  - ./bjw-s.yaml
   - ./cilium.yaml
   - ./cloudnative-pg.yaml
   - ./coder.yaml
