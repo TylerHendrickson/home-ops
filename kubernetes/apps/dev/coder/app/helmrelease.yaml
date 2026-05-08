@@ -51,7 +51,6 @@ spec:
           value: "https://coder.${SECRET_DOMAIN}"
         - name: CODER_WILDCARD_ACCESS_URL
           value: "*.coder.${SECRET_DOMAIN}"
-          # value: "*-ws-coder.${SECRET_DOMAIN}"
         - name: CODER_TELEMETRY
           value: "false"
         - name: CODER_PROMETHEUS_ENABLE
@@ -100,27 +99,6 @@ spec:
             secretKeyRef:
               name: coder-secret
               key: CODER_OAUTH2_GITHUB_CLIENT_SECRET
-        # # OIDC
-        # - name: CODER_OIDC_ISSUER_URL
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_OIDC_ISSUER_URL
-        # - name: CODER_OIDC_EMAIL_DOMAIN
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_OIDC_EMAIL_DOMAIN
-        # - name: CODER_OIDC_CLIENT_ID
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_OIDC_CLIENT_ID
-        # - name: CODER_OIDC_CLIENT_SECRET
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: coder-secret
-        #       key: CODER_OIDC_CLIENT_SECRET
       service:
         type: ClusterIP
       ingress:
@@ -130,7 +108,6 @@ spec:
           external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
         host: "coder.${SECRET_DOMAIN}"
         wildcardHost: "*.coder.${SECRET_DOMAIN}"
-        # wildcardHost: "*-ws-coder.${SECRET_DOMAIN}"
       nodeSelector:
         node-role.kubernetes.io/worker: "true"
       affinity:
