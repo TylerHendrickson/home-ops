@@ -1,0 +1,111 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/tags/app-template-5.0.1/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vikunja
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: vikunja
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      vikunja:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: vikunja/vikunja
+              tag: 2.3.0@sha256:f6b80393c1998cd5cd0dc38d24762c59ab4c10000a6f1032ef5b554e262cab93
+            env:
+              VIKUNJA_SERVICE_ROOTPATH: /app/vikunja
+              VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.${SECRET_DOMAIN}"
+              VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
+              VIKUNJA_SERVICE_TIMEZONE: "America/Chicago"
+              VIKUNJA_DATABASE_TYPE: sqlite
+              VIKUNJA_LOG_LEVEL: INFO
+              VIKUNJA_LOG_STANDARD: stderr
+              VIKUNJA_LOG_FORMAT: structured
+              VIKUNJA_LOG_DATABASE: stderr
+              VIKUNJA_LOG_HTTP: stderr
+              VIKUNJA_LOG_EVENTS: stderr
+              VIKUNJA_LOG_MAIL: stderr
+            envFrom:
+              - secretRef:
+                  name: vikunja-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/info
+                    port: &port 3456
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/info
+                    port: *port
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+    service:
+      app:
+        controller: vikunja
+        ports:
+          http:
+            port: *port
+    ingress:
+      app:
+        enabled: true
+        className: internal
+        hosts:
+          - host: &host "vikunja.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        storageClass: longhorn
+        globalMounts:
+          - path: /app/vikunja
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
