@@ -29,7 +29,7 @@ spec:
               repository: vikunja/vikunja
               tag: 2.3.0@sha256:f6b80393c1998cd5cd0dc38d24762c59ab4c10000a6f1032ef5b554e262cab93
             env:
-              VIKUNJA_SERVICE_ROOTPATH: /app/vikunja
+              VIKUNJA_SERVICE_ROOTPATH: /data
               VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.${SECRET_DOMAIN}"
               VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
               VIKUNJA_SERVICE_TIMEZONE: "America/Chicago"
@@ -100,7 +100,7 @@ spec:
         size: 5Gi
         storageClass: longhorn
         globalMounts:
-          - path: /app/vikunja
+          - path: /data
     defaultPodOptions:
       affinity:
         nodeAffinity:
