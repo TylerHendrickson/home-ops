@@ -20,7 +20,7 @@ spec:
     keepHistory: false
   values:
     controllers:
-      vikunja:
+      main:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -75,13 +75,13 @@ spec:
               limits:
                 memory: 512Mi
     service:
-      app:
-        controller: vikunja
+      main:
+        controller: main
         ports:
           http:
             port: *port
     ingress:
-      app:
+      main:
         enabled: true
         className: internal
         hosts:
@@ -89,7 +89,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: app
+                  identifier: main
                   port: http
         tls:
           - hosts:
