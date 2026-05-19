@@ -47,6 +47,7 @@ Add to `~/.claude.json` (or per-project `.claude/mcp.json`):
 {
   "mcpServers": {
     "vikunja": {
+      "type": "http",
       "url": "https://vikunja-mcp.${SECRET_DOMAIN}/mcp",
       "headers": {
         "X-API-Key": "<MCP_API_KEY from 1Password>"
@@ -56,7 +57,8 @@ Add to `~/.claude.json` (or per-project `.claude/mcp.json`):
 }
 ```
 
-Use `/mcp` (Streamable HTTP) rather than `/sse` — it's the current MCP transport.
+`type: "http"` selects the Streamable HTTP transport (the `/mcp` endpoint). Use
+`type: "sse"` + `url: ".../sse"` if you need the older SSE transport for some reason.
 
 ## Swap procedure (when the official Vikunja MCP server ships)
 
