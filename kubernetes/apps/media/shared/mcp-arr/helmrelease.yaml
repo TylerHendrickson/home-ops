@@ -89,6 +89,11 @@ spec:
       main:
         enabled: true
         className: internal
+        annotations:
+          nginx.ingress.kubernetes.io/auth-type: basic
+          nginx.ingress.kubernetes.io/auth-secret: mcp-arr-basic-auth
+          nginx.ingress.kubernetes.io/auth-secret-type: auth-file
+          nginx.ingress.kubernetes.io/auth-realm: mcp-arr
         hosts:
           - host: &host "mcp-arr.int.${SECRET_DOMAIN}"
             paths:
