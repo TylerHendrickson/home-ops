@@ -34,7 +34,7 @@ spec:
       enabled: true
       className: internal
       hosts:
-        - host: &host "grafana-mcp.${SECRET_DOMAIN}"
+        - host: &host "grafana-mcp.int.${SECRET_DOMAIN}"
           paths:
             - path: /
               pathType: Prefix
