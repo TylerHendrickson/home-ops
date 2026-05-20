@@ -24,7 +24,7 @@ spec:
       apiKeySecret:
         name: grafana-mcp-secret
         key: token
-    disableWrite: true
+    disableWrite: true # Needs corresponding GrafanaServiceAccount role
     disabledCategories: []
     service:
       enabled: true
