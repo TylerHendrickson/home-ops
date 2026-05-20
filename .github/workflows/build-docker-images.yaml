@@ -49,12 +49,21 @@ jobs:
     strategy:
       matrix:
         image: ${{ fromJson(needs.detect.outputs.matrix) }}
+
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@ab7a9404c0f3da075243ca237b5fac12c98deaa5 # v2.19.3
         with:
           disable-sudo: true
           egress-policy: audit
+
+      - name: Set registry owner lowercase
+        id: registry
+        env:
+          REPOSITORY_OWNER: "${{ github.repository_owner }}"
+        run: |
+          owner=$(echo "$REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')
+          echo "owner=$owner" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -102,7 +111,7 @@ jobs:
           file: docker/${{ matrix.image }}/Dockerfile
           push: false
           load: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
+          tags: ${{ env.REGISTRY }}/${{ steps.registry.outputs.owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
@@ -112,7 +121,7 @@ jobs:
       - name: Run Trivy vulnerability scan
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
+          image-ref: ${{ env.REGISTRY }}/${{ steps.registry.outputs.owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
           format: sarif
           output: trivy-results.sarif
           severity: HIGH,CRITICAL
@@ -135,7 +144,7 @@ jobs:
           context: .
           file: docker/${{ matrix.image }}/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
+          tags: ${{ env.REGISTRY }}/${{ steps.registry.outputs.owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
