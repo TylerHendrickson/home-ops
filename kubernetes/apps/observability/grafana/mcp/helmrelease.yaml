@@ -23,7 +23,7 @@ spec:
       url: "http://grafana.observability.svc.cluster.local"
       apiKeySecret:
         name: grafana-mcp-secret
-        key: GRAFANA_API_KEY
+        key: token
     disableWrite: true
     disabledCategories: []
     service:
