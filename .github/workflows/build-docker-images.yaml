@@ -64,10 +64,18 @@ jobs:
         id: versions
         run: |
           DOCKERFILE="docker/${{ matrix.image }}/Dockerfile"
+          echo "DEBUG: DOCKERFILE=$DOCKERFILE"
+          echo "DEBUG: File exists: $(test -f "$DOCKERFILE" && echo yes || echo no)"
+          echo "DEBUG: File contents:"
+          cat "$DOCKERFILE"
+          echo "---"
 
           # Extract versions from ARG lines (skip comments)
           MCP_ARR=$(grep -E '^ARG MCP_ARR_VERSION=' "$DOCKERFILE" | sed 's/.*=//')
           MCP_PROXY=$(grep -E '^ARG MCP_PROXY_VERSION=' "$DOCKERFILE" | sed 's/.*=//')
+
+          echo "DEBUG: MCP_ARR=$MCP_ARR"
+          echo "DEBUG: MCP_PROXY=$MCP_PROXY"
 
           # Use MCP_ARR_VERSION as primary version
           PRIMARY_VERSION="$MCP_ARR"
