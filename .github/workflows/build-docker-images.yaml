@@ -65,12 +65,12 @@ jobs:
         run: |
           DOCKERFILE="docker/${{ matrix.image }}/Dockerfile"
 
-          # Extract primary version (first ARG with a value)
-          PRIMARY_VERSION=$(grep '^ARG ' "$DOCKERFILE" | grep '=' | head -1 | sed 's/.*=//')
+          # Extract versions from ARG lines (skip comments)
+          MCP_ARR=$(grep -E '^ARG MCP_ARR_VERSION=' "$DOCKERFILE" | sed 's/.*=//')
+          MCP_PROXY=$(grep -E '^ARG MCP_PROXY_VERSION=' "$DOCKERFILE" | sed 's/.*=//')
 
-          # Extract all versions for annotations
-          MCP_ARR=$(grep 'ARG MCP_ARR_VERSION' "$DOCKERFILE" | sed 's/.*=//')
-          MCP_PROXY=$(grep 'ARG MCP_PROXY_VERSION' "$DOCKERFILE" | sed 's/.*=//')
+          # Use MCP_ARR_VERSION as primary version
+          PRIMARY_VERSION="$MCP_ARR"
 
           echo "primary_version=$PRIMARY_VERSION" >> $GITHUB_OUTPUT
           echo "mcp_arr=$MCP_ARR" >> $GITHUB_OUTPUT
