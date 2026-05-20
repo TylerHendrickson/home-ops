@@ -26,6 +26,9 @@ spec:
         key: token
     disableWrite: true # Needs corresponding GrafanaServiceAccount role
     disabledCategories: []
+    extraArgs:
+      - --transport
+      - streamable-http
     service:
       enabled: true
       type: ClusterIP
