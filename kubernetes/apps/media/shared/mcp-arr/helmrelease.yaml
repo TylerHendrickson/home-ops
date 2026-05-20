@@ -28,18 +28,19 @@ spec:
             image:
               repository: docker.io/library/node
               tag: 20-bookworm-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
-            command: ["npx"]
-            args: ["-y", "mcp-arr-server@$(MCP_ARR_VERSION)"]
+            command: ["sh", "-c"]
+            args:
+              - exec npx -y "mcp-proxy@${MCP_PROXY_VERSION}" --port=8080 -- npx -y "mcp-arr-server@${MCP_ARR_VERSION}"
             env:
+              # renovate: datasource=npm depName=mcp-proxy
+              MCP_PROXY_VERSION: "1.0.0"
               # renovate: datasource=npm depName=mcp-arr-server
-              MCP_ARR_VERSION: "1.6.2"
-              MCP_TRANSPORT: http
-              HOST: 0.0.0.0
-              PORT: &port 3000
-              MCP_PATH: /mcp
-              SONARR_URL: http://sonarr.media.svc.cluster.local:80
-              RADARR_URL: http://radarr.media.svc.cluster.local:80
-              PROWLARR_URL: http://prowlarr.media.svc.cluster.local:80
+              MCP_ARR_VERSION: "1.5.4"
+              HOME: /tmp
+              NPM_CONFIG_CACHE: /tmp/.npm
+              SONARR_URL: http://sonarr.media.svc.cluster.local
+              RADARR_URL: http://radarr.media.svc.cluster.local
+              PROWLARR_URL: http://prowlarr.media.svc.cluster.local
             envFrom:
               - secretRef:
                   name: mcp-arr-secret
@@ -49,7 +50,7 @@ spec:
                 custom: true
                 spec:
                   tcpSocket:
-                    port: *port
+                    port: &port 8080
                   initialDelaySeconds: 10
                   periodSeconds: 5
                   failureThreshold: 60
