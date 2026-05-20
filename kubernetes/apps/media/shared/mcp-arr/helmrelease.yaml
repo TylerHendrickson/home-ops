@@ -25,19 +25,11 @@ spec:
           reloader.stakater.com/auto: "true"
         containers:
           main:
+            # renovate: datasource=docker depName=ghcr.io/tylerhendrickson/mcp-arr
             image:
-              repository: docker.io/library/node
-              tag: 20-bookworm-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
-            command: ["sh", "-c"]
-            args:
-              - exec npx -y "mcp-proxy@${MCP_PROXY_VERSION}" --port=8080 -- npx -y "mcp-arr-server@${MCP_ARR_VERSION}"
+              repository: ghcr.io/tylerhendrickson/mcp-arr
+              tag: 1.5.4@sha256:dc31b02807dd7d0888bf4cece404c714d4df3de201f2681ddae3e1e9f3ee5299
             env:
-              # renovate: datasource=npm depName=mcp-proxy
-              MCP_PROXY_VERSION: "1.0.0"
-              # renovate: datasource=npm depName=mcp-arr-server
-              MCP_ARR_VERSION: "1.5.4"
-              HOME: /tmp
-              NPM_CONFIG_CACHE: /tmp/.npm
               SONARR_URL: http://sonarr.media.svc.cluster.local
               RADARR_URL: http://radarr.media.svc.cluster.local
               PROWLARR_URL: http://prowlarr.media.svc.cluster.local
