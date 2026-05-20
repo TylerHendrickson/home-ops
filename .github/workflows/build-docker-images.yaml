@@ -27,6 +27,7 @@ jobs:
           filters: |
             mcp-arr:
               - docker/mcp-arr/Dockerfile
+              - .github/workflows/build-docker-images.yaml
           list-files: json
 
   build:
