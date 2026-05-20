@@ -1,0 +1,113 @@
+---
+name: Build and push Docker images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - docker/**/Dockerfile
+      - .github/workflows/build-docker-images.yaml
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Detect changed Dockerfiles
+        uses: dorny/paths-filter@de90cc6fb38fc0963877a195caf41e46b1a27d0e # v7.0.0
+        id: filter
+        with:
+          filters: |
+            mcp-arr:
+              - docker/mcp-arr/Dockerfile
+          list-files: json
+
+  build:
+    needs: detect
+    if: needs.detect.outputs.matrix != '[]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        image: ${{ fromJson(needs.detect.outputs.matrix) }}
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@9f2f23c98dcd45ae786d05c3e1ec8e08cb14ac14 # v3.8.0
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@4d4c9c5ea3cf60e91422eee3a7707bc4d32c9a81 # v3.2.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract ARG versions from Dockerfile
+        id: versions
+        run: |
+          DOCKERFILE="docker/${{ matrix.image }}/Dockerfile"
+
+          # Extract all ARG lines with values, format: ARG NAME=value
+          ARGS=$(grep '^ARG ' "$DOCKERFILE" | grep '=' | sed 's/ARG //' | sed 's/=/ /')
+
+          # Build composite tag from all ARG values in order
+          TAG="${{ matrix.image }}"
+          while read -r ARG_NAME ARG_VALUE; do
+            TAG="${TAG}-${ARG_VALUE}"
+          done <<< "$ARGS"
+
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Image tag: $TAG"
+
+      - name: Build Docker image (load)
+        uses: docker/build-push-action@6f82d359b42e5cc87b4d18eaaa237b10fb4ce4e8 # v6.5.0
+        with:
+          context: .
+          file: docker/${{ matrix.image }}/Dockerfile
+          push: false
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image }}:${{ steps.versions.outputs.tag }}
+
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@6e7b7d1e3bfa076e8368b02666ca25e0c2084061 # v0.24.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image }}:${{ steps.versions.outputs.tag }}
+          format: sarif
+          output: trivy-results.sarif
+          severity: HIGH,CRITICAL
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@662c8e08900b9ed9eb7e57f0dcc213625418e56a # v3.27.7
+        with:
+          sarif_file: trivy-results.sarif
+
+      - name: Check for critical vulnerabilities
+        run: |
+          if grep -q '"level": "critical"' trivy-results.sarif; then
+            echo "Critical vulnerabilities found in ${{ matrix.image }}, aborting push"
+            exit 1
+          fi
+
+      - name: Push Docker image
+        uses: docker/build-push-action@6f82d359b42e5cc87b4d18eaaa237b10fb4ce4e8 # v6.5.0
+        with:
+          context: .
+          file: docker/${{ matrix.image }}/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image }}:${{ steps.versions.outputs.tag }}
