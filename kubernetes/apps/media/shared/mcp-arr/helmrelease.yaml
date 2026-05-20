@@ -26,13 +26,17 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/rwlove/arr-mcp
-              # renovate: datasource=docker depName=ghcr.io/rwlove/arr-mcp
-              tag: v0.1.3@sha256:7a275ff8aab5dc4d857f80b076dc5614b3daefa0325d6110321248eb3e4d1056
+              repository: docker.io/library/node
+              tag: 20-bookworm-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
+            command: ["npx"]
+            args: ["-y", "mcp-arr-server@$(MCP_ARR_VERSION)"]
             env:
+              # renovate: datasource=npm depName=mcp-arr-server
+              MCP_ARR_VERSION: "1.6.2"
               MCP_TRANSPORT: http
               HOST: 0.0.0.0
               PORT: &port 3000
+              MCP_PATH: /mcp
               SONARR_URL: http://sonarr.media.svc.cluster.local:80
               RADARR_URL: http://radarr.media.svc.cluster.local:80
               PROWLARR_URL: http://prowlarr.media.svc.cluster.local:80
@@ -67,18 +71,12 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 3
                   failureThreshold: 3
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
             resources:
               requests:
                 cpu: 10m
                 memory: 128Mi
               limits:
-                memory: 256Mi
+                memory: 512Mi
     service:
       main:
         controller: main
