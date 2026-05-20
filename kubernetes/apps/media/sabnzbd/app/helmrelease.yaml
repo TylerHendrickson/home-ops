@@ -65,7 +65,7 @@ spec:
                 memory: 2Gi
               limits:
                 cpu: 4
-                memory: 20Gi
+                memory: 24Gi
         pod:
           securityContext:
             runAsUser: 568
