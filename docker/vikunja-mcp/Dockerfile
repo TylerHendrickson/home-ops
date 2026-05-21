@@ -3,7 +3,7 @@ FROM node:24-bookworm-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e4
 # renovate: datasource=npm depName=@democratize-technology/vikunja-mcp
 ARG VIKUNJA_MCP_VERSION=0.2.0
 # renovate: datasource=npm depName=mcp-proxy
-ARG MCP_PROXY_VERSION=1.0.0
+ARG MCP_PROXY_VERSION=1.3.1
 
 RUN npm install -g "@democratize-technology/vikunja-mcp@${VIKUNJA_MCP_VERSION}" "mcp-proxy@${MCP_PROXY_VERSION}"
 
