@@ -1,7 +1,7 @@
 FROM node:20-alpine AS builder
 
 # renovate: datasource=npm depName=@democratize-technology/vikunja-mcp
-ARG VIKUNJA_MCP_VERSION=0.2.2
+ARG VIKUNJA_MCP_VERSION=0.2.0
 # renovate: datasource=npm depName=mcp-proxy
 ARG MCP_PROXY_VERSION=1.0.0
 
