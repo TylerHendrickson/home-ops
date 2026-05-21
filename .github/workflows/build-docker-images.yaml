@@ -86,27 +86,15 @@ jobs:
         id: versions
         run: |
           DOCKERFILE="docker/${{ matrix.image }}/Dockerfile"
-          echo "DEBUG: DOCKERFILE=$DOCKERFILE"
-          echo "DEBUG: File exists: $(test -f "$DOCKERFILE" && echo yes || echo no)"
-          echo "DEBUG: File contents:"
-          cat "$DOCKERFILE"
-          echo "---"
 
-          # Extract versions from ARG lines (skip comments)
-          MCP_ARR=$(grep -E '^ARG MCP_ARR_VERSION=' "$DOCKERFILE" | sed 's/.*=//')
+          # Extract mcp-proxy version
           MCP_PROXY=$(grep -E '^ARG MCP_PROXY_VERSION=' "$DOCKERFILE" | sed 's/.*=//')
 
-          echo "DEBUG: MCP_ARR=$MCP_ARR"
-          echo "DEBUG: MCP_PROXY=$MCP_PROXY"
-
-          # Use MCP_ARR_VERSION as primary version
-          PRIMARY_VERSION="$MCP_ARR"
+          # Extract primary version from the first non-MCP_PROXY ARG
+          PRIMARY_VERSION=$(grep -E '^ARG ' "$DOCKERFILE" | grep -v 'MCP_PROXY_VERSION' | head -1 | sed 's/.*=//')
 
           echo "primary_version=$PRIMARY_VERSION" >> $GITHUB_OUTPUT
-          echo "mcp_arr=$MCP_ARR" >> $GITHUB_OUTPUT
           echo "mcp_proxy=$MCP_PROXY" >> $GITHUB_OUTPUT
-
-          echo "Image version: $PRIMARY_VERSION (mcp-arr: $MCP_ARR, mcp-proxy: $MCP_PROXY)"
 
       - name: Build Docker image (load)
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
