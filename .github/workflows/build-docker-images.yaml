@@ -30,6 +30,9 @@ jobs:
             mcp-arr:
               - docker/mcp-arr/Dockerfile
               - .github/workflows/build-docker-images.yaml
+            vikunja-mcp:
+              - docker/vikunja-mcp/Dockerfile
+              - .github/workflows/build-docker-images.yaml
           list-files: json
           base: ${{ github.event.repository.default_branch }}
 
