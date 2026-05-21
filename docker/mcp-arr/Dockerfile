@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:24-bookworm-slim AS builder
 
 # renovate: datasource=npm depName=mcp-arr-server
 ARG MCP_ARR_VERSION=1.5.4

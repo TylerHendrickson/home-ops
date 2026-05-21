@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:20-bookworm-slim AS builder
 
 # renovate: datasource=npm depName=@democratize-technology/vikunja-mcp
 ARG VIKUNJA_MCP_VERSION=0.2.0
