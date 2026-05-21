@@ -45,7 +45,9 @@ spec:
               # RADARR__INSTANCE_NAME: Radarr
               RADARR__PORT: &port 80
               TZ: America/Chicago
-            # envFrom: *envFrom
+            envFrom:
+              - secretRef:
+                  name: radarr-secret
             # probes:
             #   liveness: &probes
             #     enabled: true
