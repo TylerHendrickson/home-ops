@@ -345,6 +345,16 @@
   customManagers: [
     {
       customType: 'regex',
+      description: 'Process installed package versions in Dockerfiles',
+      managerFilePatterns: [
+        '/(^|/)docker/.+/Dockerfile$/',
+      ],
+      matchStrings: [
+        '# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\nARG \\S+=(?<currentValue>\\S+)\n',
+      ],
+    },
+    {
+      customType: 'regex',
       description: 'Process various other dependencies',
       managerFilePatterns: [
         '/(^|/)addons/.+\\.ya?ml(\\.j2)?(\\.j2)?$/',
