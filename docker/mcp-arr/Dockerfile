@@ -1,7 +1,7 @@
 FROM node:24-bookworm-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e404fdb2a5c3d3b73ecf AS builder
 
 # renovate: datasource=npm depName=mcp-arr-server
-ARG MCP_ARR_VERSION=1.5.4
+ARG MCP_ARR_VERSION=1.6.2
 # renovate: datasource=npm depName=mcp-proxy
 ARG MCP_PROXY_VERSION=1.0.0
 
