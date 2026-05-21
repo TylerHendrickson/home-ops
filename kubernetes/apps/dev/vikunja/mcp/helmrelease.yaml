@@ -25,18 +25,12 @@ spec:
           reloader.stakater.com/auto: "true"
         containers:
           main:
+            # renovate: datasource=docker depName=ghcr.io/tylerhendrickson/vikunja-mcp
             image:
-              repository: docker.io/library/node
-              tag: 20-bookworm-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
-            command: ["sh", "-c"]
-            args:
-              - exec npx -y "mcp-proxy@${MCP_PROXY_VERSION}" --port=8080 -- npx -y "@democratize-technology/vikunja-mcp@${VIKUNJA_MCP_VERSION}"
+              repository: ghcr.io/tylerhendrickson/vikunja-mcp
+              tag: 0.2.0@sha256:86e36cc2ac238c1299fea6ae0f2021b291f7fe187fafe912a923d8885722d4c7
             env:
               VIKUNJA_URL: "http://vikunja.dev.svc.cluster.local:3456/api/v1"
-              # renovate: datasource=npm depName=mcp-proxy
-              MCP_PROXY_VERSION: "1.0.0"
-              # renovate: datasource=npm depName=@democratize-technology/vikunja-mcp
-              VIKUNJA_MCP_VERSION: "0.2.2"
             envFrom:
               - secretRef:
                   name: vikunja-mcp-secret
