@@ -85,7 +85,6 @@ spec:
     persistence:
       config:
         type: persistentVolumeClaim
-        nameOverride: lidarr-config
         accessMode: ReadWriteOnce
         size: 10Gi
         storageClass: longhorn
