@@ -30,6 +30,7 @@ spec:
               repository: ghcr.io/tylerhendrickson/mcp-arr
               tag: 1.6.2@sha256:2a3228bb775fbb094fada06a756fb847495fc169f51f63717e715fa12c9a3ee0
             env:
+              LIDARR_URL: http://lidarr.media.svc.cluster.local
               SONARR_URL: http://sonarr.media.svc.cluster.local
               RADARR_URL: http://radarr.media.svc.cluster.local
               PROWLARR_URL: http://prowlarr.media.svc.cluster.local
