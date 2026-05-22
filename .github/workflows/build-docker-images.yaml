@@ -6,7 +6,11 @@ on:
     branches: [main]
     paths:
       - docker/**/Dockerfile
-      - .github/workflows/build-docker-images.yaml
+  workflow_dispatch:
+    inputs:
+      images:
+        description: Comma-separated image names to rebuild (e.g. "mcp-arr,vikunja-mcp")
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -15,7 +19,7 @@ jobs:
   detect:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.filter.outputs.changes }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -23,24 +27,31 @@ jobs:
           fetch-depth: 0
 
       - name: Detect changed Dockerfiles
+        if: github.event_name == 'push'
         uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: filter
         with:
           filters: |
             mcp-arr:
               - docker/mcp-arr/Dockerfile
-              - .github/workflows/build-docker-images.yaml
             vikunja-mcp:
               - docker/vikunja-mcp/Dockerfile
-              - .github/workflows/build-docker-images.yaml
           list-files: json
           base: ${{ github.event.repository.default_branch }}
 
-      - name: Debug filter output
+      - name: Resolve image matrix
+        id: matrix
+        env:
+          INPUT_IMAGES: ${{ inputs.images }}
+          FILTER_CHANGES: ${{ steps.filter.outputs.changes }}
         run: |
-          echo "changes: ${{ steps.filter.outputs.changes }}"
-          echo "mcp-arr: ${{ steps.filter.outputs.mcp-arr }}"
-          echo "mcp-arr_files: ${{ steps.filter.outputs.mcp-arr_files }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            matrix=$(echo "$INPUT_IMAGES" | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0))')
+          else
+            matrix="$FILTER_CHANGES"
+          fi
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "matrix: $matrix"
 
   build:
     needs: detect
