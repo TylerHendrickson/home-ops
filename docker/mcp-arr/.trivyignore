@@ -1,0 +1,12 @@
+# libssl3 in gcr.io/distroless/nodejs24-debian12 — awaiting upstream rebuild
+# Reviewed 2026-05-22: not exploitable in our deployment
+#   - 31789 is 32-bit-only; we run linux/amd64
+#   - 28387/28388/28389/28390 require code paths (DANE, CRL, CMS) mcp-arr doesn't use
+#   - Image is internal-ingress + nginx basic-auth gated; only initiates outbound
+#     plaintext HTTP to in-cluster *arr services (no TLS in this path)
+# Re-evaluate when expirations hit or when the distroless digest moves
+CVE-2026-31789 exp:2026-08-22
+CVE-2026-28387 exp:2026-08-22
+CVE-2026-28388 exp:2026-08-22
+CVE-2026-28389 exp:2026-08-22
+CVE-2026-28390 exp:2026-08-22
