@@ -32,7 +32,7 @@ spec:
               COMPlus_EnableDiagnostics: "0"
               LIDARR__AUTHENTICATION_METHOD: External
               LIDARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
-              LIDARR__PORT: &port 80
+              LIDARR__SERVER__PORT: &port 80
               TZ: "America/Chicago"
             envFrom:
               - secretRef:
