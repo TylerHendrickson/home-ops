@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nas-warehouse1-ro
+  finalizers:
+    - nas.home.arpa/do-not-delete
+spec:
+  capacity:
+    storage: 50Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  mountOptions:
+    - nfsvers=4.1
+    - noatime
+    - soft
+    - timeo=50
+    - retrans=5
+    - actimeo=10
+    - nconnect=4
+    - ro
+  csi:
+    driver: nfs.csi.k8s.io
+    readOnly: true
+    volumeHandle: "${CARDHU_NAS_IP}/volume1/warehouse1##ro"
+    volumeAttributes:
+      server: "${CARDHU_NAS_IP}"
+      share: /volume1/warehouse1
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nas-warehouse1-ro
+spec:
+  volumeName: nas-warehouse1-ro
+  volumeMode: Filesystem
+  storageClassName: ""
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 50Gi
