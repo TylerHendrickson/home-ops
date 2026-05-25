@@ -27,7 +27,7 @@ spec:
           main:
             image:
               repository: mcp/time
-              tag: sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
+              tag: latest@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf
             args: ["--local-timezone", "${TIMEZONE}"]
             env:
               TZ: "${TIMEZONE}"
