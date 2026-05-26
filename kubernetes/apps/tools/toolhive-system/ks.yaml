@@ -33,7 +33,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: toolhive-operator-crds
-  path: ./kubernetes/apps/tools/toolhive-system/app
+  path: ./kubernetes/apps/tools/toolhive-system/operator
   prune: true
   sourceRef:
     kind: GitRepository
