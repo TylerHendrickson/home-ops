@@ -6,7 +6,6 @@ metadata:
   name: &app mcp-platform
   namespace: flux-system
 spec:
-  targetNamespace: mcp-platform
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
