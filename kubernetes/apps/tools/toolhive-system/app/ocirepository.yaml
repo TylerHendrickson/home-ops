@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: toolhive-operator
+spec:
+  interval: 15m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.28.3
+    digest: sha256:5130f521e6f77457266ec38c2cbd22925bd6a96965b76c75769e9d890e1d01b4
+  url: oci://ghcr.io/stacklok/toolhive/toolhive-operator

@@ -93,6 +93,20 @@
       ],
     },
     {
+      description: 'ToolHive Group (operator + CRDs must move in lockstep)',
+      groupName: 'ToolHive',
+      matchDatasources: [
+        'docker',
+      ],
+      group: {
+        commitMessageTopic: '{{{groupName}}} group',
+      },
+      separateMinorPatch: true,
+      matchPackageNames: [
+        '/stacklok/toolhive/',
+      ],
+    },
+    {
       description: 'Use custom versioning for k3s',
       matchDatasources: [
         'github-releases',
