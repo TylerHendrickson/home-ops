@@ -1,0 +1,27 @@
+---
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: mcp-time
+  namespace: mcp-platform
+spec:
+  # renovate: datasource=docker depName=docker.io/mcp/time
+  # TODO: pin to digest once deployed — replace :latest with :latest@sha256:<digest>
+  image: "docker.io/mcp/time:latest"
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  permissionProfile:
+    type: builtin
+    name: none
+  telemetryConfigRef:
+    name: mcp-time-telemetry
+  audit:
+    enabled: true
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
