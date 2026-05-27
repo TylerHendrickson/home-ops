@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/tools/toolhive-system/crds
+  path: ./kubernetes/apps/tools/mcp-platform/toolhive-system/crds
   prune: true
   sourceRef:
     kind: GitRepository
@@ -33,7 +33,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: toolhive-operator-crds
-  path: ./kubernetes/apps/tools/toolhive-system/operator
+  path: ./kubernetes/apps/tools/mcp-platform/toolhive-system/operator
   prune: true
   sourceRef:
     kind: GitRepository
