@@ -8,6 +8,9 @@ metadata:
 spec:
   # renovate: datasource=docker depName=docker.io/theo01/mcp-time
   image: "docker.io/theo01/mcp-time@sha256:68f2a2d78dc66efa84f30b7a5209c90da64bf936de923c20861122062ef8ff0f"
+  args:
+    - "--log-file"
+    - "/dev/stderr"
   transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080
