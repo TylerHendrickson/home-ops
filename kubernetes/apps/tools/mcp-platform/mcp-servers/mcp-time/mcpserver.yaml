@@ -6,11 +6,8 @@ metadata:
   name: mcp-time
   namespace: mcp-platform
 spec:
-  # renovate: datasource=docker depName=docker.io/mcp/time
-  image: "docker.io/mcp/time:latest@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf"
-  env:
-    - name: LOCAL_TIMEZONE
-      value: ${TIMEZONE}
+  # renovate: datasource=docker depName=docker.io/theo01/mcp-time
+  image: "docker.io/theo01/mcp-time@sha256:68f2a2d78dc66efa84f30b7a5209c90da64bf936de923c20861122062ef8ff0f"
   transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080
