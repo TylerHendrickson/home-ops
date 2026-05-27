@@ -11,6 +11,7 @@ spec:
   policyTypes:
     - Egress
   egress:
+    # DNS to kube-dns
     - to:
         - namespaceSelector:
             matchLabels:
@@ -22,4 +23,12 @@ spec:
         - port: 53
           protocol: UDP
         - port: 53
+          protocol: TCP
+    # Kubernetes API — proxyrunner creates a StatefulSet for the inner MCP container
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+      ports:
+        - port: 443
           protocol: TCP
