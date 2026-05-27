@@ -30,6 +30,14 @@ spec:
       memory: 512Mi
   podTemplateSpec:
     spec:
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: mcp
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
