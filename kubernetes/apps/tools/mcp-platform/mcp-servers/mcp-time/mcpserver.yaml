@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
@@ -6,8 +7,7 @@ metadata:
   namespace: mcp-platform
 spec:
   # renovate: datasource=docker depName=docker.io/mcp/time
-  # TODO: pin to digest once deployed — replace :latest with :latest@sha256:<digest>
-  image: "docker.io/mcp/time:latest"
+  image: "docker.io/mcp/time:latest@sha256:9c46a918633fb474bf8035e3ee90ebac6bcf2b18ccb00679ac4c179cba0ebfcf"
   transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080
