@@ -114,10 +114,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /.npm
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/metadata/logs
       media:
         existingClaim: nas-media
         globalMounts:
