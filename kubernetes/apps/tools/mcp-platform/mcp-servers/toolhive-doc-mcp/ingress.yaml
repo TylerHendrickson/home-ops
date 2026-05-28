@@ -19,7 +19,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: mcp-toolhive-doc-mcp-proxy
+                name: mcp-toolhive-doc-mcp-remote-proxy
                 port:
                   name: http
   tls:
