@@ -104,8 +104,7 @@ data:
         probeSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
         enableAdminAPI: true
-        additionalArgs:
-          - --web.enable-otlp-receiver
+        enableOTLPReceiver: true
         walCompression: true
         retentionSize: 32GB
         storageSpec:
