@@ -1,0 +1,9 @@
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPRemoteProxy
+metadata:
+  name: toolhive-doc-mcp
+  namespace: mcp-platform
+spec:
+  remoteUrl: https://toolhive-doc-mcp.stacklok.com/mcp
+  telemetryConfigRef:
+    name: toolhive-doc-mcp-telemetry
