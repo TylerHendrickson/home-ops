@@ -40,11 +40,9 @@ spec:
                 spec:
                   exec:
                     command:
-                      - mariadb-admin
-                      - ping
-                      - --socket=/run/mysqld/mysqld.sock
-                      - --user=root
-                      - --password=$(MARIADB_ROOT_PASSWORD)
+                      - bash
+                      - -c
+                      - 'mariadb-admin ping --socket=/run/mysqld/mysqld.sock --user=root --password="$${MARIADB_ROOT_PASSWORD}"'
             restartPolicy: Always
             securityContext:
               allowPrivilegeEscalation: false
