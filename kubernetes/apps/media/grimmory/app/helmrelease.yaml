@@ -174,7 +174,7 @@ spec:
               - path: /books
                 subPath: books
               - path: /bookdrop
-                subPath: downloads/complete/books
+                subPath: downloads/bookdrop
     defaultPodOptions:
       affinity:
         nodeAffinity:

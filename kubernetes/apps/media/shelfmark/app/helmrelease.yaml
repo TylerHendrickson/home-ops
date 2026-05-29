@@ -36,7 +36,7 @@ spec:
               CONFIG_DIR: /config
               TMP_DIR: /tmp/shelfmark
               LOG_ROOT: /var/log
-              INGEST_DIR: /media/cardhu-warehouse1/books
+              INGEST_DIR: /media/cardhu-warehouse1/downloads/bookdrop
               DESTINATION_AUDIOBOOK: /media/cardhu-warehouse1/audiobooks
               PROWLARR_ENABLED: "true"
               PROWLARR_URL: http://prowlarr.media.svc.cluster.local
@@ -142,6 +142,8 @@ spec:
             subPath: audiobooks
           - path: /media/cardhu-warehouse1/downloads/complete/books
             subPath: downloads/complete/books
+          - path: /media/cardhu-warehouse1/downloads/bookdrop
+            subPath: downloads/bookdrop
     defaultPodOptions:
       affinity:
         nodeAffinity:
