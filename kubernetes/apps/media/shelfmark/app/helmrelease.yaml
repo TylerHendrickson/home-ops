@@ -127,6 +127,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /var/log
+      home:
+        type: emptyDir
+        globalMounts:
+          - path: /home/shelfmark
       media:
         existingClaim: nas-media
         globalMounts:
