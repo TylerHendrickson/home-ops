@@ -1,0 +1,148 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/tags/app-template-5.0.1/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: shelfmark
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: shelfmark
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/calibrain/shelfmark
+              tag: 1.3.0@sha256:e891eda444b261da48a839db652034bce4e20ac09c167f14adf939dedf96b572
+            env:
+              TZ: America/Chicago
+              PUID: 1000
+              PGID: 1000
+              FLASK_PORT: &port 8084
+              CONFIG_DIR: /config
+              TMP_DIR: /tmp/shelfmark
+              LOG_ROOT: /var/log
+              INGEST_DIR: /media/cardhu-warehouse1/books
+              DESTINATION_AUDIOBOOK: /media/cardhu-warehouse1/audiobooks
+              PROWLARR_ENABLED: "true"
+              PROWLARR_URL: http://prowlarr.media.svc.cluster.local
+              PROWLARR_USENET_CLIENT: sabnzbd
+              SABNZBD_URL: http://sabnzbd.media.svc.cluster.local
+              SABNZBD_CATEGORY: books
+              SABNZBD_CATEGORY_AUDIOBOOK: books
+            envFrom:
+              - secretRef:
+                  name: shelfmark-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: *port
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 1Gi
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            runAsNonRoot: true
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 100
+              - 1000
+              - 1001
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        className: internal
+        hosts:
+          - host: &host "shelfmark.int.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        storageClass: longhorn
+        globalMounts:
+          - path: /config
+      tmp:
+        type: emptyDir
+      log:
+        type: emptyDir
+        globalMounts:
+          - path: /var/log
+      media:
+        existingClaim: nas-media
+        globalMounts:
+          - path: /media/cardhu-warehouse1
+            readOnly: true
+          - path: /media/cardhu-warehouse1/books
+            subPath: books
+          - path: /media/cardhu-warehouse1/audiobooks
+            subPath: audiobooks
+          - path: /media/cardhu-warehouse1/downloads/complete/books
+            subPath: downloads/complete/books
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist

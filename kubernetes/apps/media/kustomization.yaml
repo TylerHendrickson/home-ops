@@ -12,4 +12,5 @@ resources:
   - ./radarr/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./shared/ks.yaml
+  - ./shelfmark/ks.yaml
   - ./sonarr/ks.yaml
