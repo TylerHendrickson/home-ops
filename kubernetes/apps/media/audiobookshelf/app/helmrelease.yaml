@@ -119,6 +119,12 @@ spec:
         globalMounts:
           - path: /media/cardhu-warehouse1
             readOnly: true
+          - path: /media/cardhu-warehouse1/books
+            subPath: books
+          - path: /media/cardhu-warehouse1/audiobooks
+            subPath: audiobooks
+          - path: /media/cardhu-warehouse1/podcasts
+            subPath: podcasts
     defaultPodOptions:
       affinity:
         nodeAffinity:
