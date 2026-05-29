@@ -63,6 +63,11 @@ spec:
             image:
               repository: ghcr.io/grimmory-tools/grimmory
               tag: v3.1.0@sha256:c83dcb59975c9a680ecdf84d60e7e5c9b05200818bab8794f4d84a7e008a549a
+            command:
+              - java
+            args:
+              - -jar
+              - /app/app.jar
             env:
               TZ: ${TIMEZONE}
               DATABASE_URL: jdbc:mariadb://localhost:3306/grimmory
