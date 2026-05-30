@@ -107,6 +107,20 @@
       ],
     },
     {
+      description: 'Intel Device Plugins Group (operator + GPU plugin must move in lockstep)',
+      groupName: 'Intel Device Plugins',
+      matchDatasources: [
+        'helm',
+      ],
+      group: {
+        commitMessageTopic: '{{{groupName}}} group',
+      },
+      separateMinorPatch: true,
+      matchPackageNames: [
+        '/intel-device-plugins/',
+      ],
+    },
+    {
       description: 'Use custom versioning for k3s',
       matchDatasources: [
         'github-releases',
