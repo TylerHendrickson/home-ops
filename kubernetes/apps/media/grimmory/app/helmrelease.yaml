@@ -71,7 +71,7 @@ spec:
             env:
               TZ: ${TIMEZONE}
               DATABASE_URL: jdbc:mariadb://localhost:3306/grimmory
-              DISK_TYPE: NETWORK
+              DISK_TYPE: LOCAL
             envFrom:
               - secretRef:
                   name: grimmory-secret
