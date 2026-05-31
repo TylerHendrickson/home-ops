@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanafolder_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: music-assistant
+spec:
+  # The Grafana instance lives in the observability namespace;
+  # this folder (and the alert rule below) live in home-automation,
+  # so cross-namespace import is required to match it.
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  allowCrossNamespaceImport: true
+  title: Music Assistant
