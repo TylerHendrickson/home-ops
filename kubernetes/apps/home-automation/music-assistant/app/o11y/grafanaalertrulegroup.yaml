@@ -1,0 +1,83 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanaalertrulegroup_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaAlertRuleGroup
+metadata:
+  name: music-assistant-storage
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  allowCrossNamespaceImport: true
+  folderRef: music-assistant
+  interval: 1m
+  rules:
+    - uid: music-assistant-nfs-unresponsive
+      title: MusicAssistantLibraryMountUnresponsive
+      condition: B
+      for: 15m
+      # Healthy mount (or pod down) => expression returns no series => NoData => Normal.
+      noDataState: OK
+      execErrState: Error
+      labels:
+        severity: warning
+      annotations:
+        summary: >-
+          Music Assistant NFS mount not reporting volume stats (statfs failing).
+        description: >-
+          The kubelet has stopped emitting volume stats for the nas-warehouse1-ro PVC,
+          which means statfs() against the mount is failing — the NFS mount is unresponsive and not
+          self-recovering, so Music Assistant cannot read its library even though the pod may still
+          appear healthy.
+          This is the signature of the 2026-05-30 incident. The rule is gated on the pod being
+          Running, so an intentional scale-down or rollout does not trigger it.
+      data:
+        - refId: A
+          datasourceUid: prometheus
+          relativeTimeRange:
+            from: 600
+            to: 0
+          model:
+            refId: A
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            # Fire only when the MA pod is Running AND its warehouse1 volume stats are
+            # missing. `unless` drops the running-pod signal whenever the PVC stats series
+            # exists (healthy mount); when the pod is absent the left side is empty, so a
+            # scale-down / rollout never fires.
+            expr: '(kube_pod_status_phase{namespace="home-automation", pod=~"music-assistant-.*", phase="Running"} == 1) unless on(namespace) kubelet_volume_stats_capacity_bytes{namespace="home-automation", persistentvolumeclaim="nas-warehouse1-ro"}'
+            instant: true
+            range: false
+            intervalMs: 1000
+            maxDataPoints: 43200
+            legendFormat: __auto
+        - refId: B
+          datasourceUid: __expr__
+          relativeTimeRange:
+            from: 600
+            to: 0
+          model:
+            refId: B
+            type: threshold
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            conditions:
+              - type: query
+                evaluator:
+                  type: gt
+                  params:
+                    - 0
+                operator:
+                  type: and
+                query:
+                  params:
+                    - A
+                reducer:
+                  type: last
+                  params: []
