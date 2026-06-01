@@ -16,7 +16,7 @@ spec:
         #   apiToken + userKey (injected via valuesFrom below) are required fields.
         #   Numbers are quoted (Grafana stores these as strings).
         #   Defaults below are the notifier's code defaults.
-        priority: "0"         # alerting priority: -2 (lowest) … 2 (emergency); default "0" (normal)
+        # priority: "0"         # alerting priority: -2 (lowest) … 2 (emergency); default "0" (normal)
         # okPriority: "0"     # priority for resolved/OK notifications; default "0"
         # retry: "30"         # seconds between repeats; ONLY used for emergency priority (2); min 30
         # expire: "3600"      # seconds the emergency notification keeps retrying; ONLY priority 2; max 10800
@@ -26,6 +26,13 @@ spec:
         # title: ""           # templated notification title; blank = Grafana's default title template
         # message: ""         # templated notification body; blank = Grafana's default message template
         # uploadImage: true   # attach rendered panel image to the notification; default true (boolean, not quoted)
+        priority: "0"
+        title: '[{{ .Status }}] {{ .CommonLabels.alertname }} '
+        message: |
+          {{ range .Alerts }}{{ .Annotations.summary }}
+
+          {{ .Annotations.description }}
+          {{ end }}
       valuesFrom:
         - targetPath: apiToken
           valueFrom:
