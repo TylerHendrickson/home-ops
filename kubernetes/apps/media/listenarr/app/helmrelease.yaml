@@ -33,9 +33,6 @@ spec:
               COMPlus_EnableDiagnostics: "0"
               LISTENARR_PUBLIC_URL: "https://listenarr.int.${SECRET_DOMAIN}"
               LISTENARR_LOG_LEVEL: Information
-            envFrom:
-              - secretRef:
-                  name: listenarr-secret
             probes:
               startup:
                 enabled: true
