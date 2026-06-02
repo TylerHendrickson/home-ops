@@ -92,7 +92,7 @@ spec:
         enabled: true
         className: internal
         hosts:
-          - host: &host "listenarr.${SECRET_DOMAIN}"
+          - host: &host "listenarr.int.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
