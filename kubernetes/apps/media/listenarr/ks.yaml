@@ -12,7 +12,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: longhorn-system
-    - name: external-secrets-stores
     - name: media-shared
   path: ./kubernetes/apps/media/listenarr/app
   prune: true
