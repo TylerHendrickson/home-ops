@@ -5,7 +5,7 @@ metadata:
   name: cardhu-minio-sc-v1
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: 192.168.1.95
+  server: "${CARDHU_NAS_IP}"
   share: /volume1/minio
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
@@ -49,9 +49,9 @@ spec:
     - retry=5 0 0
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: "192.168.1.95/volume1/minio##"
+    volumeHandle: "${CARDHU_NAS_IP}/volume1/minio##"
     volumeAttributes:
-      server: 192.168.1.95
+      server: "${CARDHU_NAS_IP}"
       share: /volume1/minio
 ---
 kind: PersistentVolumeClaim
