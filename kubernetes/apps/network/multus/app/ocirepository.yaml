@@ -11,4 +11,5 @@ spec:
     operation: copy
   ref:
     tag: 1.3.2
+    digest: sha256:5e0d0f61809b9df840f2d62f7baef460dc726e4590f197ef95aae736ee056f9f
   url: oci://ghcr.io/bjw-s-labs/helm/multus
