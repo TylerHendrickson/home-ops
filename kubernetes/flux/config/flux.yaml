@@ -10,7 +10,7 @@ spec:
   url: oci://ghcr.io/fluxcd/flux-manifests
   ref:
     tag: v2.8.8
-    digest: sha256:fd7cb4f5936d92d6ba386d1f5f2a91688a9b8270a8440eb0fce793062ce8b188
+    digest: sha256:64e1ca89a2ac594c4d2d75717084b57f349dadde6eee9b0872b0b1d02561a233
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
