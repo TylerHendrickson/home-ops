@@ -49,6 +49,18 @@
   commitMessageSuffix: '',
   packageRules: [
     {
+      description: 'Home Assistant - delay .0 releases to let immediate hotfixes land first',
+      matchPackageNames: [
+        'ghcr.io/home-operations/home-assistant',
+      ],
+      matchUpdateTypes: [
+        'major',
+        'minor',
+      ],
+      minimumReleaseAge: '4 days',
+      internalChecksFilter: 'strict',
+    },
+    {
       description: 'Auto merge Github Actions',
       matchManagers: [
         'github-actions',
