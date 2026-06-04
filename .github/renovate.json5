@@ -53,10 +53,7 @@
       matchPackageNames: [
         'ghcr.io/home-operations/home-assistant',
       ],
-      matchUpdateTypes: [
-        'major',
-        'minor',
-      ],
+      matchNewValue: '/\\.0$/',
       minimumReleaseAge: '4 days',
       internalChecksFilter: 'strict',
     },
