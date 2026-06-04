@@ -11,4 +11,5 @@ spec:
     operation: copy
   ref:
     tag: 2.6.0
+    digest: sha256:fd7cb4f5936d92d6ba386d1f5f2a91688a9b8270a8440eb0fce793062ce8b188
   url: oci://ghcr.io/bjw-s/helm/app-template
