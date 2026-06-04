@@ -6,7 +6,6 @@ resources:
   - ./1password.yaml
   - ./cilium.yaml
   - ./cloudnative-pg.yaml
-  - ./coder.yaml
   - ./coredns.yaml
   - ./csi-driver-nfs.yaml
   - ./democratic-csi.yaml
