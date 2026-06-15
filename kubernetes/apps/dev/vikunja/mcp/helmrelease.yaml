@@ -28,7 +28,7 @@ spec:
             # renovate: datasource=docker depName=ghcr.io/tylerhendrickson/vikunja-mcp
             image:
               repository: ghcr.io/tylerhendrickson/vikunja-mcp
-              tag: 0.2.0@sha256:e29d93bda0daa76cb1ea65489bb698600acbdc57efb7425c46cc41e81ca12471
+              tag: 0.2.0@sha256:b368b7b62cd0e46b5ad7112452062c67615cb645254a9e7a724b9c2d3bca86fd
             env:
               VIKUNJA_URL: "http://vikunja.dev.svc.cluster.local:3456/api/v1"
             envFrom:
