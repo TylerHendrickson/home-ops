@@ -106,6 +106,7 @@ data:
         enableAdminAPI: true
         enableOTLPReceiver: true
         walCompression: true
+        retention: 1y
         retentionSize: 32GB
         storageSpec:
           volumeClaimTemplate:
