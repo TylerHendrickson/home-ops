@@ -11,6 +11,6 @@ spec:
     operation: copy
   ref:
     # renovate: datasource=docker depName=ghcr.io/grafana-community/helm-charts/grafana-mcp
-    tag: 0.16.0
-    digest: sha256:d0fe19e6baec9cb977ec3b11cff7e3fc2da79eb709f2e0b9fab0491dce0b82d0
+    tag: 0.17.0
+    digest: sha256:178df9365021b79863a35a6f585e34e04ed0d13fdf6179d37040145e059ede3e
   url: oci://ghcr.io/grafana-community/helm-charts/grafana-mcp
