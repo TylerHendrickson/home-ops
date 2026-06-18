@@ -80,6 +80,13 @@ spec:
       - key: node-role.kubernetes.io/master
         operator: Exists
         effect: NoSchedule
+    prometheus:
+      service:
+        enabled: true
+      monitor:
+        enabled: true
+        interval: 30s
+        scrapeTimeout: 10s
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
