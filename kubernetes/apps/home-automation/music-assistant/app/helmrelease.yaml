@@ -65,10 +65,10 @@ spec:
                   - ALL
             resources:
               requests:
-                cpu: 100m
-                memory: 1Gi
+                cpu: "2"
+                memory: 6Gi
               limits:
-                memory: 3Gi
+                memory: 8Gi
         pod:
           securityContext:
             runAsUser: 568
@@ -132,3 +132,11 @@ spec:
               - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
                     operator: DoesNotExist
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: feature.node.kubernetes.io/cpu-cpuid.AVX2
+                    operator: In
+                    values:
+                      - "true"
