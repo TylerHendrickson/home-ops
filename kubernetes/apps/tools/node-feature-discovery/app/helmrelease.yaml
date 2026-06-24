@@ -29,8 +29,11 @@ spec:
     worker:
       config:
         core:
-          sources: ["custom", "pci", "usb"]
+          sources: ["cpu", "custom", "pci", "usb"]
         sources:
+          cpu:
+            cpuid:
+              attributeWhitelist: ["AVX2"]
           usb:
             deviceClassWhitelist: ["02", "03", "0e", "ef", "fe", "ff"]
             deviceLabelFields: ["class", "vendor", "device"]
