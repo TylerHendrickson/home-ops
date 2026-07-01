@@ -28,7 +28,7 @@ spec:
             # renovate: datasource=docker depName=ghcr.io/tylerhendrickson/mcp-arr
             image:
               repository: ghcr.io/tylerhendrickson/mcp-arr
-              tag: 1.6.5@sha256:fbc29becb38724868f8c59344eed4c8cd24b428740be27c3011958fdce4b9772
+              tag: 1.6.5@sha256:6abc6b801f08d384e9ab44b509eb59b7f4445db5ad746f0c1db45d9ef75d672f
             env:
               LIDARR_URL: http://lidarr.media.svc.cluster.local
               SONARR_URL: http://sonarr.media.svc.cluster.local
