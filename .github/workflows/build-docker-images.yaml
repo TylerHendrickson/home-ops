@@ -97,29 +97,56 @@ jobs:
         id: versions
         run: |
           DOCKERFILE="docker/${{ matrix.image }}/Dockerfile"
+          IMG="${{ env.REGISTRY }}/${{ steps.registry.outputs.owner }}/${{ matrix.image }}"
 
-          # Extract mcp-proxy version
-          MCP_PROXY=$(grep -E '^ARG MCP_PROXY_VERSION=' "$DOCKERFILE" | sed 's/.*=//')
+          # `|| true` keeps a non-matching grep from aborting the step under `set -eo pipefail`.
+          # Publish tag: the image-owned IMAGE_VERSION if present, else the upstream MCP server
+          # version (keeps the MCP images auto-tagged by their upstream version, as today).
+          PRIMARY_VERSION=$(grep -E '^ARG IMAGE_VERSION=' "$DOCKERFILE" | sed 's/.*=//' || true)
+          [ -n "$PRIMARY_VERSION" ] || PRIMARY_VERSION=$(grep -E '^ARG MCP_VERSION=' "$DOCKERFILE" | sed 's/.*=//' || true)
+          MCP_SERVER=$(grep -E '^ARG MCP_VERSION=' "$DOCKERFILE" | sed 's/.*=//' || true)
+          MCP_PROXY=$(grep -E '^ARG MCP_PROXY_VERSION=' "$DOCKERFILE" | sed 's/.*=//' || true)
 
-          # Extract primary version from the first non-MCP_PROXY ARG
-          PRIMARY_VERSION=$(grep -E '^ARG ' "$DOCKERFILE" | grep -v 'MCP_PROXY_VERSION' | head -1 | sed 's/.*=//')
+          echo "primary_version=$PRIMARY_VERSION" >> "$GITHUB_OUTPUT"
 
-          echo "primary_version=$PRIMARY_VERSION" >> $GITHUB_OUTPUT
-          echo "mcp_proxy=$MCP_PROXY" >> $GITHUB_OUTPUT
+          # Labels: generic OCI labels on every image; MCP version labels only when present.
+          {
+            echo 'labels<<EOF'
+            echo "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}"
+            echo "org.opencontainers.image.revision=${{ github.sha }}"
+            echo "org.opencontainers.image.title=${{ matrix.image }}"
+            echo "org.opencontainers.image.version=${PRIMARY_VERSION}"
+            [ -n "$MCP_SERVER" ] && echo "mcp-server.version=${MCP_SERVER}"
+            [ -n "$MCP_PROXY" ] && echo "mcp-proxy.version=${MCP_PROXY}"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+          # Push tags: the version tag always; `latest` only for tar-backup.
+          {
+            echo 'tags<<EOF'
+            echo "${IMG}:${PRIMARY_VERSION}"
+            [ "${{ matrix.image }}" = "tar-backup" ] && echo "${IMG}:latest"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Resolve build platforms
+        id: platforms
+        run: |
+          if [ "${{ matrix.image }}" = "tar-backup" ]; then
+            echo "value=linux/amd64,linux/arm64" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build Docker image (load)
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
-          context: .
+          context: docker/${{ matrix.image }}
           file: docker/${{ matrix.image }}/Dockerfile
           push: false
           load: true
           tags: ${{ env.REGISTRY }}/${{ steps.registry.outputs.owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
-          labels: |
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.revision=${{ github.sha }}
-            mcp-arr-server.version=${{ steps.versions.outputs.mcp_arr }}
-            mcp-proxy.version=${{ steps.versions.outputs.mcp_proxy }}
+          labels: ${{ steps.versions.outputs.labels }}
 
       - name: Run Trivy vulnerability scan
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
@@ -148,12 +175,9 @@ jobs:
       - name: Push Docker image
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
-          context: .
+          context: docker/${{ matrix.image }}
           file: docker/${{ matrix.image }}/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ steps.registry.outputs.owner }}/${{ matrix.image }}:${{ steps.versions.outputs.primary_version }}
-          labels: |
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.revision=${{ github.sha }}
-            mcp-arr-server.version=${{ steps.versions.outputs.mcp_arr }}
-            mcp-proxy.version=${{ steps.versions.outputs.mcp_proxy }}
+          platforms: ${{ steps.platforms.outputs.value }}
+          tags: ${{ steps.versions.outputs.tags }}
+          labels: ${{ steps.versions.outputs.labels }}

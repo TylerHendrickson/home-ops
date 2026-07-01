@@ -1,11 +1,11 @@
 FROM node:24-bookworm-slim@sha256:b31e7a42fdf8b8aa5f5ed477c72d694301273f1069c5a2f71d53c6482e99a2fc AS builder
 
 # renovate: datasource=npm depName=@democratize-technology/vikunja-mcp
-ARG VIKUNJA_MCP_VERSION=0.2.0
+ARG MCP_VERSION=0.2.0
 # renovate: datasource=npm depName=mcp-proxy
 ARG MCP_PROXY_VERSION=6.5.2
 
-RUN npm install -g "@democratize-technology/vikunja-mcp@${VIKUNJA_MCP_VERSION}" "mcp-proxy@${MCP_PROXY_VERSION}"
+RUN npm install -g "@democratize-technology/vikunja-mcp@${MCP_VERSION}" "mcp-proxy@${MCP_PROXY_VERSION}"
 
 FROM gcr.io/distroless/nodejs24-debian12:nonroot@sha256:14d42e2511532589a7c7e01a753667a74fcc96266e137e8125006b87b0c32d0a
 
