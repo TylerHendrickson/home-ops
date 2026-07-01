@@ -1,0 +1,3 @@
+# Trivy ignore list for the tar-backup image.
+# Empty for now. Triage real findings here with an expiry + rationale, following
+# the style of docker/mcp-arr/.trivyignore (e.g. "CVE-XXXX-NNNNN exp:YYYY-MM-DD").

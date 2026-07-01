@@ -1,0 +1,64 @@
+# syntax=docker/dockerfile:1
+
+# IMAGE_VERSION is *our* version for this image (Dockerfile + backup.sh), bumped
+# by hand when either changes meaningfully. It is not an upstream dependency, so
+# it intentionally has no Renovate pragma; the build pipeline publishes the image
+# under this tag.
+ARG IMAGE_VERSION=0.1.0
+
+###############################################################################
+# Stage 1 — rclone
+###############################################################################
+FROM rclone/rclone:1.74.3@sha256:623378ad0ff3ebd5cebf77720843c0e02edfe46e2d5b5ac6bed54c6371780dfb AS rclone
+
+###############################################################################
+# Stage 2 — supercronic: download + verify in a THROWAWAY builder so that curl
+#           and apt never reach the final image. Pinned version + per-arch SHA1.
+#           When bumping SUPERCRONIC_VERSION, refresh BOTH sha1 values below from
+#           the matching release page:
+#             https://github.com/aptible/supercronic/releases
+###############################################################################
+FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df AS fetch
+# renovate: datasource=github-releases depName=aptible/supercronic
+ARG SUPERCRONIC_VERSION=v0.2.46
+ARG TARGETARCH
+RUN set -eux; \
+    case "${TARGETARCH}" in \
+        amd64) SUPERCRONIC_SHA1=5bcefed628e32adc08e32634db2d10e9230dbca0 ;; \
+        arm64) SUPERCRONIC_SHA1=639ab81a72771990790df7ee87d9acfe88e5fa83 ;; \
+        *) echo "ERROR: unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends curl ca-certificates; \
+    SC="supercronic-linux-${TARGETARCH}"; \
+    curl -fsSLO "https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/${SC}"; \
+    echo "${SUPERCRONIC_SHA1}  ${SC}" | sha1sum -c -; \
+    install -m 0755 "${SC}" /usr/local/bin/supercronic
+
+###############################################################################
+# Final image — minimal Debian. GNU tar/gzip/coreutils/util-linux(flock) are
+# already in the slim base. No curl, no tzdata, no ca-certificates:
+#   * timezone comes from a bind-mounted /etc/localtime (see compose)
+#   * SMB needs no CA certs; for an HTTPS rclone backend, bind-mount the host
+#     cert store (see compose) rather than baking certs that would go stale.
+###############################################################################
+FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df
+
+# Include an HTTP client ONLY if you intend to use external heartbeat pings
+# (PING_URL). Off by default to keep the image lean and apt-free.
+ARG INCLUDE_HTTP_CLIENT=false
+RUN set -eux; \
+    if [ "${INCLUDE_HTTP_CLIENT}" = "true" ]; then \
+        apt-get update; \
+        DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends curl; \
+        rm -rf /var/lib/apt/lists/*; \
+    fi
+
+COPY --from=rclone /usr/local/bin/rclone /usr/local/bin/rclone
+COPY --from=fetch  /usr/local/bin/supercronic /usr/local/bin/supercronic
+COPY backup.sh /usr/local/bin/backup.sh
+RUN chmod 0755 /usr/local/bin/rclone /usr/local/bin/supercronic /usr/local/bin/backup.sh \
+ && mkdir -p /etc/backup
+
+EXPOSE 9746
+ENTRYPOINT ["/usr/local/bin/supercronic", "-prometheus-listen-address", "0.0.0.0:9746", "/etc/backup/crontab"]
