@@ -27,7 +27,7 @@ spec:
           main:
             image:
               repository: ghcr.io/music-assistant/server
-              tag: 2.9.3@sha256:fa04f9187e65362d489034d5b4072e94a7bef741c29c47e2b9a36325730605f2
+              tag: 2.9.5@sha256:d5f2e4e7ef2b9798b554c1ad79b0444728606d8f68f8b151f64621934d80ef65
             env:
               TZ: "America/Chicago"
               LOG_LEVEL: info
