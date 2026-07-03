@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+# External RPi "edradour" (${EDRADOUR_IP}) — hosts HA's Zigbee/Z-Wave radios + MQTT broker.
+# Not the in-cluster home-assistant pod. See docker/tar-backup/ for the backup that serves :9747.
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: edradour-backup-cron
+spec:
+  staticConfigs:
+    - targets: ["${EDRADOUR_IP}:9747"]
+  metricsPath: /metrics
+  scrapeInterval: 60s
+  relabelings:
+    - targetLabel: job
+      replacement: backup-cron
+    - targetLabel: instance
+      replacement: edradour
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: edradour-mqtt
+spec:
+  staticConfigs:
+    - targets: ["${EDRADOUR_IP}:8079"]
+  metricsPath: /metrics
+  scrapeInterval: 60s
+  relabelings:
+    - targetLabel: job
+      replacement: rpi-mqtt
+    - targetLabel: instance
+      replacement: edradour
