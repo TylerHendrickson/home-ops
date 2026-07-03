@@ -145,6 +145,31 @@ http_get() {
   return 0
 }
 
+# Fail if anything tar must read is unreadable by THIS process (effective
+# uid/gid + supplementary groups — tar's own view): regular files lacking read,
+# directories lacking read OR traverse. Symlinks/special files are archived by
+# metadata only, so they're not tested. An unreadable path would be silently
+# dropped from the archive yet still pass checksum verification, so it's a hard
+# stop here rather than a partial backup discovered at restore time.
+preflight_readable() {
+  command -v find >/dev/null 2>&1 || die "find not found; cannot run the readability pre-flight"
+  log "Pre-flight: verifying every path under ${BACKUP_SOURCE} is readable"
+  local -a unreadable
+  local p
+  mapfile -d '' -t unreadable < <(
+    find "$BACKUP_SOURCE" \
+      \( \( -type f ! -readable \) \
+         -o \( -type d \( ! -readable -o ! -executable \) \) \) \
+      -print0 2>/dev/null
+  )
+  if (( ${#unreadable[@]} > 0 )); then
+    log "There are ${#unreadable[@]} path(s) under ${BACKUP_SOURCE} that the backup user cannot read (uid=$(id -u) gid=$(id -g) groups=$(id -G)):"
+    for p in "${unreadable[@]}"; do log "  unreadable: ${p}"; done
+    die "unreadable paths in the backup tree — refusing to create an incomplete archive"
+  fi
+  log "Pre-flight OK: everything under ${BACKUP_SOURCE} is readable"
+}
+
 prune_old() {
   [[ "$RETENTION_COUNT" -gt 0 ]] || { log "Retention disabled; keeping all archives"; return 0; }
   local -a archives=()
@@ -212,6 +237,9 @@ main() {
 
   # Optional quiesce; the matching release is guaranteed by POST_PENDING/finalize.
   if [[ -n "$PRE_HOOK" ]]; then run_hook "pre" "$PRE_HOOK"; POST_PENDING=1; fi
+
+  # Validate that everything in the backup source tree is readable, or fail
+  preflight_readable
 
   # Archive the source directly. --numeric-owner records uid/gid from stat (no
   # chown needed), so ownership restores faithfully on a fresh host.
