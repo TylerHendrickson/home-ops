@@ -12,11 +12,9 @@ ARG IMAGE_VERSION=0.2.0
 FROM rclone/rclone:1.74.3@sha256:623378ad0ff3ebd5cebf77720843c0e02edfe46e2d5b5ac6bed54c6371780dfb AS rclone
 
 ###############################################################################
-# Stage 2 — supercronic: download + verify in a THROWAWAY builder so that curl
-#           and apt never reach the final image. Pinned version + per-arch SHA1.
-#           When bumping SUPERCRONIC_VERSION, refresh BOTH sha1 values below from
-#           the matching release page:
-#             https://github.com/aptible/supercronic/releases
+# Stage 2 — supercronic
+#   When bumping SUPERCRONIC_VERSION, refresh BOTH sha1 values below from
+#   the matching release page: https://github.com/aptible/supercronic/releases
 ###############################################################################
 FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df AS fetch
 # renovate: datasource=github-releases depName=aptible/supercronic
@@ -36,11 +34,7 @@ RUN set -eux; \
     install -m 0755 "${SC}" /usr/local/bin/supercronic
 
 ###############################################################################
-# Final image — minimal Debian. GNU tar/gzip/coreutils/util-linux(flock) are
-# already in the slim base. No curl, no tzdata, no ca-certificates:
-#   * timezone comes from a bind-mounted /etc/localtime (see compose)
-#   * SMB needs no CA certs; for an HTTPS rclone backend, bind-mount the host
-#     cert store (see compose) rather than baking certs that would go stale.
+# Final image. Slim base provides GNU tar/gzip/coreutils/util-linux(flock).
 ###############################################################################
 FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df
 
