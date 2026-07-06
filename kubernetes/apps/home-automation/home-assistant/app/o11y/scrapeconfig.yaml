@@ -29,7 +29,7 @@ spec:
   scrapeInterval: 60s
   relabelings:
     - targetLabel: job
-      replacement: rpi-mqtt
+      replacement: mqtt
     - targetLabel: instance
       replacement: edradour
 ---
