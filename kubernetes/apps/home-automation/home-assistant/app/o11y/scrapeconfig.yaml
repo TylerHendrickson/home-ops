@@ -32,3 +32,19 @@ spec:
       replacement: rpi-mqtt
     - targetLabel: instance
       replacement: edradour
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: edradour-zigbee2mqtt
+spec:
+  staticConfigs:
+    - targets: ["${EDRADOUR_IP}:8087"]
+  metricsPath: /metrics
+  scrapeInterval: 60s
+  relabelings:
+    - targetLabel: job
+      replacement: zigbee2mqtt
+    - targetLabel: instance
+      replacement: edradour
