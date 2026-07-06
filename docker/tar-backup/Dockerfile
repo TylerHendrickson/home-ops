@@ -24,8 +24,8 @@ ARG SUPERCRONIC_VERSION=v0.2.47
 ARG TARGETARCH
 RUN set -eux; \
     case "${TARGETARCH}" in \
-        amd64) SUPERCRONIC_SHA1=5bcefed628e32adc08e32634db2d10e9230dbca0 ;; \
-        arm64) SUPERCRONIC_SHA1=639ab81a72771990790df7ee87d9acfe88e5fa83 ;; \
+        amd64) SUPERCRONIC_SHA1=712d2ece75da6f6e530192a151488578153e4e96 ;; \
+        arm64) SUPERCRONIC_SHA1=93323899ddca3f1198f1796a4bf4418ed1e7982e ;; \
         *) echo "ERROR: unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
     esac; \
     apt-get update; \
