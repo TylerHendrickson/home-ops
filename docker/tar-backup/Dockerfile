@@ -4,7 +4,7 @@
 # by hand when either changes meaningfully. It is not an upstream dependency, so
 # it intentionally has no Renovate pragma; the build pipeline publishes the image
 # under this tag.
-ARG IMAGE_VERSION=0.2.1
+ARG IMAGE_VERSION=0.2.0
 
 ###############################################################################
 # Stage 1 — rclone
