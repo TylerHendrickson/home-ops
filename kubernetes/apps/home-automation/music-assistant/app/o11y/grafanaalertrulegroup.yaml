@@ -18,7 +18,7 @@ spec:
       for: 15m
       # Healthy mount (or pod down) => expression returns no series => NoData => Normal.
       noDataState: OK
-      execErrState: Error
+      execErrState: OK
       labels:
         severity: warning
       annotations:
