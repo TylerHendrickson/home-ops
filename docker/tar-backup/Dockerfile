@@ -4,7 +4,7 @@
 # by hand when either changes meaningfully. It is not an upstream dependency, so
 # it intentionally has no Renovate pragma; the build pipeline publishes the image
 # under this tag.
-ARG IMAGE_VERSION=0.2.0
+ARG IMAGE_VERSION=0.2.1
 
 ###############################################################################
 # Stage 1 — rclone
@@ -12,20 +12,18 @@ ARG IMAGE_VERSION=0.2.0
 FROM rclone/rclone:1.74.3@sha256:623378ad0ff3ebd5cebf77720843c0e02edfe46e2d5b5ac6bed54c6371780dfb AS rclone
 
 ###############################################################################
-# Stage 2 — supercronic: download + verify in a THROWAWAY builder so that curl
-#           and apt never reach the final image. Pinned version + per-arch SHA1.
-#           When bumping SUPERCRONIC_VERSION, refresh BOTH sha1 values below from
-#           the matching release page:
-#             https://github.com/aptible/supercronic/releases
+# Stage 2 — supercronic
+#   When bumping SUPERCRONIC_VERSION, refresh BOTH sha1 values below from
+#   the matching release page: https://github.com/aptible/supercronic/releases
 ###############################################################################
 FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df AS fetch
 # renovate: datasource=github-releases depName=aptible/supercronic
-ARG SUPERCRONIC_VERSION=v0.2.46
+ARG SUPERCRONIC_VERSION=v0.2.47
 ARG TARGETARCH
 RUN set -eux; \
     case "${TARGETARCH}" in \
-        amd64) SUPERCRONIC_SHA1=5bcefed628e32adc08e32634db2d10e9230dbca0 ;; \
-        arm64) SUPERCRONIC_SHA1=639ab81a72771990790df7ee87d9acfe88e5fa83 ;; \
+        amd64) SUPERCRONIC_SHA1=712d2ece75da6f6e530192a151488578153e4e96 ;; \
+        arm64) SUPERCRONIC_SHA1=93323899ddca3f1198f1796a4bf4418ed1e7982e ;; \
         *) echo "ERROR: unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
     esac; \
     apt-get update; \
@@ -36,11 +34,7 @@ RUN set -eux; \
     install -m 0755 "${SC}" /usr/local/bin/supercronic
 
 ###############################################################################
-# Final image — minimal Debian. GNU tar/gzip/coreutils/util-linux(flock) are
-# already in the slim base. No curl, no tzdata, no ca-certificates:
-#   * timezone comes from a bind-mounted /etc/localtime (see compose)
-#   * SMB needs no CA certs; for an HTTPS rclone backend, bind-mount the host
-#     cert store (see compose) rather than baking certs that would go stale.
+# Final image. Slim base provides GNU tar/gzip/coreutils/util-linux(flock).
 ###############################################################################
 FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df
 
