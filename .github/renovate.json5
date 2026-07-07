@@ -82,7 +82,6 @@
       group: {
         commitMessageTopic: '{{{groupName}}} group',
       },
-      separateMinorPatch: true,
       matchPackageNames: [
         '/flux/',
       ],
@@ -97,7 +96,6 @@
       group: {
         commitMessageTopic: '{{{groupName}}} group',
       },
-      separateMinorPatch: true,
       matchPackageNames: [
         '/rancher/system-upgrade-controller/',
       ],
@@ -124,7 +122,6 @@
       group: {
         commitMessageTopic: '{{{groupName}}} group',
       },
-      separateMinorPatch: true,
       matchPackageNames: [
         '/intel-device-plugins/',
       ],
