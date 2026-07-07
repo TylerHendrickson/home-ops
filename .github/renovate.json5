@@ -111,7 +111,6 @@
       group: {
         commitMessageTopic: '{{{groupName}}} group',
       },
-      separateMinorPatch: true,
       matchPackageNames: [
         '/stacklok/toolhive/',
       ],
