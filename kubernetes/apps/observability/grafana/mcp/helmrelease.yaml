@@ -29,6 +29,8 @@ spec:
     extraArgs:
       - --transport
       - streamable-http
+      - --allowed-hosts
+      - grafana-mcp.int.${SECRET_DOMAIN}
     service:
       enabled: true
       type: ClusterIP
