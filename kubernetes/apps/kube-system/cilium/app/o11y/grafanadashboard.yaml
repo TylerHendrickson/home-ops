@@ -1,0 +1,121 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: dns-egress-visibility
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  allowCrossNamespaceImport: true
+  folderRef: dns-egress-visibility
+  resyncPeriod: 10m
+  # Phase 1 baseline dashboard for the pod-to-internet egress visibility epic (Vikunja #66).
+  # Six panels are live now (server-side CoreDNS + cilium-agent); the two DNS-proxy panels
+  # (DNS QPS by namespace, FQDN cache) ship empty and populate once the Phase 2 CCNP enables
+  # the L7 DNS proxy. Datasource uid is hardcoded to "prometheus" and only brace-free Grafana
+  # vars ($__rate_interval) are used, so Flux ${VAR} postBuild substitution leaves the JSON alone.
+  json: >
+    {
+      "uid": "cilium-dns-egress-visibility",
+      "title": "Cilium / DNS Egress Visibility",
+      "tags": ["cilium", "dns", "hubble", "egress-visibility"],
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "editable": true,
+      "graphTooltip": 1,
+      "time": {"from": "now-24h", "to": "now"},
+      "refresh": "1m",
+      "templating": {"list": []},
+      "annotations": {"list": []},
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "CoreDNS request duration (p50 / p95 / p99)",
+          "description": "Primary server-side DNS latency signal. Phase 2/3 gate: p95 increase < 5ms vs this baseline.",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+          "fieldConfig": {"defaults": {"unit": "s", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "histogram_quantile(0.50, sum(rate(coredns_dns_request_duration_seconds_bucket[$__rate_interval])) by (le))", "legendFormat": "p50"},
+            {"refId": "B", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "histogram_quantile(0.95, sum(rate(coredns_dns_request_duration_seconds_bucket[$__rate_interval])) by (le))", "legendFormat": "p95"},
+            {"refId": "C", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "histogram_quantile(0.99, sum(rate(coredns_dns_request_duration_seconds_bucket[$__rate_interval])) by (le))", "legendFormat": "p99"}
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "CoreDNS QPS by zone",
+          "description": "Request rate broken out by DNS zone.",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+          "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(rate(coredns_dns_requests_total[$__rate_interval])) by (zone)", "legendFormat": "{{zone}}"}
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "CoreDNS responses by rcode",
+          "description": "SERVFAIL/NXDOMAIN regression catcher. Phase 2/3 gate: SERVFAIL rate stays ~0.",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+          "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(rate(coredns_dns_responses_total[$__rate_interval])) by (rcode)", "legendFormat": "{{rcode}}"}
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "cilium-agent memory (working set) per node",
+          "description": "Phase 2/3 memory-growth gate reference. Watch for RSS delta > ~50 MiB once the FQDN cache populates.",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+          "fieldConfig": {"defaults": {"unit": "bytes", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "container_memory_working_set_bytes{namespace=\"kube-system\", container=\"cilium-agent\"}", "legendFormat": "{{node}}"}
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "cilium-agent CPU per node",
+          "description": "Per-agent CPU cores consumed.",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+          "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (node) (rate(container_cpu_usage_seconds_total{namespace=\"kube-system\", container=\"cilium-agent\"}[$__rate_interval]))", "legendFormat": "{{node}}"}
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "DNS QPS by source namespace (Hubble)",
+          "description": "STAGED - empty until Phase 2. hubble_dns_* series only populate once the L7 DNS proxy redirect is active (Phase 2 CCNP).",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+          "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["mean", "max"]}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(rate(hubble_dns_queries_total[$__rate_interval])) by (source_namespace)", "legendFormat": "{{source_namespace}}"}
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "FQDN cache size",
+          "description": "STAGED - empty until Phase 2. The DNS proxy populates cilium_fqdn_active_names / _active_ips as it learns IP->FQDN mappings. Phase 3 gate: active_ips plateaus rather than growing past ~10k.",
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 24},
+          "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["max"]}, "tooltip": {"mode": "multi"}},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(cilium_fqdn_active_names)", "legendFormat": "active names"},
+            {"refId": "B", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(cilium_fqdn_active_ips)", "legendFormat": "active IPs"}
+          ]
+        }
+      ]
+    }
