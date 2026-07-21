@@ -108,6 +108,10 @@ spec:
       serviceMonitor:
         enabled: true
         trustCRDsExist: true
+      metrics:
+        # '+' adds to the default agent metric set (does not replace it).
+        - +cilium_fqdn_active_names
+        - +cilium_fqdn_active_ips
     dashboards:
       enabled: true
       annotations:
