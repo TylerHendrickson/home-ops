@@ -16,7 +16,7 @@ FROM rclone/rclone:1.74.4@sha256:c61954aaa32328a5486715dd063a81c7879f5195ad3505c
 #   When bumping SUPERCRONIC_VERSION, refresh BOTH sha1 values below from
 #   the matching release page: https://github.com/aptible/supercronic/releases
 ###############################################################################
-FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df AS fetch
+FROM debian:bookworm-slim@sha256:7b140f374b289a7c2befc338f42ebe6441b7ea838a042bbd5acbfca6ec875818 AS fetch
 # renovate: datasource=github-releases depName=aptible/supercronic
 ARG SUPERCRONIC_VERSION=v0.2.47
 ARG TARGETARCH
@@ -36,7 +36,7 @@ RUN set -eux; \
 ###############################################################################
 # Final image. Slim base provides GNU tar/gzip/coreutils/util-linux(flock).
 ###############################################################################
-FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df
+FROM debian:bookworm-slim@sha256:7b140f374b289a7c2befc338f42ebe6441b7ea838a042bbd5acbfca6ec875818
 
 # Include an HTTP client ONLY if you intend to use external heartbeat pings
 # (PING_URL). Off by default to keep the image lean and apt-free.
