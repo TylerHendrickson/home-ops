@@ -1,7 +1,8 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
 # External RPi "edradour" (${EDRADOUR_IP}) — hosts HA's Zigbee/Z-Wave radios + MQTT broker.
-# Not the in-cluster home-assistant pod. See docker/tar-backup/ for the backup that serves :9747.
+# Not the in-cluster home-assistant pod. The backup that serves :9747 is the tarclone
+# container (github.com/TylerHendrickson/tarclone).
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:

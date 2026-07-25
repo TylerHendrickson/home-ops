@@ -36,8 +36,6 @@ jobs:
               - docker/mcp-arr/Dockerfile
             vikunja-mcp:
               - docker/vikunja-mcp/Dockerfile
-            tar-backup:
-              - docker/tar-backup/Dockerfile
           list-files: json
           base: ${{ github.event.repository.default_branch }}
 
@@ -126,22 +124,12 @@ jobs:
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
-          # Push tags: the version tag always; `latest` only for tar-backup.
+          # Push tag: the resolved version tag.
           {
             echo 'tags<<EOF'
             echo "${IMG}:${PRIMARY_VERSION}"
-            [ "${{ matrix.image }}" = "tar-backup" ] && echo "${IMG}:latest"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
-
-      - name: Resolve build platforms
-        id: platforms
-        run: |
-          if [ "${{ matrix.image }}" = "tar-backup" ]; then
-            echo "value=linux/amd64,linux/arm64" >> "$GITHUB_OUTPUT"
-          else
-            echo "value=" >> "$GITHUB_OUTPUT"
-          fi
 
       - name: Build Docker image (load)
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
@@ -183,6 +171,5 @@ jobs:
           context: docker/${{ matrix.image }}
           file: docker/${{ matrix.image }}/Dockerfile
           push: true
-          platforms: ${{ steps.platforms.outputs.value }}
           tags: ${{ steps.versions.outputs.tags }}
           labels: ${{ steps.versions.outputs.labels }}
