@@ -18,7 +18,7 @@ FROM rclone/rclone:1.74.4@sha256:c61954aaa32328a5486715dd063a81c7879f5195ad3505c
 ###############################################################################
 FROM debian:bookworm-slim@sha256:60eac759739651111db372c07be67863818726f754804b8707c90979bda511df AS fetch
 # renovate: datasource=github-releases depName=aptible/supercronic
-ARG SUPERCRONIC_VERSION=v0.2.47
+ARG SUPERCRONIC_VERSION=v0.2.48
 ARG TARGETARCH
 RUN set -eux; \
     case "${TARGETARCH}" in \
