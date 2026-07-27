@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanafolder_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: home-assistant
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  allowCrossNamespaceImport: true
+  title: Home Assistant
