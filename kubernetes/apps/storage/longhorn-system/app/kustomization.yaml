@@ -5,4 +5,5 @@ kind: Kustomization
 namespace: longhorn-system
 resources:
   - ./helmrelease.yaml
+  - ./recurringjob.yaml
   - ./o11y
