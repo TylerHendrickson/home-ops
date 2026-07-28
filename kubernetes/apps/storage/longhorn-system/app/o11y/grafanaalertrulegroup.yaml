@@ -42,12 +42,12 @@ spec:
               type: prometheus
               uid: prometheus
             editorMode: code
-            expr: '(time() - (kube_cronjob_status_last_successful_time{namespace="longhorn-system", cronjob="daily-backup"} or vector(0))) / 3600'
+            expr: '(time() - max(kube_cronjob_status_last_successful_time{namespace="longhorn-system", cronjob="daily-backup"})) / 3600'
             instant: true
             range: false
             intervalMs: 1000
             maxDataPoints: 43200
-            legendFormat: __auto
+            legendFormat: hours since last success
         - refId: B
           datasourceUid: __expr__
           relativeTimeRange:
