@@ -5,3 +5,4 @@ kind: Kustomization
 namespace: longhorn-system
 resources:
   - ./helmrelease.yaml
+  - ./o11y

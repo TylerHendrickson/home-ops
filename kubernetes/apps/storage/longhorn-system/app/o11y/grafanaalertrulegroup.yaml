@@ -1,0 +1,144 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafanaalertrulegroup_v1beta1.json
+# Alerts on the Longhorn `daily-backup` recurring job (jobs/recurringjob.yaml), which Longhorn
+# materializes as a Kubernetes CronJob in longhorn-system.
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaAlertRuleGroup
+metadata:
+  name: longhorn-backup
+spec:
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  allowCrossNamespaceImport: true
+  folderRef: longhorn
+  interval: 1m
+  rules:
+    - uid: longhorn-daily-backup-stale
+      title: LonghornDailyBackupStale
+      condition: B
+      for: 15m
+      noDataState: OK
+      execErrState: Error
+      labels:
+        severity: critical
+      annotations:
+        summary: >-
+          Longhorn daily backup has not succeeded in over 26h.
+        description: >-
+          No volume backup for the Longhorn `daily-backup` recurring job has completed in more than 26h.
+          This indicates that volume backups are likely failing or hung.
+          Check the Longhorn backup target availability (Longhorn UI → Setting → Backup Target) and the
+          most recent daily-backup Job pods in `longhorn-system`.
+      data:
+        - refId: A
+          datasourceUid: prometheus
+          relativeTimeRange:
+            from: 600
+            to: 0
+          model:
+            refId: A
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: '(time() - (kube_cronjob_status_last_successful_time{namespace="longhorn-system", cronjob="daily-backup"} or vector(0))) / 3600'
+            instant: true
+            range: false
+            intervalMs: 1000
+            maxDataPoints: 43200
+            legendFormat: __auto
+        - refId: B
+          datasourceUid: __expr__
+          relativeTimeRange:
+            from: 600
+            to: 0
+          model:
+            refId: B
+            type: threshold
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            conditions:
+              - type: query
+                evaluator:
+                  type: gt
+                  params:
+                    - 26
+                operator:
+                  type: and
+                query:
+                  params:
+                    - A
+                reducer:
+                  type: last
+                  params: []
+
+    - uid: longhorn-daily-backup-run-failed
+      title: LonghornDailyBackupRunFailed
+      condition: B
+      for: 5m
+      noDataState: OK
+      execErrState: Error
+      labels:
+        severity: critical
+      annotations:
+        summary: >-
+          A Longhorn daily-backup run failed.
+        description: >-
+          A longhorn-system `daily-backup` Job started in the last 6h reported a failed pod
+          because a scheduled volume backup exited non-zero.
+          This indicates that one or more volumes have not been backed up according to their
+          configured schedule.
+          Check the `daily-backup` Job pod logs in Longhorn and whether the (NAS) backup target
+          is available and can be reached by Longhorn pods.
+          This alert self-clears once a run succeeds.
+      data:
+        - refId: A
+          datasourceUid: prometheus
+          relativeTimeRange:
+            from: 600
+            to: 0
+          model:
+            refId: A
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: 'max(kube_job_status_failed{namespace="longhorn-system", job_name=~"daily-backup-.*"} and on(namespace, job_name) (kube_job_status_start_time{namespace="longhorn-system", job_name=~"daily-backup-.*"} > (time() - 21600)))'
+            instant: true
+            range: false
+            intervalMs: 1000
+            maxDataPoints: 43200
+            legendFormat: __auto
+        - refId: B
+          datasourceUid: __expr__
+          relativeTimeRange:
+            from: 600
+            to: 0
+          model:
+            refId: B
+            type: threshold
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            conditions:
+              - type: query
+                evaluator:
+                  type: gt
+                  params:
+                    - 0
+                operator:
+                  type: and
+                query:
+                  params:
+                    - A
+                reducer:
+                  type: last
+                  params: []
