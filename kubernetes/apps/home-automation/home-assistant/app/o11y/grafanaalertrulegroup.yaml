@@ -5,6 +5,11 @@
 #
 # supercronic partitions its counters by the `command` label, so an image/command change
 # (e.g. the tar-backup -> tarclone migration) spawns a fresh series that starts at 0.
+#
+# supercronic ALSO registers counters lazily: after a container restart a counter is absent
+# until the next run, then reappears at 1 (never 0). A rate/increase heartbeat therefore can't
+# see the first post-restart success and false-fires until the second one — hence the
+# birth-credit in the no-recent-success rule below.
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaAlertRuleGroup
 metadata:
@@ -81,7 +86,8 @@ spec:
                   type: last
                   params: []
 
-    # Heartbeat: no *successful* backup in 36h.
+    # Heartbeat for the silent misses RunFailed can't see: cron never fired, or a run wedged
+    # without ever reporting an exit.
     - uid: edradour-backup-no-recent-success
       title: EdradourBackupNoRecentSuccess
       condition: B
@@ -110,7 +116,13 @@ spec:
               type: prometheus
               uid: prometheus
             editorMode: code
-            expr: 'sum by (job, instance) (increase(supercronic_successful_executions{job="backup-cron"}[36h]))'
+            # Second term recovers the birth-blind first success (see file header): a process too
+            # young to have run twice yet, with a live counter, must have run since it started (a
+            # run can't predate its own process). Its window spans two cron intervals plus scrape
+            # margin — always enough to reach the second post-restart run, past which the plain
+            # increase stands on its own. Cost: after a restart, a genuine miss can take one extra
+            # interval to fire, which beats paging on every restart.
+            expr: 'sum by (job, instance) (increase(supercronic_successful_executions{job="backup-cron"}[36h])) + ((max by (job, instance) (time() - process_start_time_seconds{job="backup-cron"}) < bool 176400) * on (job, instance) (sum by (job, instance) (supercronic_successful_executions{job="backup-cron"}) >= bool 1))'
             instant: true
             range: false
             intervalMs: 1000
@@ -130,8 +142,6 @@ spec:
             expression: A
             intervalMs: 1000
             maxDataPoints: 43200
-            # < 0.5 == "no whole successful run in the window" (increase() extrapolation
-            # keeps a real single success comfortably above 0.5, true-zero stays at 0).
             conditions:
               - type: query
                 evaluator:
