@@ -6,3 +6,4 @@ namespace: kube-system
 resources:
   - ./grafanafolder.yaml
   - ./grafanadashboard.yaml
+  - ./grafanaalertrulegroup.yaml
