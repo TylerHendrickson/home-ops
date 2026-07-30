@@ -9,12 +9,15 @@ metadata:
   name: dns-visibility
 spec:
   endpointSelector:
+    # Infra namespaces are excluded: routing CoreDNS's own upstream queries
+    # (kube-system) back through the DNS proxy risks a resolution loop, and
+    # Flux's control-plane lookups (flux-system) shouldn't hinge on the proxy.
     matchExpressions:
       - key: k8s:io.kubernetes.pod.namespace
-        operator: In
+        operator: NotIn
         values:
-          - media
-          - dev
+          - kube-system
+          - flux-system
   enableDefaultDeny:
     egress: false
     ingress: false

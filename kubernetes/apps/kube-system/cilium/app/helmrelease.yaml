@@ -52,6 +52,13 @@ spec:
           - http
         serviceMonitor:
           enabled: true
+          # The `query` label is unbounded. Internal cluster.local names are
+          # search-domain permutation noise (not egress) yet dominate the
+          # cardinality, so drop those series.
+          metricRelabelings:
+            - sourceLabels: [query]
+              regex: .*cluster\.local\.?
+              action: drop
         dashboards:
           enabled: true
           annotations:
