@@ -3,7 +3,7 @@ FROM node:24-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9
 # renovate: datasource=npm depName=mcp-arr-server
 ARG MCP_VERSION=1.6.5
 # renovate: datasource=npm depName=mcp-proxy
-ARG MCP_PROXY_VERSION=6.5.4
+ARG MCP_PROXY_VERSION=6.5.7
 
 RUN npm install -g mcp-arr-server@${MCP_VERSION} mcp-proxy@${MCP_PROXY_VERSION}
 
