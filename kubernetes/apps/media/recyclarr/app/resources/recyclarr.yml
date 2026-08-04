@@ -6,6 +6,194 @@ radarr:
     base_url: http://radarr.media.svc.cluster.local
     api_key: !env_var RADARR_API_KEY
 
+    delete_old_custom_formats: true
+
+    media_naming:
+      folder: jellyfin-imdb
+      movie:
+        rename: true
+        standard: jellyfin-imdb
+
+    quality_definition:
+      type: movie
+
+    quality_profiles:
+      - name: Movies - UHD Encode
+        upgrade:
+          allowed: true
+          until_quality: Bluray-2160p
+          until_score: 10000
+        min_format_score: 0
+        qualities:
+          - name: Bluray-2160p
+          - name: WEB 2160p
+            qualities: [WEBDL-2160p, WEBRip-2160p]
+          - name: Bluray|WEB-1080p
+            qualities: [Bluray-1080p, WEBDL-1080p, WEBRip-1080p, WEBDL-720p, WEBRip-720p]
+          - name: Bluray-720p
+
+      - name: Movies - UHD Remux (favorites)
+        upgrade:
+          allowed: true
+          until_quality: Remux-2160p
+          until_score: 10000
+        min_format_score: 0
+        qualities:
+          - name: Remux-2160p
+          - name: Bluray-2160p
+          - name: WEB 2160p
+            qualities: [WEBDL-2160p, WEBRip-2160p]
+          - name: Bluray-1080p
+          - name: WEB 1080p
+            qualities: [WEBDL-1080p, WEBRip-1080p]
+
+      - name: Movies - Completionist (any to max)
+        upgrade:
+          allowed: true
+          until_quality: Remux-2160p
+          until_score: 10000
+        min_format_score: 0
+        qualities:
+          - name: Remux-2160p
+          - name: Bluray-2160p
+          - name: WEB 2160p
+            qualities: [WEBDL-2160p, WEBRip-2160p]
+          - name: HDTV-2160p
+          - name: Remux-1080p
+          - name: Bluray-1080p
+          - name: WEB 1080p
+            qualities: [WEBDL-1080p, WEBRip-1080p]
+          - name: HDTV-1080p
+          - name: Bluray-720p
+          - name: WEB 720p
+            qualities: [WEBDL-720p, WEBRip-720p]
+          - name: HDTV-720p
+          - name: Bluray-576p
+          - name: Bluray-480p
+          - name: WEB 480p
+            qualities: [WEBDL-480p, WEBRip-480p]
+          - name: DVD-R
+          - name: DVD
+          - name: SDTV
+
+      - name: Movies - Completionist (no Remux)
+        upgrade:
+          allowed: true
+          until_quality: Bluray-2160p
+          until_score: 10000
+        min_format_score: 0
+        qualities:
+          - name: Bluray-2160p
+          - name: WEB 2160p
+            qualities: [WEBDL-2160p, WEBRip-2160p]
+          - name: HDTV-2160p
+          - name: Bluray-1080p
+          - name: WEB 1080p
+            qualities: [WEBDL-1080p, WEBRip-1080p]
+          - name: HDTV-1080p
+          - name: Bluray-720p
+          - name: WEB 720p
+            qualities: [WEBDL-720p, WEBRip-720p]
+          - name: HDTV-720p
+          - name: Bluray-576p
+          - name: Bluray-480p
+          - name: WEB 480p
+            qualities: [WEBDL-480p, WEBRip-480p]
+          - name: DVD-R
+          - name: DVD
+          - name: SDTV
+
+    custom_formats:
+      # HDR/DV, Atmos-first audio, resolution baseline, release-group tiers,
+      # repack/proper, remaster, and hard-blocked junk — all at TRaSH default scores.
+      - trash_ids:
+          # HDR / Dolby Vision
+          - b337d6812e06c200ec9a2d3cfa9d20a7 # DV Boost (DV with HDR10 fallback)
+          - f700d29429c023a5734505e77daeaea7 # DV (Disk)
+          - 493b6d1dbec3c3364c59d7607f7e3405 # HDR
+          # Audio (Dolby Atmos ranked above the rest)
+          - 496f355514737f7d83bf7aa4d24f8169 # TrueHD ATMOS
+          - 1af239278386be2919e1bcee0bde047e # DD+ ATMOS
+          - 417804f7f2c4308c1f4c5d380d4c4475 # ATMOS (undefined)
+          - 3cafb66171b47f226146a0770576870f # TrueHD
+          - dcf3ec6938fa32445f590a4da84256cd # DTS-HD MA
+          - a570d4a0e56a2874b64e5bfa55202a1b # FLAC
+          - e7c2fcae07cbada050a0af3357491d7b # PCM
+          - 8e109e50e0a0b83a5098b056e13bf6db # DTS-HD HRA
+          - 185f1dd7264c4562b9022d963ac37424 # DD+
+          - f9f847ac70a0af62ea4a08280b859636 # DTS-ES
+          - 1c1a4c5e823891c75bc50380a6866f73 # DTS
+          - 240770601cc226190c367ef59aba7463 # AAC
+          - c2998bd0d90ed5621d8df281e839436e # DD
+          # Resolution baseline (keeps legit releases net-positive under min_format_score 0)
+          - fb392fb0d61a010ae38e49ceaa24a1ef # 2160p
+          - 820b09bb9acbfde9c35c71e0e565dad8 # 1080p
+          - b2be17d608fc88818940cd1833b0b24c # 720p
+          # Release-group tiers
+          - 4d74ac4c4db0b64bff6ce0cffef99bf0 # UHD Bluray Tier 01
+          - a58f517a70193f8e578056642178419d # UHD Bluray Tier 02
+          - e71939fae578037e7aed3ee219bbe7c1 # UHD Bluray Tier 03
+          - ed27ebfef2f323e964fb1f61391bcb35 # HD Bluray Tier 01
+          - c20c8647f2746a1f4c4262b0fbbeeeae # HD Bluray Tier 02
+          - 5608c71bcebba0a5e666223bae8c9227 # HD Bluray Tier 03
+          - c20f169ef63c5f40c2def54abaf4438e # WEB Tier 01
+          - 403816d65392c79236dcb6dd591aeda4 # WEB Tier 02
+          - af94e0fe497124d1f9ce732069ec8c3b # WEB Tier 03
+          - 3a3ff47579026e76d6504ebea39390de # Remux Tier 01
+          - 9f98181fe5a3fbeb0cc29340da2a468a # Remux Tier 02
+          - 8baaf0b3142bf4d94c42a724f034e27a # Remux Tier 03
+          # Repack / Proper
+          - e7718d7a3ce595f289bfee26adc178f5 # Repack/Proper
+          - ae43b294509409a6a13919dedd4764c4 # Repack2
+          - 5caaaa1c08c1742aa4342d8c4cc463f2 # Repack3
+          # Remaster (positive so a remaster out-scores and auto-upgrades the current file)
+          - eca37840c13c6ef2dd0262b141a5482f # 4K Remaster
+          - 570bc9ebecd92723d2d21500f4be314c # Remaster
+          # Hard-blocked junk (TRaSH default -10000)
+          - ed38b889b31be83fda192888e2286d83 # BR-DISK
+          - 90a6f9a284dff5103f6346090e6280c8 # LQ
+          - e204b80c87be9497a8a6eaff48f72905 # LQ (Release Title)
+          - bfd8eb01832d646a0a89c4deb46f8564 # Upscaled
+          - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
+          - b8cd450cbfa689c0259a01d9e29ba3d6 # 3D
+          - 0a3f082873eb454bde444150b70253cc # Extras
+          - e6886871085226c3da1830830146846c # Generated Dynamic HDR
+        assign_scores_to:
+          - name: Movies - UHD Encode
+          - name: Movies - UHD Remux (favorites)
+          - name: Movies - Completionist (any to max)
+          - name: Movies - Completionist (no Remux)
+
+      # DTS:X yields no height in the Apple TV -> Sonos Arc chain; drop it below
+      # every Dolby Atmos format (default 4500 would outrank DD+/TrueHD Atmos).
+      - trash_ids:
+          - 2f22d89048b01681dde8afe203bf2e95 # DTS X
+        assign_scores_to:
+          - name: Movies - UHD Encode
+            score: 2600
+          - name: Movies - UHD Remux (favorites)
+            score: 2600
+          - name: Movies - Completionist (any to max)
+            score: 2600
+          - name: Movies - Completionist (no Remux)
+            score: 2600
+
+      # Mild negatives, not -10000: deprioritized but still grabbed when it is the
+      # only available release (availability-first).
+      - trash_ids:
+          - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback) — DV Profile 5
+          - cae4ca30163749b891686f95532519bd # AV1
+          - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
+        assign_scores_to:
+          - name: Movies - UHD Encode
+            score: -50
+          - name: Movies - UHD Remux (favorites)
+            score: -50
+          - name: Movies - Completionist (any to max)
+            score: -50
+          - name: Movies - Completionist (no Remux)
+            score: -50
+
 sonarr:
   sonarr-main:
     base_url: http://sonarr.media.svc.cluster.local
