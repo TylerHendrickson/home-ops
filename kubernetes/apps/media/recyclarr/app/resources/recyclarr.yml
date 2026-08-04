@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/refs/tags/v8.7.0/schemas/config-schema.json
+# renovate: datasource=github-releases depName=recyclarr/recyclarr
+---
+radarr:
+  radarr-main:
+    base_url: http://radarr.media.svc.cluster.local
+    api_key: !env_var RADARR_API_KEY
+
+sonarr:
+  sonarr-main:
+    base_url: http://sonarr.media.svc.cluster.local
+    api_key: !env_var SONARR_API_KEY
