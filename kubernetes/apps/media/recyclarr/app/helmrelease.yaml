@@ -24,25 +24,24 @@ spec:
         type: cronjob
         cronjob:
           schedule: "0 4 * * *"  # daily at 04:00
-          timeZone: America/Chicago
+          timeZone: "${TIMEZONE}"
           concurrencyPolicy: Forbid
           successfulJobsHistory: 1
-          failedJobsHistory: 3
-          backoffLimit: 2
+          failedJobsHistory: 1
+          backoffLimit: 0
+          ttlSecondsAfterFinished: 86400
         pod:
-          restartPolicy: OnFailure
+          restartPolicy: Never
         containers:
           main:
             # renovate: datasource=docker depName=ghcr.io/recyclarr/recyclarr
             image:
               repository: ghcr.io/recyclarr/recyclarr
               tag: 8.7.0@sha256:2d6107f758d882a59fe9d646aa54fa8a5a4fb7a40995125fade575652a3f7871
-            command:
-              - recyclarr
             args:
               - sync
-              - --app-data
-              - /config
+            env:
+              RECYCLARR_DATA_DIR: /tmp
             envFrom:
               - secretRef:
                   name: recyclarr-secret
@@ -64,6 +63,10 @@ spec:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
             readOnly: true
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
     defaultPodOptions:
       securityContext:
         runAsUser: 1000
