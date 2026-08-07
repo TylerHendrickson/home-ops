@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       images:
-        description: Comma-separated image names to rebuild (e.g. "mcp-arr,vikunja-mcp")
+        description: Comma-separated image names to rebuild
         required: true
 
 env:
@@ -32,8 +32,6 @@ jobs:
         id: filter
         with:
           filters: |
-            mcp-arr:
-              - docker/mcp-arr/Dockerfile
             vikunja-mcp:
               - docker/vikunja-mcp/Dockerfile
           list-files: json

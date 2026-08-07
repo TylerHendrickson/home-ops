@@ -25,11 +25,14 @@ spec:
           reloader.stakater.com/auto: "true"
         containers:
           main:
-            # renovate: datasource=docker depName=ghcr.io/tylerhendrickson/mcp-arr
+            # renovate: datasource=docker depName=ghcr.io/aplaceforallmystuff/mcp-arr
             image:
-              repository: ghcr.io/tylerhendrickson/mcp-arr
-              tag: 1.7.3@sha256:1941d3eccd56c50a144e559b68433fc68e6ec8111778489f8f7784afb1389ca8
+              repository: ghcr.io/aplaceforallmystuff/mcp-arr
+              tag: 1.7.3@sha256:ace72c56448e8695e1d2d060e7437470e3f883fcc9316f1294e3a7f682e1efa1
             env:
+              MCP_TRANSPORT: http
+              HOST: 0.0.0.0
+              PORT: "8080"
               LIDARR_URL: http://lidarr.media.svc.cluster.local
               SONARR_URL: http://sonarr.media.svc.cluster.local
               RADARR_URL: http://radarr.media.svc.cluster.local
@@ -98,8 +101,8 @@ spec:
               - *host
     defaultPodOptions:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
+        runAsUser: 1001
+        runAsGroup: 1001
         runAsNonRoot: true
       affinity:
         nodeAffinity:
