@@ -61,6 +61,10 @@ spec:
             - sourceLabels: [query]
               regex: (.+\.)?cluster\.local\.?
               action: drop
+            # Similarly, drop reverse-dns (PTR) queries for IPs in `${CLUSTER_CIDR}` and `${SERVICE_CIDR}` ranges.
+            - sourceLabels: [query]
+              regex: .*\.4[23]\.10\.in-addr\.arpa\.?
+              action: drop
         dashboards:
           enabled: true
           annotations:
