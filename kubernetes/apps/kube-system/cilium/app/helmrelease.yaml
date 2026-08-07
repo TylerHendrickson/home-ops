@@ -52,12 +52,14 @@ spec:
           - http
         serviceMonitor:
           enabled: true
-          # The `query` label is unbounded. Internal cluster.local names are
-          # search-domain permutation noise (not egress) yet dominate the
-          # cardinality, so drop those series.
           metricRelabelings:
+            # Note: `query` label is unbounded (unique per FQDN from DNS lookups).
+            # Monitoring exists (see `./o11y/grafanaalertrulegroup.yaml`) for metric cardinality explosions.
+            # Generally, internal (cluster-local) DNS queries aren't interesting for our monitoring purposes,
+            # so we drop queries for `*.cluster.local` subdomains.
+            # In addition to uninteresting reducing noise, this drops the majority of DNS queries.
             - sourceLabels: [query]
-              regex: .*cluster\.local\.?
+              regex: (.+\.)?cluster\.local\.?
               action: drop
         dashboards:
           enabled: true
