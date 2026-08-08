@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/refs/tags/v8.7.0/schemas/config-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/refs/tags/v8.7.1/schemas/config-schema.json
 # renovate: datasource=github-releases depName=recyclarr/recyclarr
 ---
 radarr:
