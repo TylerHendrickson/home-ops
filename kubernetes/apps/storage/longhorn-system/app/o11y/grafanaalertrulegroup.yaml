@@ -19,7 +19,7 @@ spec:
       condition: B
       for: 15m
       noDataState: OK
-      execErrState: Error
+      execErrState: OK
       labels:
         severity: critical
       annotations:
@@ -82,7 +82,7 @@ spec:
       condition: B
       for: 5m
       noDataState: OK
-      execErrState: Error
+      execErrState: OK
       labels:
         severity: critical
       annotations:
@@ -148,7 +148,7 @@ spec:
       condition: B
       for: 5m
       noDataState: OK
-      execErrState: Error
+      execErrState: OK
       labels:
         severity: warning
       annotations:
