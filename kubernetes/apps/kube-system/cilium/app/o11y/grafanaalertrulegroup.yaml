@@ -17,7 +17,7 @@ spec:
       condition: B
       for: 6h
       noDataState: OK
-      execErrState: Error
+      execErrState: OK
       labels:
         severity: warning
       annotations:
@@ -86,7 +86,7 @@ spec:
       condition: B
       for: 1h
       noDataState: OK
-      execErrState: Error
+      execErrState: OK
       labels:
         severity: warning
       annotations:
