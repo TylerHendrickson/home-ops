@@ -26,7 +26,7 @@ spec:
     keepHistory: false
   values:
     fullnameOverride: coredns
-    replicaCount: 1
+    replicaCount: 2
     k8sAppLabelOverride: kube-dns
     service:
       name: kube-dns
@@ -36,6 +36,8 @@ spec:
     deployment:
       annotations:
         reloader.stakater.com/auto: "true"
+    podDisruptionBudget:
+      minAvailable: 1
     servers:
       - zones:
           - zone: .
