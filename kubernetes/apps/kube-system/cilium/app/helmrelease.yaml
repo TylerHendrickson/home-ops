@@ -44,6 +44,8 @@ spec:
       metrics:
         enabled:
           - dns:query;ignoreAAAA;labelsContext=source_namespace,source_workload,destination_namespace
+          # `workload` is empty when the destination isn't a cluster workload (`reserved:world`, etc.)
+          - policy:sourceContext=workload;destinationContext=workload|dns|ip|reserved-identity
           - drop
           - tcp
           - flow
