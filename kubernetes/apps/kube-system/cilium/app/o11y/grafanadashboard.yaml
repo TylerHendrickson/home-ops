@@ -126,7 +126,7 @@ spec:
           "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 60}}, "overrides": []},
           "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["sum"]}, "tooltip": {"mode": "multi"}},
           "targets": [
-            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (source, destination, direction, action) (increase(hubble_policy_verdicts_total[$__rate_interval]))", "legendFormat": "{{source}} -> {{destination}} ({{direction}} {{action}})"}
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (source, destination, direction, action) (increase(hubble_policy_verdicts_total[$__rate_interval]))", "legendFormat": "__auto"}
           ]
         }
       ]
