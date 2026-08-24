@@ -67,6 +67,10 @@ spec:
             - sourceLabels: [query]
               regex: .*\.4[23]\.10\.in-addr\.arpa\.?
               action: drop
+            # only keep deny verdicts:
+            - sourceLabels: [__name__, action]
+              regex: hubble_policy_verdicts_total;(forwarded|redirected)
+              action: drop
         dashboards:
           enabled: true
           annotations:
