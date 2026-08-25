@@ -167,18 +167,19 @@ spec:
       for: 0m
       noDataState: OK
       execErrState: OK
-      dashboardUid: cilium-dns-egress-visibility
-      panelId: 8
       labels:
         severity: critical
       annotations:
+        __dashboardUid__: cilium-dns-egress-visibility
         summary: >-
           Network policy blocked egress from
           {{ if $labels.source }}{{ $labels.source }}{{ else }}an unlabeled pod{{ end }}.
         description: >-
-          Either the policy is too strict and is blocking legitimate traffic, or the workload
-          reached for a destination it was never allowed. Blocked destinations are on the linked
-          "Policy verdicts by workload" panel.
+          A CNP policy denied (blocked) egress traffic.
+          Investigate the destination and determine whether the policy is blocking legitimate traffic (i.e. policy is too strict)
+          or if the workload is misbehaving (malicious or otherwise-undesired egress).
+          More information, including the attempted destination, is available on the "Policy verdicts by workload"
+          panel of the linked "DNS Egress Visibility" dashboard.
       data:
         - refId: A
           datasourceUid: prometheus
