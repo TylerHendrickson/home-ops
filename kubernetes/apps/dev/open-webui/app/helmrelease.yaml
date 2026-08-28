@@ -1,0 +1,123 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/tags/app-template-5.1.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: open-webui
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            image:
+              # renovate: datasource=docker depName=ghcr.io/open-webui/open-webui
+              repository: ghcr.io/open-webui/open-webui
+              tag: 0.11.1@sha256:6bb1fbe8ab0a3e0456067f493044ffb66a30a65a34be47f6a5862176a370dd16
+            env:
+              TZ: "${TIMEZONE}"
+              HOME: /tmp
+              HF_HOME: /tmp/huggingface
+              OLLAMA_BASE_URLS: "http://ollama.dev.svc.cluster.local:9401;http://ollama.dev.svc.cluster.local"
+              OLLAMA_API_CONFIGS: '{"0":{"enable":true,"prefix_id":""},"1":{"enable":true,"prefix_id":"direct"}}'
+              ENABLE_OPENAI_API: "false"
+              WEBUI_URL: "https://owui.int.${SECRET_DOMAIN}"
+            envFrom:
+              - secretRef:
+                  name: open-webui-secret
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 8080
+                  initialDelaySeconds: 15
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 50m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            runAsNonRoot: true
+            fsGroupChangePolicy: OnRootMismatch
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        className: internal
+        hosts:
+          - host: &host "owui.int.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        storageClass: longhorn
+        globalMounts:
+          - path: /app/backend/data
+      tmp:
+        type: emptyDir
+        sizeLimit: 2Gi
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
