@@ -33,8 +33,7 @@ spec:
               TZ: "${TIMEZONE}"
               HOME: /tmp
               HF_HOME: /tmp/huggingface
-              OLLAMA_BASE_URLS: "http://ollama.dev.svc.cluster.local:9401;http://ollama.dev.svc.cluster.local"
-              OLLAMA_API_CONFIGS: '{"0":{"enable":true,"prefix_id":""},"1":{"enable":true,"prefix_id":"direct"}}'
+              OLLAMA_BASE_URL: "http://ollama.dev.svc.cluster.local"
               ENABLE_OPENAI_API: "false"
               WEBUI_URL: "https://owui.int.${SECRET_DOMAIN}"
             envFrom:

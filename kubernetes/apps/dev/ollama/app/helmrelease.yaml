@@ -75,36 +75,6 @@ spec:
               limits:
                 cpu: "8"
                 memory: 32Gi
-          exporter:
-            image:
-              # renovate: datasource=docker depName=ghcr.io/maravexa/ollama-exporter
-              repository: ghcr.io/maravexa/ollama-exporter
-              tag: v0.1.2@sha256:73018316051586d42755eb592394484b9dfb8d3f0e9fd0cb9131c7272faff86b
-            env:
-              TZ: "${TIMEZONE}"
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /metrics
-                    port: &metrics-port 9400
-                  periodSeconds: 30
-                  timeoutSeconds: 5
-                  failureThreshold: 3
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-            resources:
-              requests:
-                cpu: 10m
-                memory: 32Mi
-              limits:
-                memory: 128Mi
         pod:
           securityContext:
             runAsUser: 1000
@@ -118,48 +88,21 @@ spec:
         ports:
           http:
             port: *port
-          metrics:
-            port: *metrics-port
-          proxy:
-            port: 9401
-    serviceMonitor:
-      main:
-        service:
-          identifier: main
-        endpoints:
-          - port: metrics
-            path: /metrics
-            interval: 30s
-            scrapeTimeout: 10s
-            honorLabels: true
     persistence:
       models:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 200Gi
         storageClass: longhorn-ollama-models
-        advancedMounts:
-          main:
-            main:
-              - path: /models
+        globalMounts:
+          - path: /models
       config:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 1Gi
         storageClass: longhorn
-        advancedMounts:
-          main:
-            main:
-              - path: /config
-      exporter-config:
-        type: configMap
-        name: ollama-exporter-configmap
-        advancedMounts:
-          main:
-            exporter:
-              - path: /etc/ollama-exporter/ollama-exporter.yml
-                subPath: ollama-exporter.yml
-                readOnly: true
+        globalMounts:
+          - path: /config
       tmp:
         type: emptyDir
     defaultPodOptions:
