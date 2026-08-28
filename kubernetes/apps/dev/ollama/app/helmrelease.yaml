@@ -1,0 +1,172 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/tags/app-template-5.1.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ollama
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: ollama
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            image:
+              # renovate: datasource=docker depName=docker.io/ollama/ollama
+              repository: docker.io/ollama/ollama
+              tag: 0.33.0@sha256:08ddf4b4dbfdc4fc1f5b0fe535915998581085402e307b57bb308db68460e372
+            env:
+              TZ: "${TIMEZONE}"
+              HOME: /config
+              OLLAMA_HOST: 0.0.0.0:80
+              OLLAMA_MODELS: /models
+              OLLAMA_CONTEXT_LENGTH: "8192"
+              OLLAMA_KEEP_ALIVE: "15m"
+              OLLAMA_LOAD_TIMEOUT: "10m"
+              OLLAMA_NUM_PARALLEL: "1"
+              OLLAMA_MAX_LOADED_MODELS: "1"
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: &port 80
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: *port
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 500m
+                memory: 12Gi
+              limits:
+                cpu: "8"
+                memory: 32Gi
+          exporter:
+            image:
+              # renovate: datasource=docker depName=ghcr.io/maravexa/ollama-exporter
+              repository: ghcr.io/maravexa/ollama-exporter
+              tag: v0.1.2@sha256:73018316051586d42755eb592394484b9dfb8d3f0e9fd0cb9131c7272faff86b
+            env:
+              TZ: "${TIMEZONE}"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /metrics
+                    port: &metrics-port 9400
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            runAsNonRoot: true
+            fsGroupChangePolicy: OnRootMismatch
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *port
+          metrics:
+            port: *metrics-port
+          proxy:
+            port: 9401
+    serviceMonitor:
+      main:
+        service:
+          identifier: main
+        endpoints:
+          - port: metrics
+            path: /metrics
+            interval: 30s
+            scrapeTimeout: 10s
+            honorLabels: true
+    persistence:
+      models:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 200Gi
+        storageClass: longhorn-ollama-models
+        advancedMounts:
+          main:
+            main:
+              - path: /models
+      config:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        storageClass: longhorn
+        advancedMounts:
+          main:
+            main:
+              - path: /config
+      exporter-config:
+        type: configMap
+        name: ollama-exporter-configmap
+        advancedMounts:
+          main:
+            exporter:
+              - path: /etc/ollama-exporter/ollama-exporter.yml
+                subPath: ollama-exporter.yml
+                readOnly: true
+      tmp:
+        type: emptyDir
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
