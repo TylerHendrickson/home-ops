@@ -49,6 +49,13 @@
   commitMessageSuffix: '',
   packageRules: [
     {
+      description: 'ollama-exporter - upstream rewound to 0.1.x, but GHCR still serves the abandoned 0.3.0/0.3.1 images, which outrank the current release',
+      matchPackageNames: [
+        'ghcr.io/maravexa/ollama-exporter',
+      ],
+      allowedVersions: '!/^v?0\\.3\\.[01]$/',
+    },
+    {
       description: 'Home Assistant - delay .0 releases to let immediate hotfixes land first',
       matchPackageNames: [
         'ghcr.io/home-operations/home-assistant',
