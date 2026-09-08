@@ -52,7 +52,7 @@ spec:
                 enabled: false
             resources:
               requests:
-                cpu: 2
+                cpu: 4
                 memory: 10Gi
                 gpu.intel.com/i915: 1
               limits:
