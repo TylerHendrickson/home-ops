@@ -10,6 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 2.38.0
-    digest: sha256:e2af4bde012d4bb282bde05fdf5d3da2643274d3f9ab98388658ff63ad613a38
+    tag: 2.38.1
+    digest: sha256:4c2be43f39a5a2a4892b7e0479b336f4b7d819220800d529123ed99ff807a16f
   url: oci://ghcr.io/coder/chart/coder
