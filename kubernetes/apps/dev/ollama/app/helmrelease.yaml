@@ -28,7 +28,7 @@ spec:
             image:
               # renovate: datasource=docker depName=docker.io/ollama/ollama
               repository: docker.io/ollama/ollama
-              tag: 0.40.8@sha256:2b8eecdb85aa6ea67c381c8ecffec04b2658496cf2821a8f88b0485bdff198e8
+              tag: 0.40.11@sha256:dea72d1e22270fe095b68fdf756d2b489d615643c5a2eaebbc5f569181e322d8
             env:
               TZ: "${TIMEZONE}"
               HOME: /config
