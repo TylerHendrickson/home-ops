@@ -1,4 +1,4 @@
-FROM node:24-bookworm-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205 AS builder
+FROM node:24-bookworm-slim@sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9 AS builder
 
 # renovate: datasource=npm depName=@democratize-technology/vikunja-mcp
 ARG MCP_VERSION=0.2.0
