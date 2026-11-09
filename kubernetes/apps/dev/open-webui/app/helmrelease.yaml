@@ -28,7 +28,7 @@ spec:
             image:
               # renovate: datasource=docker depName=ghcr.io/open-webui/open-webui
               repository: ghcr.io/open-webui/open-webui
-              tag: v0.12.3@sha256:a537bbe1e6b428820f52ed4a029d7fff97062e24d5cf32c365fba36fd0542def
+              tag: v0.13.3@sha256:46b59158e6558eeb980bc828e0f1b30238ad24d82ed84d5e5eda1dab2a082f14
             env:
               TZ: "${TIMEZONE}"
               HOME: /tmp
