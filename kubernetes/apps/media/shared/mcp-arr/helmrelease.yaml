@@ -28,7 +28,7 @@ spec:
             # renovate: datasource=docker depName=ghcr.io/aplaceforallmystuff/mcp-arr
             image:
               repository: ghcr.io/aplaceforallmystuff/mcp-arr
-              tag: 1.7.3@sha256:ace72c56448e8695e1d2d060e7437470e3f883fcc9316f1294e3a7f682e1efa1
+              tag: 1.9.0@sha256:f9ebc0ecf14cb89ff0a2702062d4ff8b0bf06a258e9fc9f0278acf418d9768e6
             env:
               MCP_TRANSPORT: http
               HOST: 0.0.0.0
